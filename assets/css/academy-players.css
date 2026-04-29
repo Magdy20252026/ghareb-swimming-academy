@@ -891,11 +891,6 @@ body.dark-mode tbody tr td:last-child {
     min-width: 220px;
 }
 
-.table-wrapper th:last-child,
-.table-wrapper td:last-child {
-    min-width: 560px;
-}
-
 .table-avatar-cell {
     text-align: center;
 }
@@ -1176,12 +1171,17 @@ body.dark-mode .detail-grid-payment .detail-item {
 }
 
 .action-buttons {
+    display: inline-flex;
     align-items: stretch;
     flex-wrap: nowrap;
 }
 
 .action-buttons > * {
     flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.table-wrapper td[data-label="الإجراءات"] {
     white-space: nowrap;
 }
 
@@ -1310,6 +1310,8 @@ body.dark-mode .detail-grid-payment .detail-item {
     }
 
     .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
         width: 100%;
     }
 

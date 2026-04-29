@@ -107,6 +107,7 @@ body.dark-mode {
 }
 
 .action-buttons {
+    display: inline-flex;
     align-items: stretch;
     flex-wrap: nowrap;
 }
@@ -449,9 +450,8 @@ td {
     vertical-align: middle;
 }
 
-th:last-child,
-td:last-child {
-    min-width: 360px;
+td[data-label="الإجراءات"] {
+    white-space: nowrap;
 }
 
 th {
@@ -574,6 +574,8 @@ body.dark-mode .delete-btn {
     .form-actions,
     .compact-actions,
     .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
         width: 100%;
     }
 
