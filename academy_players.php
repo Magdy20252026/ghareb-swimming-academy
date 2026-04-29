@@ -888,7 +888,7 @@ function renderAcademyPlayersHorizontalToolbar(
 
 function canAcademyPlayersUserManageDiscount(array $user): bool
 {
-    return ($user['role'] ?? '') === 'مدير';
+    return in_array(($user['role'] ?? ''), ['مدير', 'مشرف'], true);
 }
 
 function countAcademyPlayersForSubscription(PDO $pdo, int $subscriptionId, ?int $excludePlayerId = null): int
