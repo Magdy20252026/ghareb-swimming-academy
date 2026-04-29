@@ -605,9 +605,7 @@ if (academyPlayersPlayerModal) {
 }
 
 document.addEventListener('click', (event) => {
-    const closeButton = event.target instanceof Element
-        ? event.target.closest('[data-close-player-modal]')
-        : null;
+    const closeButton = event.target.closest('[data-close-player-modal]');
     if (closeButton) {
         closePlayerFormModal(academyPlayersShouldOpenFormModal);
     }

@@ -2398,7 +2398,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                 <div class="form-card modal-form-card">
                     <div class="card-head modal-card-head">
                         <h2 id="playerFormModalTitle"><?php echo $editPlayer ? 'تعديل سباح' : 'إضافة سباح جديد'; ?></h2>
-                        <button type="button" class="modal-close-btn" data-close-player-modal aria-label="<?php echo htmlspecialchars($editPlayer ? 'إغلاق نافذة تعديل السباح' : 'إغلاق نافذة إضافة السباح', ENT_QUOTES, 'UTF-8'); ?>"><span aria-hidden="true">×</span></button>
+                        <button type="button" class="modal-close-btn" data-close-player-modal aria-label="<?php echo htmlspecialchars($editPlayer ? 'إغلاق نافذة تعديل السباح' : 'إغلاق نافذة إضافة السباح', ENT_QUOTES, 'UTF-8'); ?>">إغلاق</button>
                     </div>
 
             <form method="POST" enctype="multipart/form-data" class="player-form" id="playerForm" autocomplete="off">

@@ -588,15 +588,17 @@ input[readonly] {
 }
 
 .modal-close-btn {
-    width: 44px;
-    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 14px;
     border: 1px solid var(--border);
     border-radius: 14px;
     background: var(--surface-soft);
     color: var(--text-main);
     cursor: pointer;
-    font-size: 28px;
-    line-height: 1;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.2;
     transition: var(--transition);
 }
 
