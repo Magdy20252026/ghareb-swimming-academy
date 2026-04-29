@@ -2511,7 +2511,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
             <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="current_view" value="<?php echo htmlspecialchars($currentView === 'summary' ? 'summary' : '', ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_view" value="<?php echo htmlspecialchars($currentView, ENT_QUOTES, 'UTF-8'); ?>">
 
             <div class="form-grid form-grid-compact">
                 <div class="form-group">
