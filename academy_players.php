@@ -807,6 +807,7 @@ function renderAcademyPlayersHorizontalToolbar(
                     type="button"
                     class="save-btn"
                     data-open-player-modal
+                    aria-label="إضافة سباح"
                     aria-haspopup="dialog"
                     aria-controls="playerFormModal"
                     aria-expanded="false"
@@ -2499,6 +2500,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
         type="button"
         class="save-btn mobile-player-launcher"
         data-open-player-modal
+        aria-label="إضافة سباح"
         aria-haspopup="dialog"
         aria-controls="playerFormModal"
         aria-expanded="false"
@@ -2734,6 +2736,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                         type="button"
                         class="save-btn"
                         data-open-player-modal
+                        aria-label="إضافة سباح"
                         aria-haspopup="dialog"
                         aria-controls="playerFormModal"
                         aria-expanded="false"
