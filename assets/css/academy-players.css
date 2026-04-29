@@ -492,7 +492,7 @@ body.dark-mode .hero-card strong {
 }
 
 .player-form,
-.filter-form,
+.filter-form:not(.filter-form-horizontal),
 .stack-form,
 .compact-stack {
     display: flex;
