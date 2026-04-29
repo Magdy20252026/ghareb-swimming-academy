@@ -106,6 +106,16 @@ body.dark-mode {
     flex-wrap: wrap;
 }
 
+.action-buttons {
+    display: inline-flex;
+    align-items: stretch;
+}
+
+.action-buttons > * {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
 .theme-switch-box {
     display: flex;
     align-items: center;
@@ -439,6 +449,10 @@ td {
     vertical-align: middle;
 }
 
+.table-wrapper td[data-label="الإجراءات"] {
+    white-space: nowrap;
+}
+
 th {
     background: rgba(3, 105, 161, 0.08);
     font-size: 13px;
@@ -559,6 +573,8 @@ body.dark-mode .delete-btn {
     .form-actions,
     .compact-actions,
     .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
         width: 100%;
     }
 

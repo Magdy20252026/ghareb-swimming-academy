@@ -1171,11 +1171,17 @@ body.dark-mode .detail-grid-payment .detail-item {
 }
 
 .action-buttons {
+    display: inline-flex;
     align-items: stretch;
 }
 
 .action-buttons > * {
-    flex: 1 1 92px;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.table-wrapper td[data-label="الإجراءات"] {
+    white-space: nowrap;
 }
 
 .empty-row {
@@ -1303,6 +1309,8 @@ body.dark-mode .detail-grid-payment .detail-item {
     }
 
     .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
         width: 100%;
     }
 
