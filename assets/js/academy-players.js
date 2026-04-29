@@ -1,7 +1,7 @@
 const academyPlayersBody = document.body;
 const academyPlayersThemeToggle = document.getElementById('themeToggle');
 const academyPlayersClearBtn = document.getElementById('clearBtn');
-const academyPlayersOpenPlayerModalBtn = document.getElementById('openPlayerModalBtn');
+const academyPlayersOpenPlayerModalButtons = Array.from(document.querySelectorAll('[data-open-player-modal]'));
 const academyPlayersPlayerModal = document.getElementById('playerFormModal');
 const academyPlayersPageUrl = academyPlayersBody.dataset.pageUrl || 'academy_players.php';
 const academyPlayersFormCloseUrl = academyPlayersBody.dataset.formCloseUrl || academyPlayersPageUrl;
@@ -62,15 +62,19 @@ const paymentField = document.getElementById('payment_amount');
 const paymentCard = document.getElementById('collect-payment-card');
 const paymentScrollFallbackDelay = 400;
 let academyPlayersLastSubscriptionId = subscriptionSelect?.value || '';
+let academyPlayersLastModalTrigger = null;
 
-function openPlayerFormModal() {
+function openPlayerFormModal(triggerElement = null) {
     if (!academyPlayersPlayerModal) {
         return;
     }
 
     academyPlayersPlayerModal.classList.remove('hidden');
     academyPlayersBody.classList.add('modal-open');
-    academyPlayersOpenPlayerModalBtn?.setAttribute('aria-expanded', 'true');
+    academyPlayersLastModalTrigger = triggerElement instanceof HTMLElement ? triggerElement : null;
+    academyPlayersOpenPlayerModalButtons.forEach((button) => {
+        button.setAttribute('aria-expanded', 'true');
+    });
     window.requestAnimationFrame(() => {
         barcodeField?.focus();
     });
@@ -92,8 +96,10 @@ function closePlayerFormModal(shouldResetPage = false) {
 
     academyPlayersPlayerModal.classList.add('hidden');
     academyPlayersBody.classList.remove('modal-open');
-    academyPlayersOpenPlayerModalBtn?.setAttribute('aria-expanded', 'false');
-    academyPlayersOpenPlayerModalBtn?.focus();
+    academyPlayersOpenPlayerModalButtons.forEach((button) => {
+        button.setAttribute('aria-expanded', 'false');
+    });
+    academyPlayersLastModalTrigger?.focus();
 }
 
 function setAcademyPlayersTheme(theme) {
@@ -594,9 +600,9 @@ if (academyPlayersClearBtn) {
     academyPlayersClearBtn.addEventListener('click', clearAcademyPlayersForm);
 }
 
-if (academyPlayersOpenPlayerModalBtn) {
-    academyPlayersOpenPlayerModalBtn.addEventListener('click', openPlayerFormModal);
-}
+academyPlayersOpenPlayerModalButtons.forEach((button) => {
+    button.addEventListener('click', () => openPlayerFormModal(button));
+});
 
 if (academyPlayersPlayerModal) {
     academyPlayersPlayerModal.addEventListener('click', (event) => {

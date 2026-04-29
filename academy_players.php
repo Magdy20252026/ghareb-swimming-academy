@@ -324,6 +324,11 @@ function academyPlayersFilterParamsFromArray(array $source): array
     ];
 }
 
+function normalizeAcademyPlayersView(string $value): string
+{
+    return $value === 'summary' ? 'summary' : 'list';
+}
+
 function isAcademyPlayerExpired(?string $endDate, int $availableExercisesCount, string $today): bool
 {
     if ($availableExercisesCount <= 0) {
@@ -775,6 +780,110 @@ function buildAcademyPlayersSubscriptionSummary(array $subscriptions, string $ca
         'full_groups_count' => $fullGroupsCount,
         'available_groups' => $availableGroups,
     ];
+}
+
+function renderAcademyPlayersHorizontalToolbar(
+    array $filters,
+    array $subscriptions,
+    array $branchOptions,
+    array $categoryOptions,
+    string $summaryCategory,
+    array $currentFilterParams,
+    string $toolbarKey,
+    string $summaryPageUrl
+): void {
+    $searchId = 'search_' . $toolbarKey;
+    $subscriptionId = 'subscription_filter_' . $toolbarKey;
+    $branchId = 'branch_filter_' . $toolbarKey;
+    $categoryId = 'category_filter_' . $toolbarKey;
+    $statusId = 'status_filter_' . $toolbarKey;
+    $medicalReportId = 'medical_report_filter_' . $toolbarKey;
+    $exportUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['export' => 'xlsx']));
+    ?>
+    <section class="toolbar-card">
+        <div class="toolbar-row">
+            <div class="toolbar-actions">
+                <button
+                    type="button"
+                    class="save-btn"
+                    data-open-player-modal
+                    aria-haspopup="dialog"
+                    aria-controls="playerFormModal"
+                    aria-expanded="false"
+                >
+                    إضافة سباح
+                </button>
+                <a href="<?php echo htmlspecialchars($summaryPageUrl, ENT_QUOTES, 'UTF-8'); ?>" class="link-btn files-btn">ملخص المجموعات</a>
+                <a href="<?php echo htmlspecialchars($exportUrl, ENT_QUOTES, 'UTF-8'); ?>" class="link-btn export-btn">استخراج إكسل</a>
+            </div>
+            <form method="GET" class="filter-form filter-form-horizontal" autocomplete="off">
+                <input type="hidden" name="summary_category" value="<?php echo htmlspecialchars($summaryCategory, ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="form-group">
+                    <label for="<?php echo htmlspecialchars($searchId, ENT_QUOTES, 'UTF-8'); ?>">البحث</label>
+                    <input type="text" name="search" id="<?php echo htmlspecialchars($searchId, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                </div>
+                <div class="form-group subscription-select-group">
+                    <label for="<?php echo htmlspecialchars($subscriptionId, ENT_QUOTES, 'UTF-8'); ?>">المجموعة</label>
+                    <select name="subscription_id" id="<?php echo htmlspecialchars($subscriptionId, ENT_QUOTES, 'UTF-8'); ?>">
+                        <option value="">كل المجموعات</option>
+                        <?php foreach ($subscriptions as $subscription): ?>
+                            <?php $subscriptionDisplayText = formatAcademyPlayerSubscriptionDisplay($subscription); ?>
+                            <option value="<?php echo (int) ($subscription['id'] ?? 0); ?>" <?php echo (string) ($subscription['id'] ?? '') === $filters['subscription_id'] ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($subscriptionDisplayText, ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="<?php echo htmlspecialchars($branchId, ENT_QUOTES, 'UTF-8'); ?>">الفرع</label>
+                    <select name="branch" id="<?php echo htmlspecialchars($branchId, ENT_QUOTES, 'UTF-8'); ?>">
+                        <option value="">كل الفروع</option>
+                        <?php foreach ($branchOptions as $branchOption): ?>
+                            <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['branch'] === $branchOption ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="<?php echo htmlspecialchars($categoryId, ENT_QUOTES, 'UTF-8'); ?>">مستوى المجموعة</label>
+                    <select name="category" id="<?php echo htmlspecialchars($categoryId, ENT_QUOTES, 'UTF-8'); ?>">
+                        <option value="">كل المستويات</option>
+                        <?php foreach ($categoryOptions as $categoryOption): ?>
+                            <option value="<?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['category'] === $categoryOption ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="<?php echo htmlspecialchars($statusId, ENT_QUOTES, 'UTF-8'); ?>">الحالة</label>
+                    <select name="status" id="<?php echo htmlspecialchars($statusId, ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php foreach (ACADEMY_PLAYER_STATUS_FILTERS as $statusKey => $statusLabel): ?>
+                            <option value="<?php echo htmlspecialchars($statusKey === 'all' ? '' : $statusKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['status'] === $statusKey ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($statusLabel, ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="<?php echo htmlspecialchars($medicalReportId, ENT_QUOTES, 'UTF-8'); ?>">التقرير الطبي</label>
+                    <select name="medical_report" id="<?php echo htmlspecialchars($medicalReportId, ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php foreach (ACADEMY_PLAYER_MEDICAL_REPORT_FILTERS as $medicalReportKey => $medicalReportLabel): ?>
+                            <option value="<?php echo htmlspecialchars($medicalReportKey === 'all' ? '' : $medicalReportKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['medical_report'] === $medicalReportKey ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($medicalReportLabel, ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-actions compact-actions toolbar-form-actions">
+                    <button type="submit" class="save-btn">عرض</button>
+                    <a href="academy_players.php" class="clear-btn link-btn">إعادة ضبط</a>
+                </div>
+            </form>
+        </div>
+    </section>
+    <?php
 }
 
 function canAcademyPlayersUserManageDiscount(array $user): bool
@@ -1330,6 +1439,7 @@ foreach ($subscriptions as $subscription) {
 }
 
 $filters = academyPlayersFilterParamsFromArray($_GET);
+$currentView = normalizeAcademyPlayersView((string) ($_GET['view'] ?? ''));
 
 if (isset($_GET['export']) && $_GET['export'] === 'xlsx') {
     $playersForExport = fetchAcademyPlayersList($pdo, $filters);
@@ -1347,6 +1457,10 @@ $submittedPlayerFormData = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = trim((string) ($_POST['action'] ?? ''));
     $redirectFilters = academyPlayersFilterParamsFromArray($_POST);
+    $redirectView = normalizeAcademyPlayersView((string) ($_POST['current_view'] ?? ''));
+    $redirectPageParams = array_merge($redirectFilters, [
+        'view' => $redirectView === 'summary' ? 'summary' : '',
+    ]);
 
     if ($action !== '' && !isValidAcademyPlayersCsrfToken($_POST['csrf_token'] ?? null)) {
         $message = '❌ انتهت صلاحية الطلب، يرجى إعادة المحاولة.';
@@ -1828,7 +1942,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             setAcademyPlayersFlash('✅ تم تحديث بيانات السباح.', 'success');
                         }
 
-                        header('Location: ' . buildAcademyPlayersPageUrl($redirectFilters));
+                        header('Location: ' . buildAcademyPlayersPageUrl($redirectPageParams));
                         exit;
                     } catch (Throwable $exception) {
                         if ($pdo->inTransaction()) {
@@ -1903,7 +2017,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $pdo->commit();
                     setAcademyPlayersFlash('✅ تم تسجيل السداد بنجاح.', 'success');
-                    header('Location: ' . buildAcademyPlayersPageUrl($redirectFilters));
+                    header('Location: ' . buildAcademyPlayersPageUrl($redirectPageParams));
                     exit;
                 } catch (Throwable $exception) {
                     if ($pdo->inTransaction()) {
@@ -1939,7 +2053,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 deleteAcademyPlayerImage((string) ($playerToDelete['federation_card_path'] ?? ''));
 
                 setAcademyPlayersFlash('✅ تم حذف السباح بنجاح.', 'success');
-                header('Location: ' . buildAcademyPlayersPageUrl($redirectFilters));
+                header('Location: ' . buildAcademyPlayersPageUrl($redirectPageParams));
                 exit;
             } catch (Throwable $exception) {
                 if ($pdo->inTransaction()) {
@@ -1988,7 +2102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $playerId,
                         ]);
                         setAcademyPlayersFlash('✅ تم تحديث الملف بنجاح.', 'success');
-                        header('Location: ' . buildAcademyPlayersPageUrl(array_merge($redirectFilters, ['files' => $playerId])));
+                        header('Location: ' . buildAcademyPlayersPageUrl(array_merge($redirectPageParams, ['files' => $playerId])));
                         exit;
                     } catch (Throwable $exception) {
                         deleteAcademyPlayerImages($uploadResult['paths'] ?? []);
@@ -2007,7 +2121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $updateStmt->execute([$uploadResult['path'], $playerId]);
                         deleteAcademyPlayerImage((string) ($filesPlayer[$resolvedFileColumn] ?? ''));
                         setAcademyPlayersFlash('✅ تم تحديث الملف بنجاح.', 'success');
-                        header('Location: ' . buildAcademyPlayersPageUrl(array_merge($redirectFilters, ['files' => $playerId])));
+                        header('Location: ' . buildAcademyPlayersPageUrl(array_merge($redirectPageParams, ['files' => $playerId])));
                         exit;
                     } catch (Throwable $exception) {
                         deleteAcademyPlayerImage((string) $uploadResult['path']);
@@ -2042,7 +2156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     deleteAcademyPlayerImage((string) ($filesPlayer[$resolvedFileColumn] ?? ''));
                 }
                 setAcademyPlayersFlash('✅ تم حذف الملف بنجاح.', 'success');
-                header('Location: ' . buildAcademyPlayersPageUrl(array_merge($redirectFilters, ['files' => $playerId])));
+                header('Location: ' . buildAcademyPlayersPageUrl(array_merge($redirectPageParams, ['files' => $playerId])));
                 exit;
             } catch (Throwable $exception) {
                 $message = '❌ حدث خطأ أثناء حذف الملف.';
@@ -2079,7 +2193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $updateStarStmt->execute([$resolvedStarsCount, $lastStarDate, $playerId]);
 
                     setAcademyPlayersFlash('✅ تم تحديث تاريخ النجمة بنجاح.', 'success');
-                    header('Location: ' . buildAcademyPlayersPageUrl($redirectFilters));
+                    header('Location: ' . buildAcademyPlayersPageUrl($redirectPageParams));
                     exit;
                 } catch (Throwable $exception) {
                     $message = '❌ حدث خطأ أثناء تحديث تاريخ النجمة.';
@@ -2110,7 +2224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $updatePasswordStmt = $pdo->prepare('UPDATE academy_players SET password_hash = ? WHERE id = ?');
                 $updatePasswordStmt->execute([password_hash($newPassword, PASSWORD_DEFAULT), $playerId]);
                 setAcademyPlayersFlash('✅ تم تحديث كلمة السر بنجاح.', 'success');
-                header('Location: ' . buildAcademyPlayersPageUrl($redirectFilters));
+                header('Location: ' . buildAcademyPlayersPageUrl($redirectPageParams));
                 exit;
             } catch (Throwable $exception) {
                 $message = '❌ حدث خطأ أثناء تحديث كلمة السر.';
@@ -2200,7 +2314,10 @@ $currentFilterParams = [
     'summary_category' => $summaryCategory,
     'status' => $filters['status'] === 'all' ? '' : $filters['status'],
     'medical_report' => $filters['medical_report'] === 'all' ? '' : $filters['medical_report'],
+    'view' => $currentView === 'summary' ? 'summary' : '',
 ];
+$summaryPageUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['view' => 'summary']));
+$playersPageUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['view' => '']));
 
 $playerFormData = [
     'id' => (string) ($editPlayer['id'] ?? ''),
@@ -2376,376 +2493,309 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
         </article>
     </section>
 
-    <section class="content-grid">
-        <div class="launcher-card">
-            <div class="card-head">
-                <h2><?php echo htmlspecialchars($playerFormModalHeading, ENT_QUOTES, 'UTF-8'); ?></h2>
-            </div>
-            <p class="launcher-text">
-                <?php echo htmlspecialchars($playerFormLauncherText, ENT_QUOTES, 'UTF-8'); ?>
-            </p>
-            <div class="form-actions">
-                <button
-                    type="button"
-                    class="save-btn"
-                    id="openPlayerModalBtn"
-                    aria-haspopup="dialog"
-                    aria-controls="playerFormModal"
-                    aria-expanded="false"
-                >
-                    <?php echo htmlspecialchars($playerFormLauncherButtonText, ENT_QUOTES, 'UTF-8'); ?>
-                </button>
-            </div>
-        </div>
-
-        <div class="modal-overlay hidden" id="playerFormModal" role="dialog" aria-modal="true" aria-labelledby="playerFormModalTitle">
-            <div class="modal-shell">
-                <div class="form-card modal-form-card">
-                    <div class="card-head modal-card-head">
-                        <h2 id="playerFormModalTitle"><?php echo htmlspecialchars($playerFormModalHeading, ENT_QUOTES, 'UTF-8'); ?></h2>
-                        <button type="button" class="modal-close-btn" data-close-player-modal>إغلاق</button>
-                    </div>
-
-            <form method="POST" enctype="multipart/form-data" class="player-form" id="playerForm" autocomplete="off">
-                <input type="hidden" name="action" value="save">
-                <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($playerFormData['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
-
-                <div class="form-grid form-grid-compact">
-                    <div class="form-group">
-                        <label for="barcode">باركود السباح</label>
-                        <input type="text" name="barcode" id="barcode" value="<?php echo htmlspecialchars($playerFormData['barcode'], ENT_QUOTES, 'UTF-8'); ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="player_name">اسم السباح</label>
-                        <input type="text" name="player_name" id="player_name" value="<?php echo htmlspecialchars($playerFormData['player_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">رقم الأب</label>
-                        <input type="text" name="phone" id="phone" inputmode="tel" value="<?php echo htmlspecialchars($playerFormData['phone'], ENT_QUOTES, 'UTF-8'); ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="guardian_phone">رقم الأم</label>
-                        <input type="text" name="guardian_phone" id="guardian_phone" inputmode="tel" value="<?php echo htmlspecialchars($playerFormData['guardian_phone'], ENT_QUOTES, 'UTF-8'); ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="subscription_branch">الفرع</label>
-                        <select name="subscription_branch" id="subscription_branch" <?php echo $playerFormBranchOptions === [] ? 'disabled' : ''; ?>>
-                            <?php if ($playerFormBranchOptions === []): ?>
-                                <option value="">لا توجد فروع</option>
-                            <?php else: ?>
-                                <?php foreach ($playerFormBranchOptions as $branchOption): ?>
-                                    <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $playerFormData['subscription_branch'] === $branchOption ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="birth_date">سنة الميلاد</label>
-                        <input type="number" name="birth_year" id="birth_date" value="<?php echo htmlspecialchars($playerFormData['birth_year'], ENT_QUOTES, 'UTF-8'); ?>" min="1950" max="<?php echo (int) date('Y'); ?>" placeholder="مثال: 2010" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subscription_start_date">تاريخ بداية الاشتراك</label>
-                        <input type="date" name="subscription_start_date" id="subscription_start_date" value="<?php echo htmlspecialchars($playerFormData['subscription_start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="player_age">السن (مُحتسب)</label>
-                        <input type="text" id="player_age" value="<?php echo htmlspecialchars(calculateAcademyPlayerAgeFromYear($playerFormData['birth_year'] !== '' ? (int) $playerFormData['birth_year'] : null), ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                    </div>
-                    <div class="form-group file-group">
-                        <label for="player_image">صورة السباح</label>
-                        <input type="file" name="player_image" id="player_image" accept="image/*">
-                    </div>
-                    <div class="form-group form-group-full subscription-select-group">
-                        <label for="subscription_id">المجموعة</label>
-                        <select name="subscription_id" id="subscription_id" required <?php echo $playerFormSubscriptions === [] ? 'disabled' : ''; ?>>
-                            <?php if ($playerFormSubscriptions === []): ?>
-                                <option value="">لا توجد مجموعات</option>
-                            <?php else: ?>
-                                <?php foreach ($playerFormSubscriptions as $subscription): ?>
-                                    <?php $subscriptionId = (int) ($subscription['id'] ?? 0); ?>
-                                    <?php $subscriptionDisplayText = formatAcademyPlayerSubscriptionDisplay($subscription); ?>
-                                    <option
-                                        value="<?php echo $subscriptionId; ?>"
-                                        data-branch="<?php echo htmlspecialchars((string) ($subscription['subscription_branch'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                        data-category="<?php echo htmlspecialchars((string) ($subscription['subscription_category'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                        data-coach="<?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                        data-schedule="<?php echo htmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                        data-schedule-days="<?php echo htmlspecialchars((string) ($subscription['schedule_days'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                        data-exercises="<?php echo (int) ($subscription['available_exercises_count'] ?? 0); ?>"
-                                        data-max-trainees="<?php echo (int) ($subscription['max_trainees'] ?? 0); ?>"
-                                        data-current-count="<?php echo (int) ($subscription['active_players_count'] ?? 0); ?>"
-                                        data-price="<?php echo htmlspecialchars(formatAcademyPlayerAmount($subscription['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
-                                        data-stars-count="<?php echo academyPlayerCategoryStarsCount((string) ($subscription['subscription_category'] ?? '')); ?>"
-                                        data-allows-custom-stars="<?php echo academyPlayerCategoryAllowsCustomStars((string) ($subscription['subscription_category'] ?? '')) ? '1' : '0'; ?>"
-                                        <?php echo (string) $subscriptionId === $playerFormData['subscription_id'] ? 'selected' : ''; ?>
-                                    ><?php echo htmlspecialchars($subscriptionDisplayText, ENT_QUOTES, 'UTF-8'); ?></option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
+    <div class="modal-overlay hidden" id="playerFormModal" role="dialog" aria-modal="true" aria-labelledby="playerFormModalTitle">
+        <div class="modal-shell">
+            <div class="form-card modal-form-card">
+                <div class="card-head modal-card-head">
+                    <h2 id="playerFormModalTitle"><?php echo htmlspecialchars($playerFormModalHeading, ENT_QUOTES, 'UTF-8'); ?></h2>
+                    <button type="button" class="modal-close-btn" data-close-player-modal>إغلاق</button>
                 </div>
 
-                <div class="subscription-overview-grid">
-                    <div class="overview-item">
-                        <span>مستوى المجموعة</span>
-                        <strong id="subscription_category_display"><?php echo htmlspecialchars($playerFormData['subscription_category'] !== '' ? $playerFormData['subscription_category'] : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
-                    </div>
-                    <div class="overview-item">
-                        <span>المدرب</span>
-                        <strong id="subscription_coach_display"><?php echo htmlspecialchars($playerFormData['subscription_coach_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                    </div>
-                    <div class="overview-item">
-                        <span>الأيام والساعة</span>
-                        <strong id="subscription_schedule_display"><?php echo htmlspecialchars($playerFormData['subscription_training_schedule'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                    </div>
-                    <div class="overview-item">
-                        <span>عدد التمارين المتاحة</span>
-                        <strong id="subscription_exercises_display"><?php echo htmlspecialchars($playerFormData['available_exercises_count'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                    </div>
-                    <div class="overview-item">
-                        <span>السباحين / الحد الأقصى</span>
-                        <strong id="subscription_capacity_display"><?php echo htmlspecialchars(($playerFormData['current_players_count'] === '' ? '0' : $playerFormData['current_players_count']) . ' / ' . ($playerFormData['max_trainees'] === '' ? '0' : $playerFormData['max_trainees']), ENT_QUOTES, 'UTF-8'); ?></strong>
-                    </div>
-                    <div class="overview-item">
-                        <span>تاريخ نهاية الاشتراك</span>
-                        <strong id="subscription_end_display"><?php echo htmlspecialchars($playerFormData['subscription_end_date'] !== '' ? $playerFormData['subscription_end_date'] : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
-                    </div>
-                </div>
+        <form method="POST" enctype="multipart/form-data" class="player-form" id="playerForm" autocomplete="off">
+            <input type="hidden" name="action" value="save">
+            <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($playerFormData['id'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_view" value="<?php echo htmlspecialchars($currentView, ENT_QUOTES, 'UTF-8'); ?>">
 
-                <div class="form-grid form-grid-compact payment-grid">
-                    <div class="form-group">
-                        <label for="subscription_base_price">السعر</label>
-                        <input type="number" min="0" step="0.01" name="subscription_base_price" id="subscription_base_price" value="<?php echo htmlspecialchars($playerFormData['subscription_base_price'], ENT_QUOTES, 'UTF-8'); ?>" required>
-                    </div>
-                    <?php if ($canManageDiscount): ?>
-                        <div class="form-group" id="additionalDiscountGroup">
-                            <label for="additional_discount">خصم الإدارة</label>
-                            <input type="number" min="0" step="0.01" name="additional_discount" id="additional_discount" value="<?php echo htmlspecialchars($playerFormData['additional_discount'], ENT_QUOTES, 'UTF-8'); ?>">
-                        </div>
-                    <?php endif; ?>
-                    <div class="form-group">
-                        <label for="subscription_amount">الإجمالي</label>
-                        <input type="text" id="subscription_amount" value="<?php echo htmlspecialchars($playerFormData['subscription_amount'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="paid_amount">المدفوع</label>
-                        <input type="number" min="0" step="0.01" name="paid_amount" id="paid_amount" value="<?php echo htmlspecialchars($playerFormData['paid_amount'], ENT_QUOTES, 'UTF-8'); ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="remaining_amount">المتبقي</label>
-                        <input type="text" id="remaining_amount" value="<?php echo htmlspecialchars($playerFormData['remaining_amount'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="receipt_number">رقم الإيصال</label>
-                        <input type="text" name="receipt_number" id="receipt_number" value="<?php echo htmlspecialchars($playerFormData['receipt_number'], ENT_QUOTES, 'UTF-8'); ?>">
-                    </div>
+            <div class="form-grid form-grid-compact">
+                <div class="form-group">
+                    <label for="barcode">باركود السباح</label>
+                    <input type="text" name="barcode" id="barcode" value="<?php echo htmlspecialchars($playerFormData['barcode'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
-
-                <div class="conditional-grid">
-                    <div class="toggle-card">
-                        <label class="toggle-line">
-                            <span>كل المستندات</span>
-                            <input type="checkbox" name="all_required_documents" id="all_required_documents" value="1" <?php echo !empty($playerFormData['all_required_documents']) ? 'checked' : ''; ?>>
-                        </label>
-                    </div>
-                    <div class="toggle-card" id="birthCertificateToggleCard">
-                        <label class="toggle-line">
-                            <span>شهادة الميلاد</span>
-                            <input type="checkbox" name="birth_certificate_required" id="birth_certificate_required" value="1" <?php echo !empty($playerFormData['birth_certificate_required']) ? 'checked' : ''; ?>>
-                        </label>
-                        <div class="inline-upload <?php echo !empty($playerFormData['birth_certificate_required']) ? '' : 'hidden'; ?>" id="birthCertificateUploadWrap">
-                            <input type="file" name="birth_certificate_file" id="birth_certificate_file" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="toggle-card" id="medicalReportToggleCard">
-                        <label class="toggle-line">
-                            <span>التقرير الطبي</span>
-                            <input type="checkbox" name="medical_report_required" id="medical_report_required" value="1" <?php echo !empty($playerFormData['medical_report_required']) ? 'checked' : ''; ?>>
-                        </label>
-                        <div class="inline-upload <?php echo !empty($playerFormData['medical_report_required']) ? '' : 'hidden'; ?>" id="medicalReportUploadWrap">
-                            <input type="file" name="medical_report_file[]" id="medical_report_file" accept="image/*" multiple>
-                        </div>
-                    </div>
-                    <div class="toggle-card" id="federationCardToggleCard">
-                        <label class="toggle-line">
-                            <span>كارنية الاتحاد</span>
-                            <input type="checkbox" name="federation_card_required" id="federation_card_required" value="1" <?php echo !empty($playerFormData['federation_card_required']) ? 'checked' : ''; ?>>
-                        </label>
-                        <div class="inline-upload <?php echo !empty($playerFormData['federation_card_required']) ? '' : 'hidden'; ?>" id="federationCardUploadWrap">
-                            <input type="file" name="federation_card_file" id="federation_card_file" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="toggle-card hidden" id="starsCard">
-                        <div class="stars-preview" id="starsPreview"><?php echo htmlspecialchars(academyPlayerStarsText((int) ($playerFormData['stars_count'] === '' ? 0 : $playerFormData['stars_count'])), ENT_QUOTES, 'UTF-8'); ?></div>
-                        <div class="form-group compact-field hidden" id="starsCountGroup">
-                            <label for="stars_count">عدد النجوم</label>
-                            <select name="stars_count" id="stars_count">
-                                <option value="">اختر عدد النجوم</option>
-                                <?php foreach (ACADEMY_PLAYERS_CUSTOM_STARS_OPTIONS as $starsOption): ?>
-                                    <option value="<?php echo $starsOption; ?>" <?php echo (string) $starsOption === $playerFormData['stars_count'] ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars(academyPlayerStarsOptionLabel((int) $starsOption), ENT_QUOTES, 'UTF-8'); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group compact-field">
-                            <label for="last_star_date">تاريخ آخر نجمة (اختياري)</label>
-                            <input type="date" name="last_star_date" id="last_star_date" value="<?php echo htmlspecialchars($playerFormData['last_star_date'], ENT_QUOTES, 'UTF-8'); ?>">
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="player_name">اسم السباح</label>
+                    <input type="text" name="player_name" id="player_name" value="<?php echo htmlspecialchars($playerFormData['player_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="save-btn" <?php echo $playerFormSubscriptions === [] ? 'disabled' : ''; ?>><?php echo $editPlayer ? 'حفظ التعديل' : 'تسجيل السباح'; ?></button>
-                    <button type="button" class="clear-btn" id="clearBtn">مسح</button>
+                <div class="form-group">
+                    <label for="phone">رقم الأب</label>
+                    <input type="text" name="phone" id="phone" inputmode="tel" value="<?php echo htmlspecialchars($playerFormData['phone'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
-            </form>
+                <div class="form-group">
+                    <label for="guardian_phone">رقم الأم</label>
+                    <input type="text" name="guardian_phone" id="guardian_phone" inputmode="tel" value="<?php echo htmlspecialchars($playerFormData['guardian_phone'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
-            </div>
-        </div>
-
-        <aside class="side-panel">
-            <div class="side-card">
-                <h3>التصفية</h3>
-                <form method="GET" class="filter-form" autocomplete="off">
-                    <input type="hidden" name="summary_category" value="<?php echo htmlspecialchars($summaryCategory, ENT_QUOTES, 'UTF-8'); ?>">
-                    <div class="form-group">
-                        <label for="search">البحث</label>
-                        <input type="text" name="search" id="search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                    </div>
-                    <div class="form-group subscription-select-group">
-                        <label for="subscription_filter">المجموعة</label>
-                        <select name="subscription_id" id="subscription_filter">
-                            <option value="">كل المجموعات</option>
-                            <?php foreach ($subscriptions as $subscription): ?>
-                                <?php $subscriptionDisplayText = formatAcademyPlayerSubscriptionDisplay($subscription); ?>
-                                <option value="<?php echo (int) ($subscription['id'] ?? 0); ?>" <?php echo (string) ($subscription['id'] ?? '') === $filters['subscription_id'] ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($subscriptionDisplayText, ENT_QUOTES, 'UTF-8'); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="branch_filter">الفرع</label>
-                        <select name="branch" id="branch_filter">
-                            <option value="">كل الفروع</option>
-                            <?php foreach ($branchOptions as $branchOption): ?>
-                                <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['branch'] === $branchOption ? 'selected' : ''; ?>>
+                <div class="form-group">
+                    <label for="subscription_branch">الفرع</label>
+                    <select name="subscription_branch" id="subscription_branch" <?php echo $playerFormBranchOptions === [] ? 'disabled' : ''; ?>>
+                        <?php if ($playerFormBranchOptions === []): ?>
+                            <option value="">لا توجد فروع</option>
+                        <?php else: ?>
+                            <?php foreach ($playerFormBranchOptions as $branchOption): ?>
+                                <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $playerFormData['subscription_branch'] === $branchOption ? 'selected' : ''; ?>>
                                     <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="category_filter">مستوى المجموعة</label>
-                        <select name="category" id="category_filter">
-                            <option value="">كل المستويات</option>
-                            <?php foreach ($categoryOptions as $categoryOption): ?>
-                                <option value="<?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['category'] === $categoryOption ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>
-                                </option>
+                        <?php endif; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="birth_date">سنة الميلاد</label>
+                    <input type="number" name="birth_year" id="birth_date" value="<?php echo htmlspecialchars($playerFormData['birth_year'], ENT_QUOTES, 'UTF-8'); ?>" min="1950" max="<?php echo (int) date('Y'); ?>" placeholder="مثال: 2010" required>
+                </div>
+                <div class="form-group">
+                    <label for="subscription_start_date">تاريخ بداية الاشتراك</label>
+                    <input type="date" name="subscription_start_date" id="subscription_start_date" value="<?php echo htmlspecialchars($playerFormData['subscription_start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="player_age">السن (مُحتسب)</label>
+                    <input type="text" id="player_age" value="<?php echo htmlspecialchars(calculateAcademyPlayerAgeFromYear($playerFormData['birth_year'] !== '' ? (int) $playerFormData['birth_year'] : null), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                </div>
+                <div class="form-group file-group">
+                    <label for="player_image">صورة السباح</label>
+                    <input type="file" name="player_image" id="player_image" accept="image/*">
+                </div>
+                <div class="form-group form-group-full subscription-select-group">
+                    <label for="subscription_id">المجموعة</label>
+                    <select name="subscription_id" id="subscription_id" required <?php echo $playerFormSubscriptions === [] ? 'disabled' : ''; ?>>
+                        <?php if ($playerFormSubscriptions === []): ?>
+                            <option value="">لا توجد مجموعات</option>
+                        <?php else: ?>
+                            <?php foreach ($playerFormSubscriptions as $subscription): ?>
+                                <?php $subscriptionId = (int) ($subscription['id'] ?? 0); ?>
+                                <?php $subscriptionDisplayText = formatAcademyPlayerSubscriptionDisplay($subscription); ?>
+                                <option
+                                    value="<?php echo $subscriptionId; ?>"
+                                    data-branch="<?php echo htmlspecialchars((string) ($subscription['subscription_branch'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-category="<?php echo htmlspecialchars((string) ($subscription['subscription_category'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-coach="<?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-schedule="<?php echo htmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-schedule-days="<?php echo htmlspecialchars((string) ($subscription['schedule_days'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-exercises="<?php echo (int) ($subscription['available_exercises_count'] ?? 0); ?>"
+                                    data-max-trainees="<?php echo (int) ($subscription['max_trainees'] ?? 0); ?>"
+                                    data-current-count="<?php echo (int) ($subscription['active_players_count'] ?? 0); ?>"
+                                    data-price="<?php echo htmlspecialchars(formatAcademyPlayerAmount($subscription['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-stars-count="<?php echo academyPlayerCategoryStarsCount((string) ($subscription['subscription_category'] ?? '')); ?>"
+                                    data-allows-custom-stars="<?php echo academyPlayerCategoryAllowsCustomStars((string) ($subscription['subscription_category'] ?? '')) ? '1' : '0'; ?>"
+                                    <?php echo (string) $subscriptionId === $playerFormData['subscription_id'] ? 'selected' : ''; ?>
+                                ><?php echo htmlspecialchars($subscriptionDisplayText, ENT_QUOTES, 'UTF-8'); ?></option>
                             <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="status_filter">الحالة</label>
-                        <select name="status" id="status_filter">
-                            <?php foreach (ACADEMY_PLAYER_STATUS_FILTERS as $statusKey => $statusLabel): ?>
-                                <option value="<?php echo htmlspecialchars($statusKey === 'all' ? '' : $statusKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['status'] === $statusKey ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($statusLabel, ENT_QUOTES, 'UTF-8'); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="medical_report_filter">التقرير الطبي</label>
-                        <select name="medical_report" id="medical_report_filter">
-                            <?php foreach (ACADEMY_PLAYER_MEDICAL_REPORT_FILTERS as $medicalReportKey => $medicalReportLabel): ?>
-                                <option value="<?php echo htmlspecialchars($medicalReportKey === 'all' ? '' : $medicalReportKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['medical_report'] === $medicalReportKey ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($medicalReportLabel, ENT_QUOTES, 'UTF-8'); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-actions compact-actions">
-                        <button type="submit" class="save-btn">عرض</button>
-                        <a href="academy_players.php" class="clear-btn link-btn">إعادة ضبط</a>
-                        <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['export' => 'xlsx'])), ENT_QUOTES, 'UTF-8'); ?>" class="link-btn export-btn">استخراج إكسل</a>
-                    </div>
-                </form>
+                        <?php endif; ?>
+                    </select>
+                </div>
             </div>
 
-            <div class="side-card">
-                <h3>ملخص</h3>
-                <form method="GET" class="stack-form summary-filter-form" autocomplete="off">
-                    <input type="hidden" name="search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="status" value="<?php echo htmlspecialchars($filters['status'] === 'all' ? '' : $filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="medical_report" value="<?php echo htmlspecialchars($filters['medical_report'] === 'all' ? '' : $filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <div class="form-group">
-                        <label for="summary_category">مستوى الملخص</label>
-                        <select name="summary_category" id="summary_category">
-                            <option value="">كل المستويات</option>
-                            <?php foreach ($categoryOptions as $categoryOption): ?>
-                                <option value="<?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $summaryCategory === $categoryOption ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>
+            <div class="subscription-overview-grid">
+                <div class="overview-item">
+                    <span>مستوى المجموعة</span>
+                    <strong id="subscription_category_display"><?php echo htmlspecialchars($playerFormData['subscription_category'] !== '' ? $playerFormData['subscription_category'] : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
+                </div>
+                <div class="overview-item">
+                    <span>المدرب</span>
+                    <strong id="subscription_coach_display"><?php echo htmlspecialchars($playerFormData['subscription_coach_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                </div>
+                <div class="overview-item">
+                    <span>الأيام والساعة</span>
+                    <strong id="subscription_schedule_display"><?php echo htmlspecialchars($playerFormData['subscription_training_schedule'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                </div>
+                <div class="overview-item">
+                    <span>عدد التمارين المتاحة</span>
+                    <strong id="subscription_exercises_display"><?php echo htmlspecialchars($playerFormData['available_exercises_count'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                </div>
+                <div class="overview-item">
+                    <span>السباحين / الحد الأقصى</span>
+                    <strong id="subscription_capacity_display"><?php echo htmlspecialchars(($playerFormData['current_players_count'] === '' ? '0' : $playerFormData['current_players_count']) . ' / ' . ($playerFormData['max_trainees'] === '' ? '0' : $playerFormData['max_trainees']), ENT_QUOTES, 'UTF-8'); ?></strong>
+                </div>
+                <div class="overview-item">
+                    <span>تاريخ نهاية الاشتراك</span>
+                    <strong id="subscription_end_display"><?php echo htmlspecialchars($playerFormData['subscription_end_date'] !== '' ? $playerFormData['subscription_end_date'] : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
+                </div>
+            </div>
+
+            <div class="form-grid form-grid-compact payment-grid">
+                <div class="form-group">
+                    <label for="subscription_base_price">السعر</label>
+                    <input type="number" min="0" step="0.01" name="subscription_base_price" id="subscription_base_price" value="<?php echo htmlspecialchars($playerFormData['subscription_base_price'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                </div>
+                <?php if ($canManageDiscount): ?>
+                    <div class="form-group" id="additionalDiscountGroup">
+                        <label for="additional_discount">خصم الإدارة</label>
+                        <input type="number" min="0" step="0.01" name="additional_discount" id="additional_discount" value="<?php echo htmlspecialchars($playerFormData['additional_discount'], ENT_QUOTES, 'UTF-8'); ?>">
+                    </div>
+                <?php endif; ?>
+                <div class="form-group">
+                    <label for="subscription_amount">الإجمالي</label>
+                    <input type="text" id="subscription_amount" value="<?php echo htmlspecialchars($playerFormData['subscription_amount'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="paid_amount">المدفوع</label>
+                    <input type="number" min="0" step="0.01" name="paid_amount" id="paid_amount" value="<?php echo htmlspecialchars($playerFormData['paid_amount'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="remaining_amount">المتبقي</label>
+                    <input type="text" id="remaining_amount" value="<?php echo htmlspecialchars($playerFormData['remaining_amount'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="receipt_number">رقم الإيصال</label>
+                    <input type="text" name="receipt_number" id="receipt_number" value="<?php echo htmlspecialchars($playerFormData['receipt_number'], ENT_QUOTES, 'UTF-8'); ?>">
+                </div>
+            </div>
+
+            <div class="conditional-grid">
+                <div class="toggle-card">
+                    <label class="toggle-line">
+                        <span>كل المستندات</span>
+                        <input type="checkbox" name="all_required_documents" id="all_required_documents" value="1" <?php echo !empty($playerFormData['all_required_documents']) ? 'checked' : ''; ?>>
+                    </label>
+                </div>
+                <div class="toggle-card" id="birthCertificateToggleCard">
+                    <label class="toggle-line">
+                        <span>شهادة الميلاد</span>
+                        <input type="checkbox" name="birth_certificate_required" id="birth_certificate_required" value="1" <?php echo !empty($playerFormData['birth_certificate_required']) ? 'checked' : ''; ?>>
+                    </label>
+                    <div class="inline-upload <?php echo !empty($playerFormData['birth_certificate_required']) ? '' : 'hidden'; ?>" id="birthCertificateUploadWrap">
+                        <input type="file" name="birth_certificate_file" id="birth_certificate_file" accept="image/*">
+                    </div>
+                </div>
+                <div class="toggle-card" id="medicalReportToggleCard">
+                    <label class="toggle-line">
+                        <span>التقرير الطبي</span>
+                        <input type="checkbox" name="medical_report_required" id="medical_report_required" value="1" <?php echo !empty($playerFormData['medical_report_required']) ? 'checked' : ''; ?>>
+                    </label>
+                    <div class="inline-upload <?php echo !empty($playerFormData['medical_report_required']) ? '' : 'hidden'; ?>" id="medicalReportUploadWrap">
+                        <input type="file" name="medical_report_file[]" id="medical_report_file" accept="image/*" multiple>
+                    </div>
+                </div>
+                <div class="toggle-card" id="federationCardToggleCard">
+                    <label class="toggle-line">
+                        <span>كارنية الاتحاد</span>
+                        <input type="checkbox" name="federation_card_required" id="federation_card_required" value="1" <?php echo !empty($playerFormData['federation_card_required']) ? 'checked' : ''; ?>>
+                    </label>
+                    <div class="inline-upload <?php echo !empty($playerFormData['federation_card_required']) ? '' : 'hidden'; ?>" id="federationCardUploadWrap">
+                        <input type="file" name="federation_card_file" id="federation_card_file" accept="image/*">
+                    </div>
+                </div>
+                <div class="toggle-card hidden" id="starsCard">
+                    <div class="stars-preview" id="starsPreview"><?php echo htmlspecialchars(academyPlayerStarsText((int) ($playerFormData['stars_count'] === '' ? 0 : $playerFormData['stars_count'])), ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="form-group compact-field hidden" id="starsCountGroup">
+                        <label for="stars_count">عدد النجوم</label>
+                        <select name="stars_count" id="stars_count">
+                            <option value="">اختر عدد النجوم</option>
+                            <?php foreach (ACADEMY_PLAYERS_CUSTOM_STARS_OPTIONS as $starsOption): ?>
+                                <option value="<?php echo $starsOption; ?>" <?php echo (string) $starsOption === $playerFormData['stars_count'] ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars(academyPlayerStarsOptionLabel((int) $starsOption), ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="form-actions compact-actions">
-                        <button type="submit" class="save-btn">تحديث الملخص</button>
+                    <div class="form-group compact-field">
+                        <label for="last_star_date">تاريخ آخر نجمة (اختياري)</label>
+                        <input type="date" name="last_star_date" id="last_star_date" value="<?php echo htmlspecialchars($playerFormData['last_star_date'], ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
-                </form>
-                <div class="mini-stats">
-                    <div class="mini-stat">
-                        <span>المبالغ المسددة</span>
-                        <strong><?php echo formatAcademyPlayerMoney($overallStats['total_paid'] ?? 0); ?> ج.م</strong>
-                    </div>
-                    <div class="mini-stat accent-stat">
-                        <span>المجموعات المتاحة لإضافة سباحين</span>
-                        <strong><?php echo (int) ($subscriptionSummary['available_groups_count'] ?? 0); ?></strong>
-                    </div>
-                    <div class="mini-stat">
-                        <span>المجموعات المكتملة</span>
-                        <strong><?php echo (int) ($subscriptionSummary['full_groups_count'] ?? 0); ?></strong>
-                    </div>
-                </div>
-                <div class="summary-groups-list">
-                    <h4>المجموعات المتاحة</h4>
-                    <?php if (!empty($subscriptionSummary['available_groups'])): ?>
-                        <div class="info-list compact-list">
-                            <?php foreach ($subscriptionSummary['available_groups'] as $availableGroup): ?>
-                                <div>
-                                    <span>
-                                        <?php echo htmlspecialchars((string) ($availableGroup['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
-                                        <?php if ((string) ($availableGroup['subscription_branch'] ?? '') !== ''): ?>
-                                            <small class="summary-inline-note"><?php echo htmlspecialchars((string) $availableGroup['subscription_branch'], ENT_QUOTES, 'UTF-8'); ?></small>
-                                        <?php endif; ?>
-                                    </span>
-                                    <strong>
-                                        <?php echo (int) ($availableGroup['active_players_count'] ?? 0); ?> / <?php echo (int) ($availableGroup['max_trainees'] ?? 0); ?>
-                                        <small class="summary-inline-note">متبقي <?php echo (int) ($availableGroup['remaining_slots'] ?? 0); ?></small>
-                                    </strong>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php else: ?>
-                        <div class="empty-file">لا توجد مجموعات متاحة ضمن المستوى المحدد حالياً.</div>
-                    <?php endif; ?>
                 </div>
             </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn" <?php echo $playerFormSubscriptions === [] ? 'disabled' : ''; ?>><?php echo $editPlayer ? 'حفظ التعديل' : 'تسجيل السباح'; ?></button>
+                <button type="button" class="clear-btn" id="clearBtn">مسح</button>
+            </div>
+        </form>
+            </div>
+        </div>
+    </div>
+
+    <?php if ($currentView === 'summary'): ?>
+        <section class="summary-page-card">
+            <div class="summary-page-header">
+                <div>
+                    <span class="eyebrow">ملخص المجموعات</span>
+                    <h2>ملخص المجموعات</h2>
+                </div>
+                <div class="toolbar-actions">
+                    <button
+                        type="button"
+                        class="save-btn"
+                        data-open-player-modal
+                        aria-haspopup="dialog"
+                        aria-controls="playerFormModal"
+                        aria-expanded="false"
+                    >
+                        إضافة سباح
+                    </button>
+                    <a href="<?php echo htmlspecialchars($playersPageUrl, ENT_QUOTES, 'UTF-8'); ?>" class="back-btn">العودة لجدول السباحين</a>
+                </div>
+            </div>
+            <form method="GET" class="filter-form filter-form-horizontal summary-page-form" autocomplete="off">
+                <input type="hidden" name="search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="status" value="<?php echo htmlspecialchars($filters['status'] === 'all' ? '' : $filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="medical_report" value="<?php echo htmlspecialchars($filters['medical_report'] === 'all' ? '' : $filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="view" value="summary">
+                <div class="form-group">
+                    <label for="summary_category">مستوى الملخص</label>
+                    <select name="summary_category" id="summary_category">
+                        <option value="">كل المستويات</option>
+                        <?php foreach ($categoryOptions as $categoryOption): ?>
+                            <option value="<?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $summaryCategory === $categoryOption ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-actions compact-actions toolbar-form-actions">
+                    <button type="submit" class="save-btn">تحديث الملخص</button>
+                </div>
+            </form>
+            <div class="mini-stats summary-stats-grid">
+                <div class="mini-stat">
+                    <span>المبالغ المسددة</span>
+                    <strong><?php echo formatAcademyPlayerMoney($overallStats['total_paid'] ?? 0); ?> ج.م</strong>
+                </div>
+                <div class="mini-stat accent-stat">
+                    <span>المجموعات المتاحة لإضافة سباحين</span>
+                    <strong><?php echo (int) ($subscriptionSummary['available_groups_count'] ?? 0); ?></strong>
+                </div>
+                <div class="mini-stat">
+                    <span>المجموعات المكتملة</span>
+                    <strong><?php echo (int) ($subscriptionSummary['full_groups_count'] ?? 0); ?></strong>
+                </div>
+            </div>
+            <div class="summary-groups-list summary-page-groups">
+                <h3>المجموعات المتاحة</h3>
+                <?php if (!empty($subscriptionSummary['available_groups'])): ?>
+                    <div class="info-list compact-list">
+                        <?php foreach ($subscriptionSummary['available_groups'] as $availableGroup): ?>
+                            <div>
+                                <span>
+                                    <?php echo htmlspecialchars((string) ($availableGroup['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                    <?php if ((string) ($availableGroup['subscription_branch'] ?? '') !== ''): ?>
+                                        <small class="summary-inline-note"><?php echo htmlspecialchars((string) $availableGroup['subscription_branch'], ENT_QUOTES, 'UTF-8'); ?></small>
+                                    <?php endif; ?>
+                                </span>
+                                <strong>
+                                    <?php echo (int) ($availableGroup['active_players_count'] ?? 0); ?> / <?php echo (int) ($availableGroup['max_trainees'] ?? 0); ?>
+                                    <small class="summary-inline-note">متبقي <?php echo (int) ($availableGroup['remaining_slots'] ?? 0); ?></small>
+                                </strong>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="empty-file">لا توجد مجموعات متاحة ضمن المستوى المحدد حالياً.</div>
+                <?php endif; ?>
+            </div>
+        </section>
+    <?php else: ?>
+        <?php renderAcademyPlayersHorizontalToolbar($filters, $subscriptions, $branchOptions, $categoryOptions, $summaryCategory, $currentFilterParams, 'top', $summaryPageUrl); ?>
+    <?php endif; ?>
+
+    <section class="action-panels">
 
             <?php if ($paymentPlayer !== null && (float) ($paymentPlayer['remaining_amount'] ?? 0) > 0): ?>
                 <div class="side-card action-card" id="collect-payment-card">
@@ -2969,20 +3019,20 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                     </form>
                 </div>
             <?php endif; ?>
-        </aside>
     </section>
 
-    <section class="table-card">
-        <div class="card-head table-head">
-            <div>
-                <h2>جدول السباحين</h2>
+    <?php if ($currentView !== 'summary'): ?>
+        <section class="table-card">
+            <div class="card-head table-head">
+                <div>
+                    <h2>جدول السباحين</h2>
+                </div>
+                <span class="table-count"><?php echo count($players); ?> سباح</span>
             </div>
-            <span class="table-count"><?php echo count($players); ?> سباح</span>
-        </div>
-                    <div class="table-wrapper">
-                            <table>
-                                <thead>
-                                    <tr>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
                         <th>صورة السباح</th>
                         <th>اسم السباح</th>
                         <th>الباركود</th>
@@ -3008,9 +3058,9 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                         <th>المتبقي</th>
                         <th>رقم إيصال سداد المتبقي</th>
                         <th>الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <?php if ($players !== []): ?>
                         <?php foreach ($players as $player): ?>
                             <?php $playerImagePath = normalizeAcademyPlayerUploadPublicPath($player['player_image_path'] ?? null); ?>
@@ -3110,10 +3160,13 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                             <td colspan="<?php echo ACADEMY_PLAYERS_TABLE_COLUMNS_COUNT; ?>" class="empty-row">لا توجد نتائج مطابقة.</td>
                         </tr>
                     <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </section>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <?php renderAcademyPlayersHorizontalToolbar($filters, $subscriptions, $branchOptions, $categoryOptions, $summaryCategory, $currentFilterParams, 'bottom', $summaryPageUrl); ?>
+    <?php endif; ?>
 </div>
 <script src="assets/js/academy-players.js"></script>
 </body>

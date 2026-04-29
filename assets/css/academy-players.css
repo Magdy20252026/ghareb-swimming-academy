@@ -64,6 +64,8 @@ body.dark-mode {
 .hero-card,
 .form-card,
 .launcher-card,
+.toolbar-card,
+.summary-page-card,
 .side-card,
 .table-card,
 .message-box,
@@ -118,6 +120,7 @@ body.dark-mode .header-text h1,
 body.dark-mode .card-head h2,
 body.dark-mode .side-card h3,
 body.dark-mode .table-head h2,
+body.dark-mode .summary-page-card h2,
 body.dark-mode .overview-item strong,
 body.dark-mode .summary-title,
 body.dark-mode .file-card strong {
@@ -372,6 +375,8 @@ body.dark-mode .hero-card strong {
 
 .form-card,
 .launcher-card,
+.toolbar-card,
+.summary-page-card,
 .side-card,
 .table-card {
     padding: 24px;
@@ -384,6 +389,69 @@ body.dark-mode .hero-card strong {
 .launcher-card {
     display: flex;
     flex-direction: column;
+    gap: 18px;
+}
+
+.toolbar-card,
+.summary-page-card,
+.action-panels {
+    margin-bottom: 22px;
+}
+
+.toolbar-row,
+.summary-page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.toolbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-form-horizontal {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(140px, 1fr)) auto;
+    gap: 14px;
+    align-items: end;
+}
+
+.filter-form-horizontal .form-group {
+    grid-column: auto;
+    min-width: 0;
+}
+
+.toolbar-form-actions {
+    align-self: end;
+    justify-content: flex-start;
+}
+
+.summary-page-card h2 {
+    color: var(--primary-dark);
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.summary-page-form {
+    margin: 22px 0;
+}
+
+.summary-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.summary-page-groups {
+    margin-top: 22px;
+}
+
+.action-panels {
+    display: grid;
     gap: 18px;
 }
 
@@ -1277,6 +1345,14 @@ body.dark-mode .detail-grid-payment .detail-item {
         grid-column: span 3;
     }
 
+    .filter-form-horizontal {
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+    }
+
+    .toolbar-form-actions {
+        grid-column: 1 / -1;
+    }
+
     .subscription-overview-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1287,13 +1363,8 @@ body.dark-mode .detail-grid-payment .detail-item {
 }
 
 @media (max-width: 1100px) {
-    .content-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .side-panel {
-        display: grid;
-        gap: 20px;
+    .filter-form-horizontal {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
     }
 
     .form-grid-compact .form-group,
@@ -1322,6 +1393,19 @@ body.dark-mode .detail-grid-payment .detail-item {
         justify-content: space-between;
     }
 
+    .toolbar-row,
+    .summary-page-header {
+        align-items: stretch;
+    }
+
+    .toolbar-actions {
+        width: 100%;
+    }
+
+    .toolbar-actions > * {
+        flex: 1 1 180px;
+    }
+
     .hero-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1340,6 +1424,10 @@ body.dark-mode .detail-grid-payment .detail-item {
     .payment-grid .form-group,
     .form-group {
         grid-column: auto;
+    }
+
+    .filter-form-horizontal {
+        grid-template-columns: 1fr;
     }
 
     .table-wrapper table,
@@ -1439,6 +1527,10 @@ body.dark-mode .detail-grid-payment .detail-item {
 
     .header-text h1 {
         font-size: 28px;
+    }
+
+    .summary-page-card h2 {
+        font-size: 24px;
     }
 
     .card-head h2,
