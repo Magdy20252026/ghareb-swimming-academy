@@ -2317,6 +2317,8 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
     data-can-manage-discount="<?php echo $canManageDiscount ? '1' : '0'; ?>"
     data-custom-stars-options="<?php echo htmlspecialchars(implode(',', ACADEMY_PLAYERS_CUSTOM_STARS_OPTIONS), ENT_QUOTES, 'UTF-8'); ?>"
     data-form-available-exercises-count="<?php echo (int) ($playerFormData['available_exercises_count'] === '' ? 0 : $playerFormData['available_exercises_count']); ?>"
+    data-form-modal-open="<?php echo ($editPlayer !== null || is_array($submittedPlayerFormData)) ? '1' : '0'; ?>"
+    data-form-close-url="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>"
 >
 <div class="academy-players-page">
     <header class="page-header">
@@ -2371,10 +2373,33 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
     </section>
 
     <section class="content-grid">
-        <div class="form-card">
+        <div class="launcher-card">
             <div class="card-head">
-                <h2><?php echo $editPlayer ? 'تعديل سباح' : 'تسجيل سباح'; ?></h2>
+                <h2><?php echo $editPlayer ? 'تعديل سباح' : 'إضافة سباح جديد'; ?></h2>
             </div>
+            <p class="launcher-text">
+                <?php echo $editPlayer ? 'تم فتح نموذج تعديل السباح في نافذة منبثقة.' : 'اضغط على الزر لفتح نافذة إضافة سباح جديد.'; ?>
+            </p>
+            <div class="form-actions">
+                <button
+                    type="button"
+                    class="save-btn"
+                    id="openPlayerModalBtn"
+                    aria-haspopup="dialog"
+                    aria-controls="playerFormModal"
+                >
+                    <?php echo $editPlayer ? 'تعديل سباح' : 'إضافة سباح'; ?>
+                </button>
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="playerFormModal" role="dialog" aria-modal="true" aria-labelledby="playerFormModalTitle">
+            <div class="modal-shell">
+                <div class="form-card modal-form-card">
+                    <div class="card-head modal-card-head">
+                        <h2 id="playerFormModalTitle"><?php echo $editPlayer ? 'تعديل سباح' : 'تسجيل سباح'; ?></h2>
+                        <button type="button" class="modal-close-btn" data-close-player-modal aria-label="إغلاق نافذة إضافة السباح">×</button>
+                    </div>
 
             <form method="POST" enctype="multipart/form-data" class="player-form" id="playerForm" autocomplete="off">
                 <input type="hidden" name="action" value="save">
@@ -2579,6 +2604,8 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                     <button type="button" class="clear-btn" id="clearBtn">مسح</button>
                 </div>
             </form>
+                </div>
+            </div>
         </div>
 
         <aside class="side-panel">

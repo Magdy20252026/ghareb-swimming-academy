@@ -1,7 +1,11 @@
 const academyPlayersBody = document.body;
 const academyPlayersThemeToggle = document.getElementById('themeToggle');
 const academyPlayersClearBtn = document.getElementById('clearBtn');
+const academyPlayersOpenPlayerModalBtn = document.getElementById('openPlayerModalBtn');
+const academyPlayersPlayerModal = document.getElementById('playerFormModal');
 const academyPlayersPageUrl = academyPlayersBody.dataset.pageUrl || 'academy_players.php';
+const academyPlayersFormCloseUrl = academyPlayersBody.dataset.formCloseUrl || academyPlayersPageUrl;
+const academyPlayersShouldOpenFormModal = academyPlayersBody.dataset.formModalOpen === '1';
 const academyPlayersCanManageDiscount = academyPlayersBody.dataset.canManageDiscount === '1';
 const academyPlayersCustomStarsOptions = (academyPlayersBody.dataset.customStarsOptions || '3,4')
     .split(',')
@@ -25,6 +29,7 @@ const subscriptionSelectListenerOptions = { signal: subscriptionSelectListenersC
 
 const subscriptionSelect = document.getElementById('subscription_id');
 const subscriptionBranchField = document.getElementById('subscription_branch');
+const barcodeField = document.getElementById('barcode');
 const birthDateField = document.getElementById('birth_date');
 const ageField = document.getElementById('player_age');
 const paidAmountField = document.getElementById('paid_amount');
@@ -57,6 +62,33 @@ const paymentField = document.getElementById('payment_amount');
 const paymentCard = document.getElementById('collect-payment-card');
 const paymentScrollFallbackDelay = 400;
 let academyPlayersLastSubscriptionId = subscriptionSelect?.value || '';
+
+function openPlayerFormModal() {
+    if (!academyPlayersPlayerModal) {
+        return;
+    }
+
+    academyPlayersPlayerModal.classList.remove('hidden');
+    academyPlayersBody.classList.add('modal-open');
+    window.requestAnimationFrame(() => {
+        barcodeField?.focus();
+    });
+}
+
+function closePlayerFormModal(shouldResetPage = false) {
+    if (shouldResetPage) {
+        window.location.href = academyPlayersFormCloseUrl;
+        return;
+    }
+
+    if (!academyPlayersPlayerModal) {
+        return;
+    }
+
+    academyPlayersPlayerModal.classList.add('hidden');
+    academyPlayersBody.classList.remove('modal-open');
+    academyPlayersOpenPlayerModalBtn?.focus();
+}
 
 function setAcademyPlayersTheme(theme) {
     if (theme === 'dark') {
@@ -479,6 +511,10 @@ window.addEventListener('load', () => {
     updateSubscriptionDisplays();
     updateRequiredDocumentsState();
 
+    if (academyPlayersShouldOpenFormModal) {
+        openPlayerFormModal();
+    }
+
     if (window.location.hash === '#collect-payment-card') {
         focusPaymentField();
     }
@@ -551,6 +587,30 @@ if (starsCountField) {
 if (academyPlayersClearBtn) {
     academyPlayersClearBtn.addEventListener('click', clearAcademyPlayersForm);
 }
+
+if (academyPlayersOpenPlayerModalBtn) {
+    academyPlayersOpenPlayerModalBtn.addEventListener('click', openPlayerFormModal);
+}
+
+if (academyPlayersPlayerModal) {
+    academyPlayersPlayerModal.addEventListener('click', (event) => {
+        if (event.target === academyPlayersPlayerModal) {
+            closePlayerFormModal(academyPlayersShouldOpenFormModal);
+        }
+    });
+}
+
+document.querySelectorAll('[data-close-player-modal]').forEach((button) => {
+    button.addEventListener('click', () => {
+        closePlayerFormModal(academyPlayersShouldOpenFormModal);
+    });
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && academyPlayersPlayerModal && !academyPlayersPlayerModal.classList.contains('hidden')) {
+        closePlayerFormModal(academyPlayersShouldOpenFormModal);
+    }
+});
 
 document.addEventListener('submit', (event) => {
     const form = event.target;
