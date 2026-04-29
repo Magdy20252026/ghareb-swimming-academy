@@ -2319,6 +2319,8 @@ $currentFilterParams = [
 $summaryPageUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['view' => 'summary']));
 $playersPageUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['view' => '']));
 
+$isNewPlayerForm = $editPlayer === null;
+
 $playerFormData = [
     'id' => (string) ($editPlayer['id'] ?? ''),
     'barcode' => (string) ($editPlayer['barcode'] ?? ''),
@@ -2349,10 +2351,10 @@ $playerFormData = [
     'paid_amount' => isset($editPlayer['paid_amount']) ? formatAcademyPlayerAmount($editPlayer['paid_amount']) : '0.00',
     'remaining_amount' => isset($editPlayer['remaining_amount']) ? formatAcademyPlayerAmount($editPlayer['remaining_amount']) : '0.00',
     'receipt_number' => (string) ($editPlayer['receipt_number'] ?? ''),
-    'all_required_documents' => !empty($editPlayer['birth_certificate_required']) && !empty($editPlayer['medical_report_required']) && !empty($editPlayer['federation_card_required']),
-    'birth_certificate_required' => !empty($editPlayer['birth_certificate_required']),
-    'medical_report_required' => !empty($editPlayer['medical_report_required']),
-    'federation_card_required' => !empty($editPlayer['federation_card_required']),
+    'all_required_documents' => $isNewPlayerForm || (!empty($editPlayer['birth_certificate_required']) && !empty($editPlayer['medical_report_required']) && !empty($editPlayer['federation_card_required'])),
+    'birth_certificate_required' => $isNewPlayerForm || !empty($editPlayer['birth_certificate_required']),
+    'medical_report_required' => $isNewPlayerForm || !empty($editPlayer['medical_report_required']),
+    'federation_card_required' => $isNewPlayerForm || !empty($editPlayer['federation_card_required']),
     'stars_count' => isset($editPlayer['stars_count']) && (int) $editPlayer['stars_count'] > 0 ? (string) (int) $editPlayer['stars_count'] : '',
     'last_star_date' => (string) ($editPlayer['last_star_date'] ?? ''),
     'subscription_start_date' => (string) ($editPlayer['subscription_start_date'] ?? ''),

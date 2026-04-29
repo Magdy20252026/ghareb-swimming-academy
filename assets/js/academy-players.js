@@ -18,8 +18,8 @@ const academyPlayersFormAvailableExercisesCount = Number.parseInt(
     academyPlayersBody.dataset.formAvailableExercisesCount || '0',
     10,
 );
-const subscriptionSelectMinFontSize = 11;
-const subscriptionSelectMaxFontSize = 15;
+const subscriptionSelectMinFontSize = 13;
+const subscriptionSelectMaxFontSize = 16;
 const subscriptionSelectReservedControlWidth = 34;
 const subscriptionSelectResizeDebounceDelay = 120;
 let subscriptionSelectTextSizer = null;
