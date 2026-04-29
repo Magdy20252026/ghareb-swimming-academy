@@ -70,6 +70,7 @@ function openPlayerFormModal() {
 
     academyPlayersPlayerModal.classList.remove('hidden');
     academyPlayersBody.classList.add('modal-open');
+    academyPlayersOpenPlayerModalBtn?.setAttribute('aria-expanded', 'true');
     window.requestAnimationFrame(() => {
         barcodeField?.focus();
     });
@@ -91,6 +92,7 @@ function closePlayerFormModal(shouldResetPage = false) {
 
     academyPlayersPlayerModal.classList.add('hidden');
     academyPlayersBody.classList.remove('modal-open');
+    academyPlayersOpenPlayerModalBtn?.setAttribute('aria-expanded', 'false');
     academyPlayersOpenPlayerModalBtn?.focus();
 }
 

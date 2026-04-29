@@ -2301,6 +2301,10 @@ $resolvedFormStarsCount = $playerFormData['stars_count'] !== ''
     : academyPlayerResolveStarsCount($playerFormData['subscription_category'], null);
 $playerFormData['stars_count'] = $resolvedFormStarsCount > 0 ? (string) $resolvedFormStarsCount : '';
 
+$playerFormModalHeading = $editPlayer ? 'تعديل سباح' : 'إضافة سباح جديد';
+$playerFormLauncherText = $editPlayer ? 'اضغط على الزر لفتح نافذة تعديل السباح.' : 'اضغط على الزر لفتح نافذة إضافة سباح جديد.';
+$playerFormLauncherButtonText = $editPlayer ? 'تعديل سباح' : 'إضافة سباح';
+
 $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
 ?>
 <!DOCTYPE html>
@@ -2375,10 +2379,10 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
     <section class="content-grid">
         <div class="launcher-card">
             <div class="card-head">
-                <h2><?php echo $editPlayer ? 'تعديل سباح' : 'إضافة سباح جديد'; ?></h2>
+                <h2><?php echo htmlspecialchars($playerFormModalHeading, ENT_QUOTES, 'UTF-8'); ?></h2>
             </div>
             <p class="launcher-text">
-                <?php echo $editPlayer ? 'اضغط على الزر لفتح نافذة تعديل السباح.' : 'اضغط على الزر لفتح نافذة إضافة سباح جديد.'; ?>
+                <?php echo htmlspecialchars($playerFormLauncherText, ENT_QUOTES, 'UTF-8'); ?>
             </p>
             <div class="form-actions">
                 <button
@@ -2387,8 +2391,9 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                     id="openPlayerModalBtn"
                     aria-haspopup="dialog"
                     aria-controls="playerFormModal"
+                    aria-expanded="false"
                 >
-                    <?php echo $editPlayer ? 'تعديل سباح' : 'إضافة سباح'; ?>
+                    <?php echo htmlspecialchars($playerFormLauncherButtonText, ENT_QUOTES, 'UTF-8'); ?>
                 </button>
             </div>
         </div>
@@ -2397,7 +2402,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
             <div class="modal-shell">
                 <div class="form-card modal-form-card">
                     <div class="card-head modal-card-head">
-                        <h2 id="playerFormModalTitle"><?php echo $editPlayer ? 'تعديل سباح' : 'إضافة سباح جديد'; ?></h2>
+                        <h2 id="playerFormModalTitle"><?php echo htmlspecialchars($playerFormModalHeading, ENT_QUOTES, 'UTF-8'); ?></h2>
                         <button type="button" class="modal-close-btn" data-close-player-modal>إغلاق</button>
                     </div>
 
