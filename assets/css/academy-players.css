@@ -891,6 +891,11 @@ body.dark-mode tbody tr td:last-child {
     min-width: 220px;
 }
 
+.table-wrapper th:last-child,
+.table-wrapper td:last-child {
+    min-width: 520px;
+}
+
 .table-avatar-cell {
     text-align: center;
 }
@@ -1170,12 +1175,15 @@ body.dark-mode .detail-grid-payment .detail-item {
     display: inline-flex;
 }
 
-.action-buttons {
+.table-wrapper .action-buttons {
     display: inline-flex;
     align-items: stretch;
+    flex-wrap: nowrap;
+    width: max-content;
+    min-width: max-content;
 }
 
-.action-buttons > * {
+.table-wrapper .action-buttons > * {
     flex: 0 0 auto;
     white-space: nowrap;
 }
@@ -1312,6 +1320,7 @@ body.dark-mode .detail-grid-payment .detail-item {
         display: flex;
         flex-wrap: wrap;
         width: 100%;
+        min-width: 0;
     }
 
     .inline-form,
