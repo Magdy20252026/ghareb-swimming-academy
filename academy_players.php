@@ -2495,6 +2495,17 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
         </article>
     </section>
 
+    <button
+        type="button"
+        class="save-btn mobile-player-launcher"
+        data-open-player-modal
+        aria-haspopup="dialog"
+        aria-controls="playerFormModal"
+        aria-expanded="false"
+    >
+        إضافة سباح
+    </button>
+
     <div class="modal-overlay hidden" id="playerFormModal" role="dialog" aria-modal="true" aria-labelledby="playerFormModalTitle">
         <div class="modal-shell">
             <div class="form-card modal-form-card">
