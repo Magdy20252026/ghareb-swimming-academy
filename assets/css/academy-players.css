@@ -424,7 +424,7 @@ body.dark-mode .hero-card strong {
     display: none;
     position: fixed;
     right: 16px;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0));
     z-index: 1100;
     min-height: 52px;
     padding-inline: 20px;
