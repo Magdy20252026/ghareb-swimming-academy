@@ -891,6 +891,11 @@ body.dark-mode tbody tr td:last-child {
     min-width: 220px;
 }
 
+.table-wrapper th:last-child,
+.table-wrapper td:last-child {
+    min-width: 560px;
+}
+
 .table-avatar-cell {
     text-align: center;
 }
@@ -1172,10 +1177,12 @@ body.dark-mode .detail-grid-payment .detail-item {
 
 .action-buttons {
     align-items: stretch;
+    flex-wrap: nowrap;
 }
 
 .action-buttons > * {
-    flex: 1 1 92px;
+    flex: 0 0 auto;
+    white-space: nowrap;
 }
 
 .empty-row {
