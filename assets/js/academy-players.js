@@ -75,6 +75,10 @@ function openPlayerFormModal() {
     });
 }
 
+function isPlayerModalOpen() {
+    return Boolean(academyPlayersPlayerModal) && !academyPlayersPlayerModal.classList.contains('hidden');
+}
+
 function closePlayerFormModal(shouldResetPage = false) {
     if (shouldResetPage) {
         window.location.href = academyPlayersFormCloseUrl;
@@ -607,7 +611,7 @@ document.querySelectorAll('[data-close-player-modal]').forEach((button) => {
 });
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && academyPlayersPlayerModal && !academyPlayersPlayerModal.classList.contains('hidden')) {
+    if (event.key === 'Escape' && isPlayerModalOpen()) {
         closePlayerFormModal(academyPlayersShouldOpenFormModal);
     }
 });
