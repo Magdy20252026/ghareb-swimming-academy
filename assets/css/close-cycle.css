@@ -1,0 +1,90 @@
+@import url("reports.css");
+
+.close-cycle-toolbar {
+    align-items: flex-start;
+}
+
+.close-cycle-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.close-cycle-switcher {
+    flex: 1;
+}
+
+.cycle-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.cycle-filter-input,
+.apply-btn {
+    min-height: 50px;
+    border-radius: 16px;
+    border: 1px solid rgba(215, 226, 240, 0.72);
+    font: inherit;
+    font-weight: 800;
+    transition: var(--transition);
+}
+
+.cycle-filter-input {
+    min-width: 210px;
+    padding: 0 16px;
+    background: #f8fbff;
+    color: var(--text-main);
+    outline: none;
+}
+
+.cycle-filter-input:focus {
+    border-color: rgba(109, 40, 217, 0.42);
+    box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.12);
+}
+
+.apply-btn {
+    padding: 0 22px;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--primary-main), var(--secondary-main));
+    color: #ffffff;
+}
+
+.apply-btn:hover {
+    transform: translateY(-2px);
+}
+
+body.dark-mode .cycle-filter-input {
+    background: rgba(15, 23, 42, 0.92);
+    color: var(--text-main);
+    border-color: rgba(71, 85, 105, 0.88);
+}
+
+body.dark-mode .cycle-filter-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+@media (max-width: 900px) {
+    .close-cycle-controls,
+    .cycle-filter-form {
+        width: 100%;
+    }
+
+    .close-cycle-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cycle-filter-form {
+        justify-content: stretch;
+    }
+
+    .cycle-filter-input,
+    .apply-btn {
+        width: 100%;
+    }
+}

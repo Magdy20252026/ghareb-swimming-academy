@@ -1,0 +1,92 @@
+@import url("coach-attendance.css");
+
+.coach-advances-content-grid {
+    grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 0.9fr);
+}
+
+.advance-total-box {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.advance-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.advance-summary-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-soft);
+    background: var(--surface-muted);
+}
+
+.advance-summary-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.advance-summary-content strong {
+    color: var(--secondary-main);
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.advance-summary-content span {
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.advance-summary-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.advance-summary-meta strong {
+    color: var(--primary-dark);
+    font-size: 16px;
+    font-weight: 900;
+}
+
+body.dark-mode .advance-summary-item {
+    background: #101b2d;
+    border-color: #24354d;
+}
+
+body.dark-mode .advance-summary-content strong,
+body.dark-mode .advance-summary-meta strong {
+    color: #f8fafc;
+}
+
+body.dark-mode .advance-summary-content span {
+    color: #cbd5e1;
+}
+
+@media (max-width: 1200px) {
+    .coach-advances-content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .advance-summary-item {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .advance-summary-meta {
+        align-items: center;
+    }
+}

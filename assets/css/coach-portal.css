@@ -1,0 +1,954 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Tahoma", Arial, sans-serif;
+}
+
+:root {
+    --bg-main: #f8fafc;
+    --bg-alt: #eff6ff;
+    --surface: rgba(255, 255, 255, 0.95);
+    --surface-strong: #ffffff;
+    --surface-soft: #f8fafc;
+    --text-dark: #0f172a;
+    --text-main: #334155;
+    --text-soft: #64748b;
+    --border: rgba(148, 163, 184, 0.25);
+    --shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+    --orange: #f97316;
+    --orange-deep: #c2410c;
+    --blue: #2563eb;
+    --blue-soft: #38bdf8;
+    --green: #16a34a;
+    --red: #dc2626;
+    --gold: #d97706;
+    --purple: #9333ea;
+    --transition: all 0.3s ease;
+}
+
+body {
+    min-height: 100vh;
+    padding: 24px;
+    color: var(--text-dark);
+    background:
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.18), transparent 25%),
+        radial-gradient(circle at left center, rgba(59, 130, 246, 0.12), transparent 24%),
+        linear-gradient(180deg, var(--bg-alt), var(--bg-main));
+    transition: var(--transition);
+}
+
+.portal-shell {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.hero-card,
+.search-card,
+.coach-overview-card,
+.stat-card,
+.table-card,
+.message-box,
+.empty-placeholder {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px);
+}
+
+.hero-card,
+.search-card,
+.coach-overview-card,
+.table-card,
+.empty-placeholder,
+.message-box {
+    margin-bottom: 20px;
+}
+
+.hero-card {
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.brand-block {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.brand-logo-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.brand-logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 28px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--orange), var(--blue-soft));
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 900;
+    box-shadow: 0 20px 40px rgba(249, 115, 22, 0.24);
+    overflow: hidden;
+    padding: 8px;
+}
+
+.brand-logo span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.brand-logo img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 20px;
+}
+
+.brand-wave {
+    position: absolute;
+    left: -8px;
+    bottom: -8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--surface-strong);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.14);
+}
+
+.page-badge,
+.mini-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.page-badge {
+    margin-bottom: 12px;
+    background: rgba(249, 115, 22, 0.12);
+    color: var(--orange-deep);
+}
+
+.brand-text h1,
+.coach-identity h2,
+.empty-placeholder h2,
+.card-head h2 {
+    color: var(--text-dark);
+    font-weight: 900;
+}
+
+.brand-text h1 {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.brand-text p,
+.card-head p,
+.coach-meta,
+.empty-placeholder p {
+    color: var(--text-soft);
+    line-height: 1.8;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.hero-tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.theme-switch-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(249, 115, 22, 0.18);
+    background: rgba(255, 247, 237, 0.92);
+    color: var(--text-main);
+    font-weight: 800;
+}
+
+.switch {
+    position: relative;
+    width: 54px;
+    height: 28px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #d7dee9;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 6px 12px rgba(15, 23, 42, 0.16);
+    transition: var(--transition);
+}
+
+.switch input:checked + .slider {
+    background: linear-gradient(135deg, var(--orange), var(--blue-soft));
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(-26px);
+}
+
+.search-card,
+.coach-overview-card,
+.table-card {
+    padding: 26px;
+}
+
+.card-head {
+    margin-bottom: 18px;
+}
+
+.search-form {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.auth-form .field-group {
+    min-width: 220px;
+}
+
+.password-form .field-group {
+    min-width: 240px;
+}
+
+.field-group {
+    flex: 1 1 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.field-group label {
+    color: var(--text-main);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.field-group input {
+    min-height: 58px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    color: var(--text-dark);
+    padding: 0 18px;
+    font-size: 16px;
+    font-weight: 700;
+    outline: none;
+    transition: var(--transition);
+}
+
+.field-group input:focus {
+    border-color: rgba(37, 99, 235, 0.45);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.search-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    flex: 0 0 auto;
+}
+
+.primary-btn,
+.secondary-btn {
+    min-height: 58px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 18px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--orange), var(--blue));
+    color: #ffffff;
+}
+
+.secondary-btn {
+    background: linear-gradient(135deg, #64748b, #94a3b8);
+    color: #ffffff;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+    transform: translateY(-2px);
+}
+
+.message-box {
+    padding: 16px 18px;
+    font-weight: 800;
+}
+
+.message-box.success {
+    color: #166534;
+    background: rgba(22, 163, 74, 0.12);
+    border-color: rgba(22, 163, 74, 0.18);
+}
+
+.message-box.error {
+    color: #991b1b;
+    background: rgba(220, 38, 38, 0.12);
+    border-color: rgba(220, 38, 38, 0.18);
+}
+
+.message-box.info {
+    color: #1d4ed8;
+    background: rgba(37, 99, 235, 0.10);
+    border-color: rgba(37, 99, 235, 0.18);
+}
+
+.coach-overview-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.coach-identity {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.coach-avatar {
+    width: 74px;
+    height: 74px;
+    border-radius: 24px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.16), rgba(249, 115, 22, 0.16));
+    font-size: 34px;
+}
+
+.mini-badge {
+    margin-bottom: 10px;
+    background: rgba(37, 99, 235, 0.10);
+    color: #1d4ed8;
+}
+
+.coach-identity h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.coach-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.coach-meta span,
+.availability-pill {
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: rgba(248, 250, 252, 0.9);
+}
+
+.coach-meta span {
+    padding: 10px 14px;
+}
+
+.coach-overview-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+.notification-center {
+    min-width: 260px;
+    max-width: 340px;
+    padding: 18px 20px;
+    display: grid;
+    gap: 12px;
+    border-radius: 22px;
+    border: 1px solid rgba(37, 99, 235, 0.14);
+    background: rgba(239, 246, 255, 0.92);
+}
+
+.notification-btn {
+    min-height: 52px;
+}
+
+.notification-btn:disabled {
+    opacity: 0.75;
+    cursor: wait;
+}
+
+.notification-status {
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.8;
+}
+
+.notification-status[data-state="success"] {
+    color: #166534;
+}
+
+.notification-status[data-state="error"] {
+    color: #991b1b;
+}
+
+.availability-pill {
+    min-width: 230px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.availability-pill span {
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.availability-pill strong {
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.availability-pill.positive strong {
+    color: #166534;
+}
+
+.availability-pill.negative strong {
+    color: #991b1b;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 20px;
+    display: grid;
+    place-items: center;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.stat-card p {
+    color: var(--text-soft);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.7;
+}
+
+.accent-orange .stat-icon {
+    background: linear-gradient(135deg, #f97316, #fb923c);
+}
+
+.accent-green .stat-icon {
+    background: linear-gradient(135deg, #16a34a, #4ade80);
+}
+
+.accent-red .stat-icon {
+    background: linear-gradient(135deg, #dc2626, #f87171);
+}
+
+.accent-blue .stat-icon {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+}
+
+.accent-gold .stat-icon {
+    background: linear-gradient(135deg, #d97706, #facc15);
+}
+
+.accent-purple .stat-icon {
+    background: linear-gradient(135deg, #9333ea, #c084fc);
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.coach-notifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.coach-notification-card {
+    padding: 20px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(239, 246, 255, 0.96));
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    display: grid;
+    gap: 12px;
+}
+
+.coach-notification-card strong {
+    color: var(--orange-deep);
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.coach-notification-card p {
+    color: var(--text-dark);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.9;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.table-wrap {
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 640px;
+}
+
+th,
+td {
+    text-align: right;
+    padding: 14px 12px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    vertical-align: middle;
+}
+
+th {
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 900;
+    background: rgba(248, 250, 252, 0.92);
+}
+
+td {
+    color: var(--text-dark);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.status-pill.present {
+    background: rgba(22, 163, 74, 0.10);
+    color: #166534;
+}
+
+.status-pill.absent {
+    background: rgba(220, 38, 38, 0.10);
+    color: #991b1b;
+}
+
+.status-pill.neutral {
+    background: rgba(217, 119, 6, 0.12);
+    color: #92400e;
+}
+
+.positive-text {
+    color: #166534;
+    font-weight: 900;
+}
+
+.negative-text {
+    color: #b91c1c;
+    font-weight: 900;
+}
+
+.empty-state,
+.empty-placeholder {
+    text-align: center;
+}
+
+.empty-state {
+    padding: 28px 12px 8px;
+    color: var(--text-soft);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.empty-placeholder {
+    padding: 46px 24px;
+}
+
+.empty-icon {
+    font-size: 52px;
+    margin-bottom: 14px;
+}
+
+.empty-placeholder h2 {
+    margin-bottom: 10px;
+}
+
+body.dark-mode {
+    --bg-main: #07111f;
+    --bg-alt: #09192d;
+    --surface: rgba(8, 17, 31, 0.88);
+    --surface-strong: #0b1728;
+    --surface-soft: #0f1e31;
+    --text-dark: #f8fafc;
+    --text-main: #e2e8f0;
+    --text-soft: #cbd5e1;
+    --border: rgba(71, 85, 105, 0.55);
+    --shadow: 0 24px 60px rgba(2, 6, 23, 0.48);
+}
+
+body.dark-mode .theme-switch-box,
+body.dark-mode .field-group input,
+body.dark-mode .coach-meta span,
+body.dark-mode .availability-pill,
+body.dark-mode th,
+body.dark-mode .coach-notification-card {
+    background: var(--surface-strong);
+    border-color: var(--border);
+}
+
+body.dark-mode .notification-center {
+    background: rgba(11, 23, 40, 0.92);
+    border-color: var(--border);
+}
+
+body.dark-mode .page-badge {
+    background: rgba(249, 115, 22, 0.18);
+    color: #fed7aa;
+}
+
+body.dark-mode .mini-badge {
+    background: rgba(37, 99, 235, 0.18);
+    color: #bfdbfe;
+}
+
+body.dark-mode .status-pill.present {
+    background: rgba(22, 163, 74, 0.18);
+    color: #86efac;
+}
+
+body.dark-mode .status-pill.absent {
+    background: rgba(220, 38, 38, 0.18);
+    color: #fca5a5;
+}
+
+body.dark-mode .status-pill.neutral {
+    background: rgba(217, 119, 6, 0.2);
+    color: #fcd34d;
+}
+
+body.dark-mode .table-wrap tr {
+    background: rgba(11, 23, 40, 0.92);
+}
+
+body.dark-mode .positive-text,
+body.dark-mode .availability-pill.positive strong {
+    color: #86efac;
+}
+
+body.dark-mode .negative-text,
+body.dark-mode .availability-pill.negative strong {
+    color: #fca5a5;
+}
+
+@media (max-width: 1100px) {
+    .content-grid,
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 16px;
+    }
+
+    .hero-card,
+    .coach-overview-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stats-grid,
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .availability-pill {
+        min-width: 0;
+    }
+
+    .coach-overview-pills {
+        justify-content: stretch;
+    }
+
+    .search-form {
+        align-items: stretch;
+    }
+
+    .search-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .search-actions > * {
+        flex: 1 1 0;
+    }
+
+    .field-group,
+    .auth-form .field-group {
+        min-width: 0;
+        flex-basis: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 12px;
+    }
+
+    .hero-card,
+    .search-card,
+    .coach-overview-card,
+    .table-card,
+    .empty-placeholder {
+        padding: 20px;
+        border-radius: 24px;
+    }
+
+    .brand-block,
+    .coach-identity,
+    .search-form,
+    .search-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .brand-text h1 {
+        font-size: 28px;
+    }
+
+    .coach-identity h2 {
+        font-size: 22px;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .field-group input {
+        width: 100%;
+    }
+
+    .coach-overview-pills,
+    .availability-pill {
+        width: 100%;
+    }
+
+    .brand-logo {
+        width: 72px;
+        height: 72px;
+        font-size: 30px;
+        padding: 6px;
+    }
+
+    .hero-tools {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-wrap {
+        overflow: visible;
+    }
+
+    .table-wrap table,
+    .table-wrap thead,
+    .table-wrap tbody,
+    .table-wrap tr,
+    .table-wrap td {
+        display: block;
+        width: 100%;
+    }
+
+    .table-wrap table {
+        min-width: 0;
+        border-collapse: separate;
+    }
+
+    .table-wrap thead {
+        display: none;
+    }
+
+    .table-wrap tbody {
+        display: grid;
+        gap: 14px;
+    }
+
+    .table-wrap tr {
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: rgba(248, 250, 252, 0.88);
+    }
+
+    .table-wrap td {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 12px 0;
+        text-align: left;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .table-wrap td:last-child {
+        border-bottom: none;
+    }
+
+    .table-wrap td::before {
+        content: attr(data-label);
+        flex: 0 0 42%;
+        color: var(--text-soft);
+        font-size: 13px;
+        font-weight: 900;
+        text-align: right;
+    }
+
+    .table-wrap td > * {
+        margin-inline-start: auto;
+    }
+
+    .status-pill {
+        text-align: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .brand-text h1 {
+        font-size: 24px;
+    }
+
+    .page-badge,
+    .mini-badge,
+    .coach-meta span,
+    .availability-pill span,
+    .card-head p,
+    .brand-text p,
+    .empty-placeholder p {
+        font-size: 12px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .stat-card strong,
+    .availability-pill strong {
+        font-size: 24px;
+    }
+
+    .table-wrap tr {
+        padding: 8px 12px;
+    }
+
+    .table-wrap td {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        text-align: right;
+    }
+
+    .table-wrap td::before,
+    .table-wrap td > * {
+        flex: none;
+        margin-inline-start: 0;
+    }
+}
+
+@media (min-width: 1200px) {
+    .search-form {
+        flex-wrap: nowrap;
+    }
+
+    .search-actions {
+        align-self: flex-end;
+    }
+}

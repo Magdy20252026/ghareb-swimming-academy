@@ -1,0 +1,64 @@
+@import url("coach-salaries.css");
+
+.admin-salaries-page .section-badge {
+    background: linear-gradient(135deg, rgba(124, 45, 18, 0.12), rgba(234, 88, 12, 0.16));
+}
+
+.admin-salaries-page .salary-summary-highlight strong,
+.admin-salaries-page .salary-history-preview-meta strong {
+    color: #9a3412;
+}
+
+.admin-salaries-page .estimated-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 58px;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.admin-salaries-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-salaries-page .present-badge {
+    background: rgba(22, 163, 74, 0.14);
+    color: #166534;
+}
+
+.admin-salaries-page .absent-badge {
+    background: rgba(220, 38, 38, 0.14);
+    color: #991b1b;
+}
+
+.admin-salaries-page .leave-badge {
+    background: rgba(217, 119, 6, 0.14);
+    color: #9a3412;
+}
+
+body.dark-mode .admin-salaries-page .salary-summary-highlight strong,
+body.dark-mode .admin-salaries-page .salary-history-preview-meta strong {
+    color: #fdba74;
+}
+
+body.dark-mode .admin-salaries-page .present-badge {
+    background: rgba(22, 163, 74, 0.18);
+    color: #86efac;
+}
+
+body.dark-mode .admin-salaries-page .absent-badge {
+    background: rgba(220, 38, 38, 0.18);
+    color: #fca5a5;
+}
+
+body.dark-mode .admin-salaries-page .leave-badge {
+    background: rgba(217, 119, 6, 0.2);
+    color: #fdba74;
+}

@@ -1,0 +1,308 @@
+@import url("coach-attendance.css");
+
+.coach-salaries-page {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.coach-salaries-content-grid {
+    grid-template-columns: minmax(360px, 1.05fr) minmax(320px, 0.95fr);
+}
+
+.salary-control-card,
+.salary-history-preview-card {
+    height: 100%;
+}
+
+.salary-filter-form,
+.salary-payment-form {
+    gap: 16px;
+}
+
+.salary-filter-actions {
+    margin-bottom: 18px;
+}
+
+.salary-date-range-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.salary-selected-meta span {
+    background: rgba(249, 115, 22, 0.10);
+    border: 1px solid rgba(249, 115, 22, 0.18);
+    border-radius: 999px;
+    padding: 8px 12px;
+}
+
+.salary-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.salary-summary-box {
+    background: var(--surface-muted);
+    border: 1px solid var(--border-soft);
+    border-radius: 22px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.salary-summary-box span {
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.salary-summary-box strong {
+    color: var(--secondary-main);
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.salary-summary-highlight {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(249, 115, 22, 0.10));
+}
+
+.salary-summary-net.is-positive {
+    background: rgba(22, 163, 74, 0.10);
+    border-color: rgba(22, 163, 74, 0.18);
+}
+
+.salary-summary-net.is-negative {
+    background: rgba(220, 38, 38, 0.08);
+    border-color: rgba(220, 38, 38, 0.18);
+}
+
+.payment-cycle-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.payment-cycle-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.payment-cycle-option input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.payment-cycle-option span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    border-radius: 20px;
+    border: 1px solid var(--border-soft);
+    background: var(--surface-muted);
+    color: var(--text-dark);
+    font-weight: 900;
+    transition: var(--transition);
+}
+
+.payment-cycle-option input:checked + span,
+.payment-cycle-option.is-active span {
+    border-color: rgba(249, 115, 22, 0.30);
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(253, 186, 116, 0.16));
+    color: var(--primary-dark);
+}
+
+.salary-period-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.salary-period-note {
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px dashed rgba(249, 115, 22, 0.24);
+    background: rgba(249, 115, 22, 0.08);
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.salary-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.salary-action-buttons > button {
+    flex: 1 1 180px;
+}
+
+.salary-history-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.salary-history-preview-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    padding: 16px;
+    border-radius: 22px;
+    background: var(--surface-muted);
+    border: 1px solid var(--border-soft);
+}
+
+.salary-history-preview-item strong {
+    color: var(--secondary-main);
+    display: block;
+    font-size: 15px;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.salary-history-preview-item span {
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.salary-history-preview-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.salary-history-preview-meta strong {
+    color: var(--primary-dark);
+    margin-bottom: 0;
+}
+
+.salary-pending-preview-list {
+    margin-bottom: 16px;
+}
+
+.salary-pending-preview-item {
+    border-color: rgba(37, 99, 235, 0.14);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(249, 115, 22, 0.08));
+}
+
+.salary-inline-form {
+    margin: 0;
+}
+
+.table-action-btn {
+    border: none;
+    border-radius: 14px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.table-action-btn:hover {
+    transform: translateY(-1px);
+}
+
+.positive-text {
+    color: #166534;
+    font-weight: 900;
+}
+
+.negative-text {
+    color: #b91c1c;
+    font-weight: 900;
+}
+
+body.dark-mode .salary-selected-meta span,
+body.dark-mode .salary-summary-box,
+body.dark-mode .salary-history-preview-item,
+body.dark-mode .payment-cycle-option span {
+    background: #101b2d;
+    border-color: #24354d;
+}
+
+body.dark-mode .salary-summary-highlight,
+body.dark-mode .payment-cycle-option input:checked + span,
+body.dark-mode .payment-cycle-option.is-active span {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.18), rgba(59, 130, 246, 0.12));
+}
+
+body.dark-mode .salary-period-note,
+body.dark-mode .salary-pending-preview-item {
+    background: rgba(15, 23, 42, 0.72);
+    border-color: #24354d;
+}
+
+body.dark-mode .salary-summary-net.is-positive {
+    background: rgba(22, 163, 74, 0.14);
+    border-color: rgba(134, 239, 172, 0.22);
+}
+
+body.dark-mode .salary-summary-net.is-negative {
+    background: rgba(220, 38, 38, 0.14);
+    border-color: rgba(252, 165, 165, 0.22);
+}
+
+body.dark-mode .salary-summary-box span,
+body.dark-mode .salary-history-preview-item span {
+    color: #cbd5e1;
+}
+
+body.dark-mode .salary-summary-box strong,
+body.dark-mode .salary-history-preview-item strong,
+body.dark-mode .salary-history-preview-meta strong,
+body.dark-mode .payment-cycle-option span {
+    color: #f8fafc;
+}
+
+body.dark-mode .positive-text {
+    color: #86efac;
+}
+
+body.dark-mode .negative-text {
+    color: #fca5a5;
+}
+
+body.dark-mode .table-action-btn {
+    background: linear-gradient(135deg, #1e40af, #2563eb);
+}
+
+@media (max-width: 1200px) {
+    .coach-salaries-content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .salary-summary-grid,
+    .payment-cycle-grid,
+    .salary-date-range-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .salary-period-row,
+    .salary-history-preview-item,
+    .salary-history-preview-meta {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+
+    .salary-history-preview-meta {
+        align-items: flex-start;
+    }
+}
