@@ -398,7 +398,11 @@ body.dark-mode .hero-card strong {
     margin-bottom: 22px;
 }
 
-.toolbar-row,
+.toolbar-row {
+    display: grid;
+    gap: 16px;
+}
+
 .summary-page-header {
     display: flex;
     flex-wrap: wrap;
@@ -412,13 +416,14 @@ body.dark-mode .hero-card strong {
     flex-wrap: wrap;
     align-items: center;
     gap: 12px;
+    justify-content: flex-start;
 }
 
 .filter-form-horizontal {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(6, minmax(140px, 1fr)) auto;
-    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
     align-items: end;
 }
 
@@ -427,9 +432,26 @@ body.dark-mode .hero-card strong {
     min-width: 0;
 }
 
+.toolbar-field-search {
+    min-width: 0;
+}
+
+.toolbar-field-wide {
+    grid-column: span 2;
+}
+
 .toolbar-form-actions {
     align-self: end;
     justify-content: flex-start;
+    min-width: 0;
+}
+
+.filter-form-horizontal .toolbar-form-actions {
+    gap: 10px;
+}
+
+.filter-form-horizontal .toolbar-form-actions > * {
+    flex: 1 1 0;
 }
 
 .summary-page-card h2 {
@@ -1349,10 +1371,6 @@ body.dark-mode .detail-grid-payment .detail-item {
         grid-template-columns: repeat(3, minmax(180px, 1fr));
     }
 
-    .toolbar-form-actions {
-        grid-column: 1 / -1;
-    }
-
     .subscription-overview-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1365,6 +1383,11 @@ body.dark-mode .detail-grid-payment .detail-item {
 @media (max-width: 1100px) {
     .filter-form-horizontal {
         grid-template-columns: repeat(2, minmax(180px, 1fr));
+    }
+
+    .toolbar-field-wide,
+    .toolbar-form-actions {
+        grid-column: span 1;
     }
 
     .form-grid-compact .form-group,
@@ -1428,6 +1451,11 @@ body.dark-mode .detail-grid-payment .detail-item {
 
     .filter-form-horizontal {
         grid-template-columns: 1fr;
+    }
+
+    .toolbar-field-wide,
+    .toolbar-form-actions {
+        grid-column: auto;
     }
 
     .table-wrapper table,

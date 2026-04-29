@@ -818,11 +818,11 @@ function renderAcademyPlayersHorizontalToolbar(
             </div>
             <form method="GET" class="filter-form filter-form-horizontal" autocomplete="off">
                 <input type="hidden" name="summary_category" value="<?php echo htmlspecialchars($summaryCategory, ENT_QUOTES, 'UTF-8'); ?>">
-                <div class="form-group">
+                <div class="form-group toolbar-field-search">
                     <label for="<?php echo htmlspecialchars($searchId, ENT_QUOTES, 'UTF-8'); ?>">البحث</label>
                     <input type="text" name="search" id="<?php echo htmlspecialchars($searchId, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
-                <div class="form-group subscription-select-group">
+                <div class="form-group subscription-select-group toolbar-field-wide">
                     <label for="<?php echo htmlspecialchars($subscriptionId, ENT_QUOTES, 'UTF-8'); ?>">المجموعة</label>
                     <select name="subscription_id" id="<?php echo htmlspecialchars($subscriptionId, ENT_QUOTES, 'UTF-8'); ?>">
                         <option value="">كل المجموعات</option>
