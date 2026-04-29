@@ -604,10 +604,13 @@ if (academyPlayersPlayerModal) {
     });
 }
 
-document.querySelectorAll('[data-close-player-modal]').forEach((button) => {
-    button.addEventListener('click', () => {
+document.addEventListener('click', (event) => {
+    const closeButton = event.target instanceof Element
+        ? event.target.closest('[data-close-player-modal]')
+        : null;
+    if (closeButton) {
         closePlayerFormModal(academyPlayersShouldOpenFormModal);
-    });
+    }
 });
 
 document.addEventListener('keydown', (event) => {
