@@ -600,16 +600,15 @@ if (academyPlayersPlayerModal) {
     academyPlayersPlayerModal.addEventListener('click', (event) => {
         if (event.target === academyPlayersPlayerModal) {
             closePlayerFormModal(academyPlayersShouldOpenFormModal);
+            return;
+        }
+
+        const closeButton = event.target.closest('[data-close-player-modal]');
+        if (closeButton) {
+            closePlayerFormModal(academyPlayersShouldOpenFormModal);
         }
     });
 }
-
-document.addEventListener('click', (event) => {
-    const closeButton = event.target.closest('[data-close-player-modal]');
-    if (closeButton) {
-        closePlayerFormModal(academyPlayersShouldOpenFormModal);
-    }
-});
 
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && isPlayerModalOpen()) {
