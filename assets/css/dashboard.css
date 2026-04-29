@@ -84,8 +84,8 @@ body {
 }
 
 .academy-logo {
-    width: 88px;
-    height: 88px;
+    width: 72px;
+    height: 72px;
     margin: 0 auto 10px;
     border-radius: 50%;
     background: linear-gradient(135deg, #ffffff, #cfe0ff);
@@ -93,7 +93,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 24px;
     font-weight: bold;
     overflow: hidden;
 }
@@ -114,7 +114,7 @@ body {
 }
 
 .academy-name {
-    font-size: 21px;
+    font-size: 17px;
     margin-bottom: 12px;
     line-height: 1.3;
 }
@@ -155,15 +155,23 @@ body {
     flex-direction: column;
     gap: 8px;
     padding-left: 2px;
+    scrollbar-width: auto;
+    scrollbar-color: rgba(255,255,255,0.34) transparent;
 }
 
 .sidebar-menu::-webkit-scrollbar {
-    width: 5px;
+    width: 11px;
 }
 
 .sidebar-menu::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.20);
+    background: rgba(255,255,255,0.34);
     border-radius: 20px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .menu-btn {
@@ -680,9 +688,9 @@ body.dark-mode .detail-table tbody tr:hover td {
 
 @media (max-width: 991px) {
     .academy-logo {
-        width: 72px;
-        height: 72px;
-        font-size: 28px;
+        width: 64px;
+        height: 64px;
+        font-size: 24px;
     }
 
     .sidebar {
@@ -709,9 +717,9 @@ body.dark-mode .detail-table tbody tr:hover td {
     }
 
     .sidebar.collapsed .academy-logo {
-        width: 72px;
-        height: 72px;
-        font-size: 28px;
+        width: 64px;
+        height: 64px;
+        font-size: 24px;
         margin-bottom: 10px;
     }
 
@@ -816,7 +824,7 @@ body.dark-mode .detail-table tbody tr:hover td {
     }
 
     .academy-name {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .menu-text {
@@ -845,9 +853,9 @@ body.dark-mode .detail-table tbody tr:hover td {
     }
 
     .academy-logo {
-        width: 64px;
-        height: 64px;
-        font-size: 24px;
+        width: 56px;
+        height: 56px;
+        font-size: 22px;
     }
 
     .sidebar-toggle,
