@@ -896,15 +896,7 @@ function userCanAccess(array $user, string $menuKey): bool
         return true;
     }
 
-    return ($menuKey === "academy_players" && in_array("players", $permissions, true))
-        || (
-            $menuKey === "academy_players_academies"
-            && (
-                in_array("academy_players_academies", $permissions, true)
-                || in_array("academy_players", $permissions, true)
-                || in_array("players", $permissions, true)
-            )
-        );
+    return $menuKey === "academy_players" && in_array("players", $permissions, true);
 }
 
 function getVisibleMenuItems(array $user): array

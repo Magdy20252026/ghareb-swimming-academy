@@ -805,7 +805,7 @@ function renderAcademyPlayersHorizontalToolbar(
             <div class="toolbar-actions">
                 <button
                     type="button"
-                    class="save-btn"
+                    class="save-btn desktop-player-launcher"
                     data-open-player-modal
                     aria-label="إضافة سباح"
                     aria-haspopup="dialog"
@@ -2734,7 +2734,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                 <div class="toolbar-actions">
                     <button
                         type="button"
-                        class="save-btn"
+                        class="save-btn desktop-player-launcher"
                         data-open-player-modal
                         aria-label="إضافة سباح"
                         aria-haspopup="dialog"
