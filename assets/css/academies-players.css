@@ -109,7 +109,6 @@ body.dark-mode {
 .action-buttons {
     display: inline-flex;
     align-items: stretch;
-    flex-wrap: nowrap;
 }
 
 .action-buttons > * {
