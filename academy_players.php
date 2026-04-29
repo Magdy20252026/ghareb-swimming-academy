@@ -2317,7 +2317,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
     data-can-manage-discount="<?php echo $canManageDiscount ? '1' : '0'; ?>"
     data-custom-stars-options="<?php echo htmlspecialchars(implode(',', ACADEMY_PLAYERS_CUSTOM_STARS_OPTIONS), ENT_QUOTES, 'UTF-8'); ?>"
     data-form-available-exercises-count="<?php echo (int) ($playerFormData['available_exercises_count'] === '' ? 0 : $playerFormData['available_exercises_count']); ?>"
-    data-form-modal-open="<?php echo ($editPlayer !== null || is_array($submittedPlayerFormData)) ? '1' : '0'; ?>"
+    data-form-modal-open="<?php echo ($editPlayer || is_array($submittedPlayerFormData)) ? '1' : '0'; ?>"
     data-form-close-url="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>"
 >
 <div class="academy-players-page">
@@ -2378,7 +2378,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                 <h2><?php echo $editPlayer ? 'تعديل سباح' : 'إضافة سباح جديد'; ?></h2>
             </div>
             <p class="launcher-text">
-                <?php echo $editPlayer ? 'تم فتح نموذج تعديل السباح في نافذة منبثقة.' : 'اضغط على الزر لفتح نافذة إضافة سباح جديد.'; ?>
+                <?php echo $editPlayer ? 'اضغط على الزر لفتح نافذة تعديل السباح.' : 'اضغط على الزر لفتح نافذة إضافة سباح جديد.'; ?>
             </p>
             <div class="form-actions">
                 <button
