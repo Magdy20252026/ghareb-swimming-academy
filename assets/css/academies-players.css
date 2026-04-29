@@ -449,7 +449,7 @@ td {
     vertical-align: middle;
 }
 
-td[data-label="الإجراءات"] {
+.table-wrapper td[data-label="الإجراءات"] {
     white-space: nowrap;
 }
 
