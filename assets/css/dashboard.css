@@ -18,6 +18,10 @@
     --transition: all 0.3s ease;
     --sidebar-width: 320px;
     --sidebar-collapsed: 95px;
+    --sidebar-scrollbar-size: 16px;
+    --sidebar-scrollbar-thumb: rgba(186, 230, 253, 0.95);
+    --sidebar-scrollbar-thumb-hover: rgba(147, 197, 253, 0.98);
+    --sidebar-scrollbar-track: rgba(191, 219, 254, 0.16);
 }
 
 body {
@@ -156,22 +160,28 @@ body {
     gap: 8px;
     padding-left: 2px;
     scrollbar-width: auto;
-    scrollbar-color: rgba(255,255,255,0.34) transparent;
+    scrollbar-color: var(--sidebar-scrollbar-thumb) var(--sidebar-scrollbar-track);
 }
 
 .sidebar-menu::-webkit-scrollbar {
-    width: 11px;
+    width: var(--sidebar-scrollbar-size);
 }
 
 .sidebar-menu::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.34);
+    background: linear-gradient(180deg, #dbeafe 0%, #93c5fd 100%);
     border-radius: 20px;
-    border: 2px solid transparent;
+    border: 3px solid rgba(191, 219, 254, 0.18);
     background-clip: content-box;
+    box-shadow: 0 0 0 1px rgba(219, 234, 254, 0.30), 0 6px 12px rgba(125, 177, 255, 0.22);
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #bfdbfe 0%, #7dd3fc 100%);
 }
 
 .sidebar-menu::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--sidebar-scrollbar-track);
+    border-radius: 20px;
 }
 
 .menu-btn {
