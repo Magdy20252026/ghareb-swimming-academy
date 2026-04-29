@@ -522,8 +522,10 @@ body.dark-mode .hero-card strong {
 }
 
 .subscription-select-group select {
-    min-height: 56px;
-    font-size: 15px;
+    min-height: 60px;
+    font-size: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .payment-grid .form-group {
@@ -660,7 +662,7 @@ input[readonly] {
 }
 
 .modal-shell {
-    width: min(1100px, 100%);
+    width: min(1240px, 100%);
     max-height: calc(100vh - 48px);
     overflow: auto;
     border-radius: 24px;
