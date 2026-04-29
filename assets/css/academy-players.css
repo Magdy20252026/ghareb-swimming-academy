@@ -524,7 +524,8 @@ body.dark-mode .hero-card strong {
 .subscription-select-group select {
     min-height: 60px;
     font-size: 16px;
-    padding-inline: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .payment-grid .form-group {
