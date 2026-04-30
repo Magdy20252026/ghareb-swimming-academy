@@ -599,7 +599,7 @@ function fetchAcademyPlayersSubscriptions(PDO $pdo): array
         );
         $subscriptions = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
     } catch (PDOException $e) {
-        error_log('Error in fetchAcademyPlayersSubscriptions: ' . $e->getMessage());
+        academyPlayersMarkReadFailure('fetch subscriptions', $e);
         $subscriptions = [];
     }
     foreach ($subscriptions as &$subscription) {
@@ -619,24 +619,106 @@ function fetchAcademyPlayersSubscriptions(PDO $pdo): array
     return $subscriptions;
 }
 
+function &academyPlayersReadFailureStorage()
+{
+    static $hasReadFailure = false;
+    return $hasReadFailure;
+}
+
+function setAcademyPlayersReadFailure(bool $value): void
+{
+    $hasReadFailure = &academyPlayersReadFailureStorage();
+    $hasReadFailure = $value;
+}
+
+function getAcademyPlayersReadFailure(): bool
+{
+    $hasReadFailure = &academyPlayersReadFailureStorage();
+    return $hasReadFailure;
+}
+
+function &academyPlayersReadFailureContextsStorage()
+{
+    static $contexts = [];
+    return $contexts;
+}
+
+function recordAcademyPlayersReadFailureContext(string $context): void
+{
+    $contexts = &academyPlayersReadFailureContextsStorage();
+    if (!in_array($context, $contexts, true)) {
+        $contexts[] = $context;
+    }
+}
+
+function getAcademyPlayersReadFailureContexts(): array
+{
+    $contexts = &academyPlayersReadFailureContextsStorage();
+    return $contexts;
+}
+
+function describeAcademyPlayersReadFailure(): string
+{
+    $contextLabels = [
+        'fetch subscriptions' => 'المجموعات',
+        'fetch player statistics' => 'الإحصائيات',
+        'fetch categories' => 'التصنيفات',
+        'fetch branches' => 'الفروع',
+        'fetch players list' => 'قائمة السباحين',
+        'count players' => 'إجمالي السباحين',
+        'count subscription players' => 'أعداد المجموعات',
+        'fetch player by id' => 'بيانات السباح',
+        'fetch player payments' => 'مدفوعات السباح',
+    ];
+    $labels = [];
+
+    foreach (getAcademyPlayersReadFailureContexts() as $context) {
+        $labels[] = $contextLabels[$context] ?? 'بعض البيانات';
+    }
+
+    $labels = array_values(array_unique($labels));
+    if ($labels === []) {
+        return '⚠️ تعذر تحميل بعض بيانات صفحة السباحين حاليًا. تم إظهار البيانات المتاحة فقط.';
+    }
+
+    return '⚠️ تعذر تحميل ' . implode('، ', $labels) . ' حاليًا. تم إظهار البيانات المتاحة فقط.';
+}
+
+function academyPlayersMarkReadFailure(string $context, PDOException $exception): void
+{
+    setAcademyPlayersReadFailure(true);
+    recordAcademyPlayersReadFailureContext($context);
+    error_log(sprintf('Academy players read error (%s) [code=%s].', $context, (string) $exception->getCode()));
+}
+
 function fetchAcademyPlayerById(PDO $pdo, int $playerId): ?array
 {
-    $stmt = $pdo->prepare('SELECT * FROM academy_players WHERE id = ? LIMIT 1');
-    $stmt->execute([$playerId]);
-    $player = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $player ?: null;
+    try {
+        $stmt = $pdo->prepare('SELECT * FROM academy_players WHERE id = ? LIMIT 1');
+        $stmt->execute([$playerId]);
+        $player = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $player ?: null;
+    } catch (PDOException $exception) {
+        academyPlayersMarkReadFailure('fetch player by id', $exception);
+        return null;
+    }
 }
 
 function fetchAcademyPlayerPayments(PDO $pdo, int $playerId): array
 {
-    $stmt = $pdo->prepare(
-        'SELECT amount, receipt_number, payment_type, created_at
-         FROM academy_player_payments
-         WHERE player_id = ?
-         ORDER BY created_at DESC, id DESC'
-    );
-    $stmt->execute([$playerId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    try {
+        $stmt = $pdo->prepare(
+            'SELECT amount, receipt_number, payment_type, created_at
+             FROM academy_player_payments
+             WHERE player_id = ?
+             ORDER BY created_at DESC, id DESC'
+        );
+        $stmt->execute([$playerId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    } catch (PDOException $exception) {
+        academyPlayersMarkReadFailure('fetch player payments', $exception);
+        return [];
+    }
 }
 
 function fetchAcademyPlayerStatistics(PDO $pdo): array
@@ -654,7 +736,7 @@ function fetchAcademyPlayerStatistics(PDO $pdo): array
         );
         return $stmt ? ($stmt->fetch(PDO::FETCH_ASSOC) ?: []) : [];
     } catch (PDOException $e) {
-        error_log('Error in fetchAcademyPlayerStatistics: ' . $e->getMessage());
+        academyPlayersMarkReadFailure('fetch player statistics', $e);
         return [];
     }
 }
@@ -810,37 +892,42 @@ function academyPlayersBuildFilteredQueryParts(array $filters): array
 
 function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params, ?int $limit = null, int $offset = 0): array
 {
-    $sql = 'SELECT ap.*';
+    try {
+        $sql = 'SELECT ap.*';
 
-    if (academyPlayersCanFetchSettlementReceipts($pdo)) {
-        $sql .= ',
-                (
-                    SELECT GROUP_CONCAT(app.receipt_number ORDER BY app.created_at DESC, app.id DESC SEPARATOR " • ")
-                    FROM academy_player_payments app
-                    WHERE app.player_id = ap.id
-                      AND app.payment_type = "settlement"
-                      AND app.receipt_number IS NOT NULL
-                      AND app.receipt_number <> ""
-                ) AS settlement_receipt_numbers';
-    } else {
-        $sql .= ', NULL AS settlement_receipt_numbers';
+        if (academyPlayersCanFetchSettlementReceipts($pdo)) {
+            $sql .= ',
+                    (
+                        SELECT GROUP_CONCAT(app.receipt_number ORDER BY app.created_at DESC, app.id DESC SEPARATOR " • ")
+                        FROM academy_player_payments app
+                        WHERE app.player_id = ap.id
+                          AND app.payment_type = "settlement"
+                          AND app.receipt_number IS NOT NULL
+                          AND app.receipt_number <> ""
+                    ) AS settlement_receipt_numbers';
+        } else {
+            $sql .= ', NULL AS settlement_receipt_numbers';
+        }
+
+        $sql .= ' FROM academy_players ap';
+        if ($whereClauses !== []) {
+            $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+        }
+        $sql .= ' ORDER BY ' . academyPlayersResolveOrderByClause($pdo);
+
+        if ($limit !== null) {
+            $sql .= ' LIMIT ? OFFSET ?';
+            $params[] = $limit;
+            $params[] = $offset;
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    } catch (PDOException $exception) {
+        academyPlayersMarkReadFailure('fetch players list', $exception);
+        return [];
     }
-
-    $sql .= ' FROM academy_players ap';
-    if ($whereClauses !== []) {
-        $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
-    }
-    $sql .= ' ORDER BY ' . academyPlayersResolveOrderByClause($pdo);
-
-    if ($limit !== null) {
-        $sql .= ' LIMIT ? OFFSET ?';
-        $params[] = $limit;
-        $params[] = $offset;
-    }
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-    $players = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
     foreach ($players as &$player) {
         $player['medical_report_files_list'] = decodeAcademyPlayerMedicalReportFiles(
@@ -879,16 +966,21 @@ function fetchAcademyPlayersPage(PDO $pdo, array $filters, int $page, int $perPa
 
 function countAcademyPlayers(PDO $pdo, array $filters): int
 {
-    [$whereClauses, $params] = academyPlayersBuildFilteredQueryParts($filters);
-    $sql = 'SELECT COUNT(*) FROM academy_players ap';
+    try {
+        [$whereClauses, $params] = academyPlayersBuildFilteredQueryParts($filters);
+        $sql = 'SELECT COUNT(*) FROM academy_players ap';
 
-    if ($whereClauses !== []) {
-        $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+        if ($whereClauses !== []) {
+            $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        return (int) ($stmt->fetchColumn() ?: 0);
+    } catch (PDOException $exception) {
+        academyPlayersMarkReadFailure('count players', $exception);
+        return 0;
     }
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-    return (int) ($stmt->fetchColumn() ?: 0);
 }
 
 function renderAcademyPlayersPagination(array $currentFilterParams, int $currentPage, int $totalPages): void
@@ -941,7 +1033,7 @@ function fetchAcademyPlayersCategories(PDO $pdo): array
         $stmt = $pdo->query('SELECT DISTINCT subscription_category FROM academy_players WHERE subscription_category IS NOT NULL AND subscription_category <> "" ORDER BY subscription_category ASC');
         $categories = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
     } catch (PDOException $e) {
-        error_log('Error in fetchAcademyPlayersCategories: ' . $e->getMessage());
+        academyPlayersMarkReadFailure('fetch categories', $e);
         $categories = [];
     }
     return array_values(array_filter(array_map(static fn($value): string => sanitizeAcademyPlayerText((string) $value), $categories)));
@@ -953,7 +1045,7 @@ function fetchAcademyPlayersBranches(PDO $pdo): array
         $stmt = $pdo->query('SELECT DISTINCT subscription_branch FROM academy_players WHERE subscription_branch IS NOT NULL AND subscription_branch <> "" ORDER BY subscription_branch ASC');
         $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
     } catch (PDOException $e) {
-        error_log('Error in fetchAcademyPlayersBranches: ' . $e->getMessage());
+        academyPlayersMarkReadFailure('fetch branches', $e);
         $branches = [];
     }
     return array_values(array_filter(array_map(static fn($value): string => sanitizeAcademyPlayerText((string) $value), $branches)));
@@ -1115,17 +1207,22 @@ function canAcademyPlayersUserManageDiscount(array $user): bool
 
 function countAcademyPlayersForSubscription(PDO $pdo, int $subscriptionId, ?int $excludePlayerId = null): int
 {
-    $sql = 'SELECT COUNT(*) FROM academy_players WHERE subscription_id = ? AND subscription_end_date >= CURDATE() AND available_exercises_count > 0';
-    $params = [$subscriptionId];
+    try {
+        $sql = 'SELECT COUNT(*) FROM academy_players WHERE subscription_id = ? AND subscription_end_date >= CURDATE() AND available_exercises_count > 0';
+        $params = [$subscriptionId];
 
-    if ($excludePlayerId !== null && $excludePlayerId > 0) {
-        $sql .= ' AND id <> ?';
-        $params[] = $excludePlayerId;
+        if ($excludePlayerId !== null && $excludePlayerId > 0) {
+            $sql .= ' AND id <> ?';
+            $params[] = $excludePlayerId;
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
+    } catch (PDOException $exception) {
+        academyPlayersMarkReadFailure('count subscription players', $exception);
+        return 0;
     }
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-    return (int) $stmt->fetchColumn();
 }
 
 function academyPlayersFindDuplicateBarcode(PDO $pdo, string $barcode, ?int $excludePlayerId = null): ?array
@@ -2654,6 +2751,16 @@ $playerFormLauncherText = $editPlayer ? 'اضغط على الزر لفتح نا�
 $playerFormLauncherButtonText = $editPlayer ? 'تعديل سباح' : 'إضافة سباح';
 
 $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
+
+if (getAcademyPlayersReadFailure()) {
+    $readFailureMessage = describeAcademyPlayersReadFailure();
+    if ($message === '') {
+        $message = $readFailureMessage;
+        $messageType = 'error';
+    } else {
+        $message .= ' ' . $readFailureMessage;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
