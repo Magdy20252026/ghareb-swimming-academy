@@ -786,9 +786,7 @@ function renderAcademyPlayersPagination(array $currentFilterParams, int $current
     for ($page = max(2, $currentPage - 2); $page <= min($totalPages - 1, $currentPage + 2); $page++) {
         $pageNumbers[] = $page;
     }
-    if ($totalPages > 1) {
-        $pageNumbers[] = $totalPages;
-    }
+    $pageNumbers[] = $totalPages;
     $pageNumbers = array_values(array_unique($pageNumbers));
     sort($pageNumbers);
     ?>
@@ -893,7 +891,7 @@ function renderAcademyPlayersHorizontalToolbar(
     $categoryId = 'category_filter_' . $toolbarKey;
     $statusId = 'status_filter_' . $toolbarKey;
     $medicalReportId = 'medical_report_filter_' . $toolbarKey;
-    $exportUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => '', 'export' => 'xlsx']));
+    $exportUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => null, 'export' => 'xlsx']));
     ?>
     <section class="toolbar-card">
         <div class="toolbar-row">
@@ -1557,7 +1555,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $redirectView = normalizeAcademyPlayersView((string) ($_POST['current_view'] ?? ''));
     $redirectPage = normalizeAcademyPlayersPageNumber($_POST['current_page'] ?? 1);
     $redirectPageParams = array_merge($redirectFilters, [
-        'page' => $redirectPage > 1 ? (string) $redirectPage : '',
+        'page' => $redirectPage > 1 ? (string) $redirectPage : null,
         'view' => $redirectView === 'summary' ? 'summary' : '',
     ]);
 
@@ -2413,7 +2411,7 @@ $currentFilterParams = [
     'subscription_id' => $filters['subscription_id'],
     'branch' => $filters['branch'],
     'category' => $filters['category'],
-    'page' => $currentPlayersPage > 1 ? (string) $currentPlayersPage : '',
+    'page' => $currentPlayersPage > 1 ? (string) $currentPlayersPage : null,
     'summary_category' => $summaryCategory,
     'status' => $filters['status'] === 'all' ? '' : $filters['status'],
     'medical_report' => $filters['medical_report'] === 'all' ? '' : $filters['medical_report'],
