@@ -977,7 +977,7 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
         }
     }
 
-    if ($lastException instanceof PDOException) {
+    if ($lastException !== null) {
         academyPlayersMarkReadFailure('fetch players list', $lastException);
         return [];
     }
