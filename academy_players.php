@@ -619,15 +619,26 @@ function fetchAcademyPlayersSubscriptions(PDO $pdo): array
     return $subscriptions;
 }
 
-function academyPlayersMarkReadFailure(string $context, Throwable $exception): void
+function academyPlayersReadFailureState(?bool $setValue = null): bool
 {
-    $GLOBALS['academy_players_read_failure'] = true;
+    static $hasReadFailure = false;
+
+    if ($setValue !== null) {
+        $hasReadFailure = $setValue;
+    }
+
+    return $hasReadFailure;
+}
+
+function academyPlayersMarkReadFailure(string $context, PDOException $exception): void
+{
+    academyPlayersReadFailureState(true);
     error_log(sprintf('Academy players read error (%s): %s', $context, $exception->getMessage()));
 }
 
 function academyPlayersHasReadFailure(): bool
 {
-    return !empty($GLOBALS['academy_players_read_failure']);
+    return academyPlayersReadFailureState();
 }
 
 function fetchAcademyPlayerById(PDO $pdo, int $playerId): ?array
@@ -637,7 +648,7 @@ function fetchAcademyPlayerById(PDO $pdo, int $playerId): ?array
         $stmt->execute([$playerId]);
         $player = $stmt->fetch(PDO::FETCH_ASSOC);
         return $player ?: null;
-    } catch (Throwable $exception) {
+    } catch (PDOException $exception) {
         academyPlayersMarkReadFailure('fetch player by id', $exception);
         return null;
     }
@@ -654,7 +665,7 @@ function fetchAcademyPlayerPayments(PDO $pdo, int $playerId): array
         );
         $stmt->execute([$playerId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-    } catch (Throwable $exception) {
+    } catch (PDOException $exception) {
         academyPlayersMarkReadFailure('fetch player payments', $exception);
         return [];
     }
@@ -863,7 +874,7 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
         $players = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-    } catch (Throwable $exception) {
+    } catch (PDOException $exception) {
         academyPlayersMarkReadFailure('fetch players list', $exception);
         return [];
     }
@@ -916,7 +927,7 @@ function countAcademyPlayers(PDO $pdo, array $filters): int
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
         return (int) ($stmt->fetchColumn() ?: 0);
-    } catch (Throwable $exception) {
+    } catch (PDOException $exception) {
         academyPlayersMarkReadFailure('count players', $exception);
         return 0;
     }
@@ -1158,7 +1169,7 @@ function countAcademyPlayersForSubscription(PDO $pdo, int $subscriptionId, ?int 
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
         return (int) $stmt->fetchColumn();
-    } catch (Throwable $exception) {
+    } catch (PDOException $exception) {
         academyPlayersMarkReadFailure('count subscription players', $exception);
         return 0;
     }
