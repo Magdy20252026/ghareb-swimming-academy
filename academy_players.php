@@ -668,9 +668,10 @@ function fetchAcademyPlayersList(PDO $pdo, array $filters): array
 function academyPlayersTableExists(PDO $pdo, string $tableName): bool
 {
     static $cache = [];
+    $allowedTables = ['academy_players', 'academy_player_payments'];
 
     $normalizedTableName = trim($tableName);
-    if ($normalizedTableName === '') {
+    if ($normalizedTableName === '' || !in_array($normalizedTableName, $allowedTables, true)) {
         return false;
     }
 
@@ -693,6 +694,10 @@ function academyPlayersTableExists(PDO $pdo, string $tableName): bool
 function academyPlayersColumnExists(PDO $pdo, string $tableName, string $columnName): bool
 {
     static $cache = [];
+    $allowedColumnsByTable = [
+        'academy_players' => ['created_at', 'updated_at'],
+        'academy_player_payments' => ['id', 'player_id', 'payment_type', 'receipt_number', 'created_at'],
+    ];
 
     $normalizedTableName = trim($tableName);
     $normalizedColumnName = trim($columnName);
@@ -700,7 +705,8 @@ function academyPlayersColumnExists(PDO $pdo, string $tableName, string $columnN
     if (
         $normalizedTableName === ''
         || $normalizedColumnName === ''
-        || preg_match('/^[A-Za-z0-9_]+$/', $normalizedTableName) !== 1
+        || !isset($allowedColumnsByTable[$normalizedTableName])
+        || !in_array($normalizedColumnName, $allowedColumnsByTable[$normalizedTableName], true)
     ) {
         return false;
     }
