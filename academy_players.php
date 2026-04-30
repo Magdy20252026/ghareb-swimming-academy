@@ -890,42 +890,95 @@ function academyPlayersBuildFilteredQueryParts(array $filters): array
     return [$whereClauses, $params];
 }
 
+function academyPlayersBuildFetchPlayersSql(
+    array $whereClauses,
+    ?int $limit,
+    bool $includeSettlementReceipts,
+    string $orderByClause
+): string {
+    $sql = 'SELECT ap.*';
+
+    if ($includeSettlementReceipts) {
+        $sql .= ',
+                (
+                    SELECT GROUP_CONCAT(app.receipt_number ORDER BY app.created_at DESC, app.id DESC SEPARATOR " • ")
+                    FROM academy_player_payments app
+                    WHERE app.player_id = ap.id
+                      AND app.payment_type = "settlement"
+                      AND app.receipt_number IS NOT NULL
+                      AND app.receipt_number <> ""
+                ) AS settlement_receipt_numbers';
+    } else {
+        $sql .= ', NULL AS settlement_receipt_numbers';
+    }
+
+    $sql .= ' FROM academy_players ap';
+    if ($whereClauses !== []) {
+        $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+    }
+    $sql .= ' ORDER BY ' . $orderByClause;
+
+    if ($limit !== null) {
+        $sql .= ' LIMIT ? OFFSET ?';
+    }
+
+    return $sql;
+}
+
 function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params, ?int $limit = null, int $offset = 0): array
 {
-    try {
-        $sql = 'SELECT ap.*';
+    $queryParams = $params;
+    if ($limit !== null) {
+        $queryParams[] = $limit;
+        $queryParams[] = $offset;
+    }
 
-        if (academyPlayersCanFetchSettlementReceipts($pdo)) {
-            $sql .= ',
-                    (
-                        SELECT GROUP_CONCAT(app.receipt_number ORDER BY app.created_at DESC, app.id DESC SEPARATOR " • ")
-                        FROM academy_player_payments app
-                        WHERE app.player_id = ap.id
-                          AND app.payment_type = "settlement"
-                          AND app.receipt_number IS NOT NULL
-                          AND app.receipt_number <> ""
-                    ) AS settlement_receipt_numbers';
-        } else {
-            $sql .= ', NULL AS settlement_receipt_numbers';
+    $queryAttempts = [
+        [
+            'include_settlement_receipts' => academyPlayersCanFetchSettlementReceipts($pdo),
+            'order_by' => academyPlayersResolveOrderByClause($pdo),
+            'label' => 'primary',
+        ],
+        [
+            'include_settlement_receipts' => false,
+            'order_by' => academyPlayersResolveOrderByClause($pdo),
+            'label' => 'without settlement receipts',
+        ],
+        [
+            'include_settlement_receipts' => false,
+            'order_by' => 'ap.subscription_end_date ASC, ap.id DESC',
+            'label' => 'legacy order by fallback',
+        ],
+    ];
+
+    $lastException = null;
+    $players = [];
+
+    foreach ($queryAttempts as $attempt) {
+        try {
+            $sql = academyPlayersBuildFetchPlayersSql(
+                $whereClauses,
+                $limit,
+                $attempt['include_settlement_receipts'],
+                $attempt['order_by']
+            );
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($queryParams);
+            $players = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            $lastException = null;
+            break;
+        } catch (PDOException $exception) {
+            $lastException = $exception;
+            error_log(sprintf(
+                'Academy players list query fallback (%s) [code=%s].',
+                $attempt['label'],
+                (string) $exception->getCode()
+            ));
         }
+    }
 
-        $sql .= ' FROM academy_players ap';
-        if ($whereClauses !== []) {
-            $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
-        }
-        $sql .= ' ORDER BY ' . academyPlayersResolveOrderByClause($pdo);
-
-        if ($limit !== null) {
-            $sql .= ' LIMIT ? OFFSET ?';
-            $params[] = $limit;
-            $params[] = $offset;
-        }
-
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        $players = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-    } catch (PDOException $exception) {
-        academyPlayersMarkReadFailure('fetch players list', $exception);
+    if ($lastException instanceof PDOException) {
+        academyPlayersMarkReadFailure('fetch players list', $lastException);
         return [];
     }
 
