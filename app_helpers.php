@@ -372,6 +372,18 @@ function getAcademyMenuItems(): array
             "editable_permission" => true,
         ],
         [
+            "key" => "settle_remaining",
+            "title" => "تسديد الباق",
+            "icon" => "💳",
+            "type" => "link",
+            "href" => "settle_remaining.php",
+            "accent_start" => "#15803d",
+            "accent_end" => "#22c55e",
+            "description" => "سداد المبالغ المتبقية على السباحين",
+            "always_visible" => false,
+            "editable_permission" => true,
+        ],
+        [
             "key" => "coaches",
             "title" => "المدربين",
             "icon" => "🏅",

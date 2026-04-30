@@ -1840,7 +1840,6 @@ if (isset($_GET['export']) && $_GET['export'] === 'xlsx') {
 }
 
 $editPlayer = null;
-$paymentPlayer = null;
 $filesPlayer = null;
 $starsPlayer = null;
 $passwordPlayer = null;
@@ -2352,77 +2351,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-    } elseif ($action === 'collect_payment') {
-        $playerId = (int) trim((string) ($_POST['player_id'] ?? '0'));
-        $paymentAmountInput = normalizeAcademyPlayerDecimal((string) ($_POST['payment_amount'] ?? ''));
-        $receiptNumber = sanitizeAcademyPlayerText((string) ($_POST['receipt_number'] ?? ''));
-        $paymentPlayer = fetchAcademyPlayerById($pdo, $playerId);
-
-        if ($paymentPlayer === null) {
-            $message = '❌ السباح المطلوب غير موجود.';
-            $messageType = 'error';
-        } elseif (!isValidAcademyPlayerDecimal($paymentAmountInput)) {
-            $message = '❌ أدخل مبلغ سداد صحيحًا.';
-            $messageType = 'error';
-        } elseif ($receiptNumber === '') {
-            $message = '❌ أدخل رقم إيصال السداد.';
-            $messageType = 'error';
-        } elseif ((float) ($paymentPlayer['remaining_amount'] ?? 0) <= 0) {
-            $message = '❌ لا يوجد مبلغ متبقي على هذا السباح.';
-            $messageType = 'error';
-        } else {
-            $paymentAmount = (float) $paymentAmountInput;
-            $currentRemaining = (float) ($paymentPlayer['remaining_amount'] ?? 0);
-
-            if ($paymentAmount > $currentRemaining) {
-                $message = '❌ مبلغ السداد أكبر من المتبقي.';
-                $messageType = 'error';
-            } else {
-                try {
-                    $pdo->beginTransaction();
-
-                    $updatedPaidAmount = (float) ($paymentPlayer['paid_amount'] ?? 0) + $paymentAmount;
-                    $updatedRemainingAmount = max($currentRemaining - $paymentAmount, 0);
-
-                    $paymentUpdateStmt = $pdo->prepare(
-                        'UPDATE academy_players
-                         SET paid_amount = ?, remaining_amount = ?, last_payment_at = CURRENT_TIMESTAMP
-                         WHERE id = ?'
-                    );
-                    $paymentUpdateStmt->execute([
-                        formatAcademyPlayerAmount($updatedPaidAmount),
-                        formatAcademyPlayerAmount($updatedRemainingAmount),
-                        $playerId,
-                    ]);
-
-                    recordAcademyPlayerPayment($pdo, [
-                        'player_id' => $playerId,
-                        'payment_type' => 'settlement',
-                        'amount' => $paymentAmount,
-                        'receipt_number' => $receiptNumber,
-                        'created_by_user_id' => (int) ($currentUser['id'] ?? 0) ?: null,
-                        'player_name_snapshot' => (string) ($paymentPlayer['player_name'] ?? ''),
-                        'subscription_name_snapshot' => (string) ($paymentPlayer['subscription_name'] ?? ''),
-                        'subscription_amount_snapshot' => (float) ($paymentPlayer['subscription_amount'] ?? 0),
-                        'paid_amount_before_snapshot' => (float) ($paymentPlayer['paid_amount'] ?? 0),
-                        'paid_amount_after_snapshot' => $updatedPaidAmount,
-                        'remaining_amount_before_snapshot' => $currentRemaining,
-                        'remaining_amount_after_snapshot' => $updatedRemainingAmount,
-                    ]);
-
-                    $pdo->commit();
-                    setAcademyPlayersFlash('✅ تم تسجيل السداد بنجاح.', 'success');
-                    header('Location: ' . buildAcademyPlayersPageUrl($redirectPageParams));
-                    exit;
-                } catch (Throwable $exception) {
-                    if ($pdo->inTransaction()) {
-                        $pdo->rollBack();
-                    }
-                    $message = '❌ حدث خطأ أثناء تسجيل السداد.';
-                    $messageType = 'error';
-                }
-            }
-        }
     } elseif ($action === 'delete') {
         $playerId = (int) trim((string) ($_POST['player_id'] ?? '0'));
         $playerToDelete = fetchAcademyPlayerById($pdo, $playerId);
@@ -2632,14 +2560,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['edit']) && ctype_digit((string) $_GET['edit'])) {
     $editPlayer = fetchAcademyPlayerById($pdo, (int) $_GET['edit']);
     if ($editPlayer === null && $message === '') {
-        $message = '❌ السباح المطلوب غير موجود.';
-        $messageType = 'error';
-    }
-}
-
-if (isset($_GET['pay']) && ctype_digit((string) $_GET['pay'])) {
-    $paymentPlayer = fetchAcademyPlayerById($pdo, (int) $_GET['pay']);
-    if ($paymentPlayer === null && $message === '') {
         $message = '❌ السباح المطلوب غير موجود.';
         $messageType = 'error';
     }
@@ -3221,43 +3141,6 @@ if (getAcademyPlayersReadFailure()) {
     <?php endif; ?>
 
     <section class="action-panels">
-
-            <?php if ($paymentPlayer !== null && (float) ($paymentPlayer['remaining_amount'] ?? 0) > 0): ?>
-                <div class="side-card action-card" id="collect-payment-card">
-                    <h3>سداد</h3>
-                    <div class="info-list">
-                        <div><span>السباح</span><strong><?php echo htmlspecialchars((string) ($paymentPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>المجموعة</span><strong><?php echo htmlspecialchars((string) ($paymentPlayer['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>الفرع</span><strong><?php echo htmlspecialchars((string) ($paymentPlayer['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>المتبقي</span><strong><?php echo formatAcademyPlayerMoney($paymentPlayer['remaining_amount'] ?? 0); ?> ج.م</strong></div>
-                    </div>
-                    <form method="POST" class="stack-form" autocomplete="off">
-                        <input type="hidden" name="action" value="collect_payment">
-                        <input type="hidden" name="player_id" value="<?php echo (int) ($paymentPlayer['id'] ?? 0); ?>">
-                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
-                        <div class="form-group">
-                            <label for="payment_amount">مبلغ السداد</label>
-                            <input type="number" name="payment_amount" id="payment_amount" min="0.01" max="<?php echo htmlspecialchars(formatAcademyPlayerAmount($paymentPlayer['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="payment_receipt_number">رقم إيصال السداد</label>
-                            <input type="text" name="receipt_number" id="payment_receipt_number" required>
-                        </div>
-                        <div class="form-actions compact-actions">
-                            <button type="submit" class="save-btn">تسجيل السداد</button>
-                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
-                        </div>
-                    </form>
-                </div>
-            <?php endif; ?>
-
             <?php if ($filesPlayer !== null): ?>
                 <?php $filesPlayerStarsCount = academyPlayerResolveStarsCount((string) ($filesPlayer['subscription_category'] ?? ''), $filesPlayer['stars_count'] ?? null); ?>
                 <?php $filesPlayerMedicalReportPaths = decodeAcademyPlayerMedicalReportFiles($filesPlayer['medical_report_files'] ?? null, $filesPlayer['medical_report_path'] ?? null); ?>
@@ -3558,11 +3441,6 @@ if (getAcademyPlayersReadFailure()) {
                                 <td data-label="رقم إيصال سداد المتبقي"><span class="table-cell-text table-cell-multiline"><?php echo htmlspecialchars((string) (($player['settlement_receipt_numbers'] ?? '') !== '' ? $player['settlement_receipt_numbers'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="الإجراءات">
                                     <div class="action-buttons">
-                                        <?php if ((float) ($player['remaining_amount'] ?? 0) > 0): ?>
-                                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['pay' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#collect-payment-card" class="pay-btn">سداد</a>
-                                        <?php else: ?>
-                                            <span class="action-disabled">مسدد</span>
-                                        <?php endif; ?>
                                         <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['edit' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>" class="edit-btn">تعديل</a>
                                         <?php if ($playerHasStarsCategory): ?>
                                             <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['stars' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#player-stars-card" class="link-btn" aria-label="<?php echo htmlspecialchars('تحديث نجمة ' . (string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">النجمة</a>

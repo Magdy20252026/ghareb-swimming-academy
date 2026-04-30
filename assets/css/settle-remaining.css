@@ -1,0 +1,228 @@
+@import url('academy-players.css');
+
+:root {
+    --table-min-width: 1480px;
+}
+
+.remaining-settlement-page {
+    max-width: 1680px;
+}
+
+.remaining-settlement-page .hero-grid {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.remaining-settlement-page .hero-card,
+.remaining-settlement-page .hero-card-main {
+    grid-column: auto;
+    min-height: 100%;
+}
+
+.remaining-settlement-page .hero-card-main {
+    min-width: 0;
+}
+
+.remaining-settlement-page .toolbar-card,
+.remaining-settlement-page .table-card,
+.remaining-settlement-page .page-header,
+.remaining-settlement-page .hero-card,
+.remaining-settlement-page .message-box {
+    background: var(--surface);
+}
+
+.remaining-settlement-page .filter-form-horizontal {
+    grid-template-columns: minmax(0, 1.5fr) auto;
+}
+
+.remaining-settlement-page .toolbar-form-actions {
+    align-self: stretch;
+}
+
+.remaining-settlement-page .toolbar-form-actions > * {
+    min-width: 140px;
+}
+
+.remaining-settlement-page .table-wrapper th,
+.remaining-settlement-page .table-wrapper td {
+    min-width: 140px;
+}
+
+.remaining-settlement-page .table-wrapper th:first-child,
+.remaining-settlement-page .table-wrapper td:first-child {
+    min-width: 78px;
+    width: 78px;
+}
+
+.remaining-settlement-page .table-wrapper th:nth-child(2),
+.remaining-settlement-page .table-wrapper td:nth-child(2) {
+    min-width: 170px;
+}
+
+.remaining-settlement-page .table-wrapper th:nth-child(3),
+.remaining-settlement-page .table-wrapper td:nth-child(3) {
+    min-width: 220px;
+}
+
+.remaining-settlement-page .table-wrapper th:nth-child(4),
+.remaining-settlement-page .table-wrapper td:nth-child(4) {
+    min-width: 240px;
+}
+
+.remaining-settlement-page .table-wrapper th:nth-child(5),
+.remaining-settlement-page .table-wrapper td:nth-child(5),
+.remaining-settlement-page .table-wrapper th:nth-child(6),
+.remaining-settlement-page .table-wrapper td:nth-child(6) {
+    min-width: 150px;
+}
+
+.remaining-settlement-page .table-wrapper th:last-child,
+.remaining-settlement-page .table-wrapper td:last-child {
+    min-width: 420px;
+}
+
+.stacked-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.stacked-cell strong {
+    color: var(--text-main);
+}
+
+.stacked-cell span {
+    color: var(--text-soft);
+    font-weight: 700;
+}
+
+.settlement-form {
+    display: grid;
+    grid-template-columns: minmax(120px, 140px) minmax(170px, 1fr) auto;
+    gap: 10px;
+    align-items: end;
+}
+
+.settlement-form .form-group {
+    grid-column: auto;
+    min-width: 0;
+    margin: 0;
+}
+
+.settlement-submit-group {
+    min-width: 130px;
+}
+
+.settlement-submit-group .save-btn {
+    width: 100%;
+}
+
+.remaining-settlement-page .table-wrapper td[data-label="تسديد الباق"] {
+    white-space: normal;
+}
+
+.remaining-settlement-page .empty-row {
+    color: var(--text-soft);
+}
+
+body.dark-mode .remaining-settlement-page .hero-card:not(.hero-card-main),
+body.dark-mode .remaining-settlement-page .toolbar-card,
+body.dark-mode .remaining-settlement-page .table-card,
+body.dark-mode .remaining-settlement-page .page-header {
+    background: var(--surface);
+}
+
+body.dark-mode .remaining-settlement-page .table-cell-text,
+body.dark-mode .remaining-settlement-page .stacked-cell strong,
+body.dark-mode .remaining-settlement-page label,
+body.dark-mode .remaining-settlement-page input,
+body.dark-mode .remaining-settlement-page .table-count {
+    color: var(--text-main);
+}
+
+body.dark-mode .remaining-settlement-page .stacked-cell span,
+body.dark-mode .remaining-settlement-page .empty-row,
+body.dark-mode .remaining-settlement-page .table-wrapper td::before {
+    color: var(--text-soft);
+}
+
+@media (max-width: 1100px) {
+    .remaining-settlement-page .filter-form-horizontal {
+        grid-template-columns: 1fr;
+    }
+
+    .settlement-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 860px) {
+    :root {
+        --table-min-width: 0;
+    }
+
+    .remaining-settlement-page .toolbar-form-actions > * {
+        width: 100%;
+    }
+
+    .remaining-settlement-page .table-wrapper thead {
+        display: none;
+    }
+
+    .remaining-settlement-page .table-wrapper tbody,
+    .remaining-settlement-page .table-wrapper tr,
+    .remaining-settlement-page .table-wrapper td {
+        display: block;
+        width: 100%;
+    }
+
+    .remaining-settlement-page .table-wrapper tr {
+        padding: 14px;
+        margin-bottom: 14px;
+        border-radius: 22px;
+        overflow: hidden;
+    }
+
+    .remaining-settlement-page .table-wrapper td {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 12px 0;
+        text-align: left;
+        border: none;
+        border-radius: 0;
+    }
+
+    .remaining-settlement-page .table-wrapper td::before {
+        content: attr(data-label);
+        font-size: 12px;
+        font-weight: 900;
+        color: var(--text-soft);
+        text-align: right;
+        flex: 0 0 110px;
+    }
+
+    .remaining-settlement-page .table-wrapper td:first-child,
+    .remaining-settlement-page .table-wrapper td:last-child {
+        width: 100%;
+    }
+
+    .remaining-settlement-page .table-wrapper td[data-label="تسديد الباق"] {
+        display: block;
+    }
+
+    .remaining-settlement-page .table-wrapper td[data-label="تسديد الباق"]::before {
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .remaining-settlement-page .settlement-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .remaining-settlement-page .table-wrapper tr {
+        padding: 12px;
+    }
+}
