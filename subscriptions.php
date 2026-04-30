@@ -410,6 +410,7 @@ function isSubscriptionPlaceholderText(string $value): bool
         return false;
     }
 
+    // نحذف الفواصل والمسافات والشرطات وحتى الشرط المائل لأن القيم التالفة تظهر عادة كسلسلة من علامات الاستفهام فقط.
     $placeholderCandidate = preg_replace('/[\s\p{Pd}•.,،:\/\\\\()]+/u', '', $normalizedValue);
     if ($placeholderCandidate === null) {
         error_log('تعذر تنفيذ preg_replace بسبب خطأ في محرك PCRE أثناء فحص بيانات المجموعة: ' . formatSubscriptionLogValue($normalizedValue));
@@ -421,6 +422,7 @@ function isSubscriptionPlaceholderText(string $value): bool
         error_log('تم اكتشاف محرف الاستبدال في بيانات المجموعة أثناء فحص الرموز غير المفهومة: ' . formatSubscriptionLogValue($normalizedValue));
     }
 
+    // وجود محرف الاستبدال � يعني أن النص وصل تالفًا من بيانات قديمة، لذلك نعامله كقيمة placeholder غير صالحة للعرض.
     return preg_match('/^[\?؟�]+$/u', $placeholderCandidate) === 1;
 }
 
