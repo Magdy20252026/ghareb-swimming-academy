@@ -399,7 +399,7 @@ function resolveSubscriptionsFormData(
     return is_array($editSubscription) ? $editSubscription : [];
 }
 
-function buildSubscriptionScheduleFromSubmittedLookup(array $submittedScheduleLookup): array
+function buildSubscriptionScheduleFromSubmittedData(array $submittedScheduleLookup): array
 {
     $schedule = [];
 
@@ -649,7 +649,7 @@ $isEditingSubscription = isset($subscriptionFormData['id']) && trim((string) ($s
 $shouldAutoOpenSubscriptionModal = $isEditingSubscription || ($submittedAction === 'save' && $messageType === 'error');
 $shouldResetSubscriptionModalOnClose = $isEditingSubscription;
 $editSchedule = $submittedAction === 'save' && $messageType === 'error'
-    ? buildSubscriptionScheduleFromSubmittedLookup($submittedScheduleLookup)
+    ? buildSubscriptionScheduleFromSubmittedData($submittedScheduleLookup)
     : ($editSubscription ? decodeSubscriptionSchedule($editSubscription['training_schedule'] ?? null) : []);
 $editScheduleLookup = [];
 if ($submittedAction === 'save' && $messageType === 'error') {
@@ -689,7 +689,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
     data-page-url="<?php echo htmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
     data-form-close-url="<?php echo htmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
     data-form-modal-open="<?php echo $shouldAutoOpenSubscriptionModal ? '1' : '0'; ?>"
-    data-form-modal-reset="<?php echo $shouldResetSubscriptionModalOnClose ? '1' : '0'; ?>"
+    data-form-modal-reset-page="<?php echo $shouldResetSubscriptionModalOnClose ? '1' : '0'; ?>"
 >
 <div class="subscriptions-page">
     <header class="page-header">

@@ -4,7 +4,7 @@ const subscriptionsClearBtn = document.getElementById('clearBtn');
 const subscriptionsPageUrl = subscriptionsBody?.dataset.pageUrl || window.location.pathname.split('/').pop() || '';
 const subscriptionsFormCloseUrl = subscriptionsBody?.dataset.formCloseUrl || subscriptionsPageUrl;
 const subscriptionsShouldOpenFormModal = subscriptionsBody?.dataset.formModalOpen === '1';
-const subscriptionsShouldResetModalOnClose = subscriptionsBody?.dataset.formModalReset === '1';
+const subscriptionsShouldResetModalOnClose = subscriptionsBody?.dataset.formModalResetPage === '1';
 const subscriptionsForm = document.getElementById('subscriptionsForm');
 const subscriptionsOpenModalButtons = Array.from(document.querySelectorAll('[data-open-subscription-modal]'));
 const subscriptionsFormModal = document.getElementById('subscriptionFormModal');
