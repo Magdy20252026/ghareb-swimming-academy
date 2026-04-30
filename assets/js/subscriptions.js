@@ -317,7 +317,7 @@ if (subscriptionsClearBtn) {
 }
 
 subscriptionsOpenModalButtons.forEach((button) => {
-    button.addEventListener('click', () => openSubscriptionsFormModal(button));
+    button.addEventListener('click', () => openSubscriptionsFormModal());
 });
 
 subscriptionsCategoryField?.addEventListener('change', updateGeneratedSubscriptionName);
