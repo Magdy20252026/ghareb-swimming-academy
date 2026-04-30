@@ -411,8 +411,8 @@ function isSubscriptionPlaceholderText(string $value): bool
     }
 
     // النمط التالي يحذف الفواصل والشرطات وأرقام الوقت الغربية/العربية ورموز AM/PM حتى لا تُحتسب عند اكتشاف النصوص التالفة.
-    $placeholderNoisePattern = '/[\s\p{Pd}•.,،:\/\\\\()0-9٠-٩۰-۹AaPpMmصم]+/u';
-    $placeholderCandidate = preg_replace($placeholderNoisePattern, '', $normalizedValue);
+    $timeAndPunctuationNoisePattern = '/[\s\p{Pd}•.,،:\/\\\\()0-9٠-٩۰-۹AaPpMmصم]+/u';
+    $placeholderCandidate = preg_replace($timeAndPunctuationNoisePattern, '', $normalizedValue);
     if ($placeholderCandidate === null) {
         error_log('تعذر تنفيذ preg_replace بسبب خطأ في محرك PCRE أثناء فحص بيانات المجموعة: ' . formatSubscriptionLogValue($normalizedValue));
         return false;
