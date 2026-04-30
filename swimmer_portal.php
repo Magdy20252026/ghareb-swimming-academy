@@ -555,6 +555,13 @@ function swimmerPortalCardRequests(PDO $pdo, int $playerId): array
     return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 }
 
+function swimmerPortalHasCardRequest(PDO $pdo, int $playerId): bool
+{
+    $stmt = $pdo->prepare('SELECT id FROM swimmer_card_requests WHERE player_id = ? LIMIT 1');
+    $stmt->execute([$playerId]);
+    return (bool) $stmt->fetchColumn();
+}
+
 function swimmerPortalGroupEvaluation(PDO $pdo, int $subscriptionId, string $month): ?array
 {
     if ($subscriptionId <= 0 || preg_match('/^\d{4}-\d{2}$/', $month) !== 1) {
@@ -868,7 +875,19 @@ if ($player !== null && $_SERVER['REQUEST_METHOD'] === 'POST' && swimmerPortalVa
     } elseif ($action === 'upload_file') {
         $fileType = trim((string) ($_POST['file_type'] ?? ''));
 
-        if ($fileType === 'birth_certificate') {
+        if ($fileType === 'profile_image') {
+            $upload = swimmerPortalUploadImage($_FILES['profile_image_file'] ?? [], SWIMMER_PORTAL_UPLOAD_DIR, SWIMMER_PORTAL_UPLOAD_PUBLIC_DIR, 'swimmer-profile');
+            if (!empty($upload['error']) || empty($upload['path'])) {
+                $message = '❌ تعذر رفع الصورة الشخصية.';
+                $messageType = 'error';
+            } else {
+                $updateStmt = $pdo->prepare('UPDATE academy_players SET player_image_path = ? WHERE id = ?');
+                $updateStmt->execute([$upload['path'], (int) $player['id']]);
+                swimmerPortalDeleteImage((string) ($player['player_image_path'] ?? ''));
+                header('Location: swimmer_portal.php?section=files');
+                exit;
+            }
+        } elseif ($fileType === 'birth_certificate') {
             $upload = swimmerPortalUploadImage($_FILES['birth_certificate_file'] ?? [], SWIMMER_PORTAL_UPLOAD_DIR, SWIMMER_PORTAL_UPLOAD_PUBLIC_DIR, 'swimmer-birth-certificate');
             if (!empty($upload['error']) || empty($upload['path'])) {
                 $message = '❌ تعذر رفع الملف.';
@@ -912,7 +931,11 @@ if ($player !== null && $_SERVER['REQUEST_METHOD'] === 'POST' && swimmerPortalVa
         }
     } elseif ($action === 'delete_file') {
         $fileType = trim((string) ($_POST['file_type'] ?? ''));
-        if ($fileType === 'birth_certificate') {
+        if ($fileType === 'profile_image') {
+            $updateStmt = $pdo->prepare('UPDATE academy_players SET player_image_path = NULL WHERE id = ?');
+            $updateStmt->execute([(int) $player['id']]);
+            swimmerPortalDeleteImage((string) ($player['player_image_path'] ?? ''));
+        } elseif ($fileType === 'birth_certificate') {
             $updateStmt = $pdo->prepare('UPDATE academy_players SET birth_certificate_path = NULL WHERE id = ?');
             $updateStmt->execute([(int) $player['id']]);
             swimmerPortalDeleteImage((string) ($player['birth_certificate_path'] ?? ''));
@@ -929,15 +952,47 @@ if ($player !== null && $_SERVER['REQUEST_METHOD'] === 'POST' && swimmerPortalVa
         header('Location: swimmer_portal.php?section=files');
         exit;
     } elseif ($action === 'card_request') {
-        $upload = swimmerPortalUploadImage($_FILES['card_request_image'] ?? [], SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_DIR, SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_PUBLIC_DIR, 'card-request');
-        if (!empty($upload['error']) || empty($upload['path'])) {
-            $message = '❌ تعذر رفع الصورة.';
+        $alreadyRequested = !empty($player['card_request_submitted_at']) || swimmerPortalHasCardRequest($pdo, (int) $player['id']);
+        if ($alreadyRequested) {
+            $message = '❌ تم إرسال طلب الكارنية من قبل ولا يمكن تكراره.';
             $messageType = 'error';
         } else {
-            $insertStmt = $pdo->prepare('INSERT INTO swimmer_card_requests (player_id, player_name_snapshot, request_image_path) VALUES (?, ?, ?)');
-            $insertStmt->execute([(int) $player['id'], (string) ($player['player_name'] ?? ''), $upload['path']]);
-            header('Location: swimmer_portal.php?section=card-request');
-            exit;
+            $upload = swimmerPortalUploadImage($_FILES['card_request_image'] ?? [], SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_DIR, SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_PUBLIC_DIR, 'card-request');
+            if (!empty($upload['error']) || empty($upload['path'])) {
+                $message = '❌ تعذر رفع الصورة.';
+                $messageType = 'error';
+            } else {
+                try {
+                    $pdo->beginTransaction();
+
+                    $markRequestStmt = $pdo->prepare(
+                        'UPDATE academy_players
+                         SET card_request_submitted_at = NOW()
+                         WHERE id = ? AND card_request_submitted_at IS NULL'
+                    );
+                    $markRequestStmt->execute([(int) $player['id']]);
+
+                    if ($markRequestStmt->rowCount() === 0) {
+                        $pdo->rollBack();
+                        swimmerPortalDeleteImage((string) $upload['path']);
+                        $message = '❌ تم إرسال طلب الكارنية من قبل ولا يمكن تكراره.';
+                        $messageType = 'error';
+                    } else {
+                        $insertStmt = $pdo->prepare('INSERT INTO swimmer_card_requests (player_id, player_name_snapshot, request_image_path) VALUES (?, ?, ?)');
+                        $insertStmt->execute([(int) $player['id'], (string) ($player['player_name'] ?? ''), $upload['path']]);
+                        $pdo->commit();
+                        header('Location: swimmer_portal.php?section=card-request');
+                        exit;
+                    }
+                } catch (Throwable $exception) {
+                    if ($pdo->inTransaction()) {
+                        $pdo->rollBack();
+                    }
+                    swimmerPortalDeleteImage((string) $upload['path']);
+                    $message = '❌ حدث خطأ أثناء إرسال الطلب.';
+                    $messageType = 'error';
+                }
+            }
         }
     } elseif ($action === 'change_password') {
         $currentPassword = (string) ($_POST['current_password'] ?? '');
@@ -974,6 +1029,7 @@ $nutritionHistory = $player !== null ? ($_SESSION['swimmer_nutrition_chat'][$pla
 $notifications = $player !== null ? swimmerPortalNotifications($pdo, $player) : [];
 $offers = swimmerPortalOffers($pdo);
 $cardRequests = $player !== null ? swimmerPortalCardRequests($pdo, (int) $player['id']) : [];
+$hasSubmittedCardRequest = $player !== null && (!empty($player['card_request_submitted_at']) || $cardRequests !== []);
 $attendanceRecords = $player !== null ? swimmerPortalAttendanceRecords($pdo, (int) $player['id']) : [];
 $attendanceSummary = swimmerPortalAttendanceSummary($attendanceRecords);
 $birthCertificatePath = $player !== null ? swimmerPortalNormalizePath($player['birth_certificate_path'] ?? null) : null;
@@ -1289,6 +1345,14 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                     <section class="portal-section-card files-layout">
                         <?php
                         $requiredFiles = [];
+                        $requiredFiles[] = [
+                            'title' => 'الصورة الشخصية',
+                            'type' => 'profile_image',
+                            'single_path' => $playerImagePath,
+                            'paths' => $playerImagePath !== null ? [$playerImagePath] : [],
+                            'input_name' => 'profile_image_file',
+                            'multiple' => false,
+                        ];
                         if (!empty($player['birth_certificate_required'])) {
                             $requiredFiles[] = [
                                 'title' => 'شهادة الميلاد',
@@ -1370,16 +1434,23 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                     </section>
                 <?php elseif ($activeSection === 'card-request'): ?>
                     <section class="portal-section-card card-request-layout">
-                        <form method="POST" enctype="multipart/form-data" class="portal-form-card stack-form" autocomplete="off">
-                            <input type="hidden" name="action" value="card_request">
-                            <input type="hidden" name="redirect_section" value="card-request">
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
-                            <div class="form-group">
-                                <label for="card_request_image">صورة السباح</label>
-                                <input type="file" name="card_request_image" id="card_request_image" accept="image/*" required>
+                        <?php if (!$hasSubmittedCardRequest): ?>
+                            <form method="POST" enctype="multipart/form-data" class="portal-form-card stack-form" autocomplete="off">
+                                <input type="hidden" name="action" value="card_request">
+                                <input type="hidden" name="redirect_section" value="card-request">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <div class="form-group">
+                                    <label for="card_request_image">صورة السباح</label>
+                                    <input type="file" name="card_request_image" id="card_request_image" accept="image/*" required>
+                                </div>
+                                <button type="submit" class="primary-btn">رفع</button>
+                            </form>
+                        <?php else: ?>
+                            <div class="portal-form-card stack-form">
+                                <strong>تم إرسال طلب الكارنية بالفعل</strong>
+                                <p>يمكن للسباح إرسال طلب كارنية مرة واحدة فقط، وتم تسجيل طلبك بنجاح.</p>
                             </div>
-                            <button type="submit" class="primary-btn">رفع</button>
-                        </form>
+                        <?php endif; ?>
                         <div class="request-history-grid">
                             <?php foreach ($cardRequests as $request): ?>
                                 <?php $requestImagePath = swimmerPortalNormalizeCardRequestPath($request['request_image_path'] ?? null); ?>
