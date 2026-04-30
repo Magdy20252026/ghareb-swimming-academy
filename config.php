@@ -1109,7 +1109,7 @@ try {
             WHERE ap.card_request_submitted_at IS NULL
         ");
     } catch (PDOException $exception) {
-        error_log('تعذر تحديث حالة إرسال طلبات الكارنية للاعبين: ' . $exception->getMessage());
+        error_log('تعذر تحديث حالة إرسال طلبات الكارنية للاعبين أثناء مزامنة الطلبات السابقة: ' . $exception->getMessage());
     }
 
     $swimmerNotificationsTableExistsStmt = $pdo->query("SHOW TABLES LIKE 'swimmer_notifications'");
