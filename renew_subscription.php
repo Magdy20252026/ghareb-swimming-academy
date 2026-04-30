@@ -448,13 +448,14 @@ function fetchRenewBranches(PDO $pdo): array
          FROM academy_players
          WHERE academy_id = 0
            AND subscription_branch IS NOT NULL
-           AND subscription_branch <> ""
+           AND CHAR_LENGTH(TRIM(subscription_branch)) > 0
            AND (subscription_end_date < CURDATE() OR available_exercises_count <= 0)
          ORDER BY subscription_branch ASC'
     );
     $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    $sanitizedBranches = array_map(static fn($value): string => sanitizeRenewText((string) $value), $branches);
 
-    return array_values(array_filter(array_map(static fn($value): string => sanitizeRenewText((string) $value), $branches)));
+    return array_values(array_filter($sanitizedBranches, static fn(string $value): bool => $value !== ''));
 }
 
 function fetchRenewSummary(PDO $pdo): array
