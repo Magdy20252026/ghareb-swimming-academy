@@ -403,10 +403,6 @@ document.addEventListener('keydown', (event) => {
         return;
     }
 
-    if (event.target instanceof HTMLSelectElement) {
-        return;
-    }
-
     closeSubscriptionsFormModal(subscriptionsShouldResetModalOnClose);
 });
 

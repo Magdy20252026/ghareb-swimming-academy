@@ -444,11 +444,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trainingDaysCount = sanitizeSubscriptionInteger((string) ($_POST['training_days_count'] ?? ''));
         $availableExercisesCount = sanitizeSubscriptionInteger((string) ($_POST['available_exercises_count'] ?? ''));
         $selectedDays = $_POST['training_days'] ?? [];
-        $scheduleTimes = $_POST['schedule_time'] ?? [];
+        $submittedScheduleTimes = is_array($_POST['schedule_time'] ?? null) ? $_POST['schedule_time'] : [];
         $coachId = sanitizeSubscriptionInteger((string) ($_POST['coach_id'] ?? ''));
         $maxTrainees = sanitizeSubscriptionInteger((string) ($_POST['max_trainees'] ?? ''));
         $subscriptionPriceInput = sanitizeSubscriptionDecimal((string) ($_POST['subscription_price'] ?? ''));
-        $trainingSchedule = normalizeSubscriptionSchedule($selectedDays, $scheduleTimes, $trainingDaysCount);
+        $trainingSchedule = normalizeSubscriptionSchedule($selectedDays, $submittedScheduleTimes, $trainingDaysCount);
         $scheduleSummary = buildSubscriptionScheduleSummary($trainingSchedule);
         $coachName = $coachLookup[$coachId] ?? '';
         $subscriptionName = buildAcademySubscriptionName(
@@ -471,7 +471,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     continue;
                 }
 
-                $selectedDayLookup[$normalizedDayKey] = normalizeAcademyTimeInputValue((string) ($scheduleTimes[$normalizedDayKey] ?? ''));
+                $selectedDayLookup[$normalizedDayKey] = normalizeAcademyTimeInputValue((string) ($submittedScheduleTimes[$normalizedDayKey] ?? ''));
             }
         }
 
