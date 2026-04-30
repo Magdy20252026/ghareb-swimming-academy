@@ -1534,128 +1534,9 @@ body.dark-mode .detail-grid-payment .detail-item {
     }
 
     .table-wrapper {
-        overflow: visible;
-        padding-bottom: 0;
-    }
-
-    .table-wrapper table,
-    .table-wrapper tbody,
-    .table-wrapper tr,
-    .table-wrapper td {
-        display: block;
-        width: 100%;
-        min-width: 0;
-    }
-
-    .table-wrapper table {
-        min-width: 0;
-        border-spacing: 0;
-    }
-
-    .table-wrapper thead {
-        display: none;
-    }
-
-    .table-wrapper tbody {
-        display: grid;
-        gap: 16px;
-    }
-
-    .table-wrapper tr {
-        padding: 18px;
-        border: 1px solid var(--border);
-        border-radius: 22px;
-        box-shadow: var(--shadow-soft);
-    }
-
-    .table-wrapper tbody td {
-        border: none;
-        border-radius: 0;
-    }
-
-    .table-wrapper tbody tr td:first-child,
-    .table-wrapper tbody tr td:last-child {
-        width: 100%;
-        border: none;
-        border-radius: 0;
-    }
-
-    .table-wrapper tbody td:not(.empty-row) {
-        display: grid;
-        grid-template-columns: minmax(92px, 112px) minmax(0, 1fr);
-        gap: 12px;
-        align-items: start;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(212, 229, 242, 0.92);
-    }
-
-    body.dark-mode .table-wrapper tbody td:not(.empty-row) {
-        border-bottom-color: rgba(74, 91, 120, 0.54);
-    }
-
-    .table-wrapper tbody td:not(.empty-row)::before {
-        content: attr(data-label);
-        color: var(--text-soft);
-        font-size: 12px;
-        font-weight: 900;
-        line-height: 1.7;
-    }
-
-    .table-wrapper tbody tr td:last-child,
-    .table-wrapper tbody td[data-label="الإجراءات"] {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-
-    .table-wrapper tbody td.table-avatar-cell {
-        justify-items: center;
-        text-align: center;
-    }
-
-    .table-wrapper tbody td.table-avatar-cell::before {
-        justify-self: stretch;
-        text-align: right;
-    }
-
-    .table-wrapper tbody td[data-label="اسم السباح"] strong {
-        margin-bottom: 0;
-    }
-
-    .table-wrapper tbody td[data-label="الإجراءات"]::before {
-        margin-bottom: 10px;
-    }
-
-    .table-wrapper .action-buttons {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-        width: 100%;
-        min-width: 0;
-    }
-
-    .table-wrapper .action-buttons > * {
-        min-width: 0;
-        width: 100%;
-    }
-
-    .table-wrapper .inline-form {
-        display: block;
-        width: 100%;
-    }
-
-    .table-wrapper .delete-btn,
-    .table-wrapper .action-disabled,
-    .table-wrapper .files-btn,
-    .table-wrapper .pay-btn,
-    .table-wrapper .edit-btn,
-    .table-wrapper .link-btn {
-        width: 100%;
-    }
-
-    .table-wrapper .empty-row {
-        display: block;
-        padding: 0;
-        text-align: center;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
     }
 
     .detail-grid {
@@ -1720,40 +1601,8 @@ body.dark-mode .detail-grid-payment .detail-item {
         line-height: 1.7;
     }
 
-    .table-wrapper tbody tr {
-        padding: 16px;
-        border-radius: 20px;
-    }
-
-    .table-wrapper tbody td:not(.empty-row) {
-        grid-template-columns: 1fr;
-        gap: 8px;
-        padding: 12px 0;
-    }
-
-    .table-wrapper tbody td.table-avatar-cell {
-        justify-items: stretch;
-        text-align: right;
-    }
-
-    .table-wrapper tbody td.table-avatar-cell::before {
-        text-align: right;
-    }
-
-    .table-avatar-box {
-        justify-content: flex-start;
-    }
-
-    .table-cell-date {
-        white-space: normal;
-    }
-
-    .table-cell-multiline {
-        min-width: 0;
-    }
-
-    .table-wrapper .action-buttons {
-        grid-template-columns: 1fr;
+    .table-wrapper {
+        padding-bottom: 8px;
     }
 }
 
@@ -1795,10 +1644,6 @@ body.dark-mode .detail-grid-payment .detail-item {
     .summary-page-header .toolbar-actions,
     .form-actions.compact-actions {
         gap: 10px;
-    }
-
-    .table-wrapper tbody td:not(.empty-row)::before {
-        font-size: 11px;
     }
 
     .modal-overlay {
