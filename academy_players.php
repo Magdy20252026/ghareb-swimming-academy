@@ -965,14 +965,14 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
             $stmt = $pdo->prepare($sql);
             $stmt->execute($queryParams);
             $players = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-            $lastException = null;
             break;
         } catch (PDOException $exception) {
             $lastException = $exception;
             error_log(sprintf(
-                'Academy players list query fallback (%s) [code=%s].',
+                'Academy players list query fallback (%s) [code=%s]: %s',
                 $attempt['label'],
-                (string) $exception->getCode()
+                (string) $exception->getCode(),
+                $exception->getMessage()
             ));
         }
     }
