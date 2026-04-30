@@ -1130,6 +1130,22 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
 
                 <?php if ($activeSection === 'info'): ?>
                     <section class="portal-section-card">
+                        <div class="info-hero-card">
+                            <div class="player-profile-avatar info-hero-avatar <?php echo $playerImagePath === null ? 'player-profile-avatar-logo' : ''; ?>">
+                                <?php if ($playerImagePath !== null): ?>
+                                    <img src="<?php echo htmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('صورة ' . (string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                                <?php elseif ($academyLogoPath !== null): ?>
+                                    <img src="<?php echo htmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
+                                <?php else: ?>
+                                    <span><?php echo htmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="info-hero-content">
+                                <span class="page-badge">👤 معلومات السباح</span>
+                                <h2><?php echo htmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></h2>
+                                <p><?php echo htmlspecialchars((string) (($player['subscription_name'] ?? '') !== '' ? $player['subscription_name'] : 'لا توجد مجموعة مضافة حالياً'), ENT_QUOTES, 'UTF-8'); ?></p>
+                            </div>
+                        </div>
                         <div class="overview-grid">
                             <?php foreach ($infoRows as $infoRow): ?>
                                 <?php

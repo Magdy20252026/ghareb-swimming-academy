@@ -741,6 +741,40 @@ h2 {
     gap: 16px;
 }
 
+.info-hero-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 18px;
+    border-radius: 28px;
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(3, 105, 161, 0.08), rgba(56, 189, 248, 0.05));
+}
+
+.info-hero-avatar {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+}
+
+.info-hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-hero-content .page-badge {
+    margin-bottom: 0;
+    width: fit-content;
+}
+
+.info-hero-content p {
+    color: var(--text-soft);
+    font-size: 15px;
+    font-weight: 700;
+}
+
 .journey-grid {
     --journey-item-gap: 14px;
     --journey-connector-offset: 6px;
@@ -1211,6 +1245,15 @@ h2 {
         text-align: right;
         justify-content: flex-start;
         padding: 16px;
+    }
+
+    .info-hero-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .info-hero-content {
+        align-items: center;
     }
 
     .player-profile-avatar {
