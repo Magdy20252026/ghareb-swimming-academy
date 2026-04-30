@@ -110,7 +110,7 @@ function generateSettleRemainingSecurityToken(): string
         }
     }
 
-    throw new RuntimeException('تعذر إنشاء رمز أمان لصفحة تسديد الباق');
+    throw new RuntimeException('تعذر إنشاء رمز أمان لصفحة تسديد الباقي');
 }
 
 function getSettleRemainingCsrfToken(): string
@@ -161,7 +161,22 @@ function consumeSettleRemainingFlash(): array
     ];
 }
 
-function fetchSettleRemainingSummary(PDO $pdo, string $search): array
+function fetchSettleRemainingBranches(PDO $pdo): array
+{
+    $stmt = $pdo->query(
+        'SELECT DISTINCT subscription_branch
+         FROM academy_players
+         WHERE academy_id = 0
+           AND remaining_amount > 0
+           AND subscription_branch IS NOT NULL
+           AND subscription_branch <> ""
+         ORDER BY subscription_branch ASC'
+    );
+    $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    return array_values(array_filter(array_map('sanitizeSettleRemainingText', $branches), static fn(string $value): bool => $value !== ''));
+}
+
+function fetchSettleRemainingSummary(PDO $pdo, string $search, string $branch): array
 {
     $sql = 'SELECT
                 COUNT(*) AS players_count,
@@ -179,12 +194,17 @@ function fetchSettleRemainingSummary(PDO $pdo, string $search): array
         $params[] = $searchValue;
     }
 
+    if ($branch !== '') {
+        $sql .= ' AND subscription_branch = ?';
+        $params[] = $branch;
+    }
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
 }
 
-function fetchSettleRemainingPlayers(PDO $pdo, string $search): array
+function fetchSettleRemainingPlayers(PDO $pdo, string $search, string $branch): array
 {
     $sql = 'SELECT
                 id,
@@ -204,6 +224,11 @@ function fetchSettleRemainingPlayers(PDO $pdo, string $search): array
         $searchValue = '%' . $search . '%';
         $params[] = $searchValue;
         $params[] = $searchValue;
+    }
+
+    if ($branch !== '') {
+        $sql .= ' AND subscription_branch = ?';
+        $params[] = $branch;
     }
 
     $sql .= ' ORDER BY remaining_amount DESC, updated_at DESC, id DESC';
@@ -239,10 +264,12 @@ $flashMessage = consumeSettleRemainingFlash();
 $message = $flashMessage['message'];
 $messageType = $flashMessage['type'];
 $search = sanitizeSettleRemainingText((string) ($_GET['search'] ?? ''));
+$branch = sanitizeSettleRemainingText((string) ($_GET['branch'] ?? ''));
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = trim((string) ($_POST['action'] ?? ''));
     $search = sanitizeSettleRemainingText((string) ($_POST['current_search'] ?? $search));
+    $branch = sanitizeSettleRemainingText((string) ($_POST['current_branch'] ?? $branch));
 
     if ($action !== '' && !isValidSettleRemainingCsrfToken($_POST['csrf_token'] ?? null)) {
         $message = '❌ انتهت صلاحية الطلب، يرجى إعادة المحاولة.';
@@ -307,7 +334,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $pdo->commit();
                     setSettleRemainingFlash('✅ تم تسجيل السداد بنجاح.', 'success');
-                    header('Location: ' . buildSettleRemainingPageUrl(['search' => $search]));
+                    header('Location: ' . buildSettleRemainingPageUrl([
+                        'search' => $search,
+                        'branch' => $branch,
+                    ]));
                     exit;
                 } catch (Throwable $exception) {
                     if ($pdo->inTransaction()) {
@@ -322,8 +352,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$players = fetchSettleRemainingPlayers($pdo, $search);
-$summary = fetchSettleRemainingSummary($pdo, $search);
+$branchOptions = fetchSettleRemainingBranches($pdo);
+if ($branch !== '' && !in_array($branch, $branchOptions, true)) {
+    $branch = '';
+}
+
+$players = fetchSettleRemainingPlayers($pdo, $search, $branch);
+$summary = fetchSettleRemainingSummary($pdo, $search, $branch);
 $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
 ?>
 <!DOCTYPE html>
@@ -331,15 +366,15 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسديد الباق</title>
+    <title>تسديد الباقي</title>
     <link rel="stylesheet" href="assets/css/settle-remaining.css">
 </head>
 <body class="light-mode">
 <div class="academy-players-page remaining-settlement-page">
     <header class="page-header">
         <div class="header-text">
-            <span class="eyebrow">تسديد الباق</span>
-            <h1>تسديد الباق</h1>
+            <span class="eyebrow">تسديد الباقي</span>
+            <h1>تسديد الباقي</h1>
         </div>
         <div class="header-actions">
             <div class="theme-switch-box">
@@ -386,6 +421,17 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
                 <label for="search">بحث بالباركود أو الاسم</label>
                 <input type="search" id="search" name="search" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>" placeholder="الباركود أو الاسم">
             </div>
+            <div class="form-group">
+                <label for="branch">الفرع</label>
+                <select id="branch" name="branch">
+                    <option value="">كل الفروع</option>
+                    <?php foreach ($branchOptions as $branchOption): ?>
+                        <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $branch === $branchOption ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
             <div class="toolbar-form-actions header-actions">
                 <button type="submit" class="save-btn">بحث</button>
                 <a href="<?php echo htmlspecialchars(SETTLE_REMAINING_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">مسح</a>
@@ -408,7 +454,7 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
                         <th>المجموعة</th>
                         <th>المدفوع</th>
                         <th>المتبقي</th>
-                        <th>تسديد الباق</th>
+                        <th>تسديد الباقي</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -426,12 +472,13 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
                                 </td>
                                 <td data-label="المدفوع"><span class="amount-badge collected"><?php echo formatSettleRemainingMoney($player['paid_amount'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="المتبقي"><span class="amount-badge remaining has-value"><?php echo formatSettleRemainingMoney($player['remaining_amount'] ?? 0); ?> ج.م</span></td>
-                                <td data-label="تسديد الباق">
+                                <td data-label="تسديد الباقي">
                                     <form method="POST" class="settlement-form" autocomplete="off">
                                         <input type="hidden" name="action" value="collect_payment">
                                         <input type="hidden" name="player_id" value="<?php echo (int) ($player['id'] ?? 0); ?>">
                                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($settleRemainingCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                         <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>">
                                         <div class="form-group">
                                             <label for="payment_amount_<?php echo (int) ($player['id'] ?? 0); ?>">المبلغ</label>
                                             <input

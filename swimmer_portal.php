@@ -752,12 +752,16 @@ function swimmerPortalNutritionPlan(int $age, float $weight, float $bodyFat): st
 
 function swimmerPortalInfoRows(array $player): array
 {
+    $birthYear = '—';
+    $birthDate = (string) ($player['birth_date'] ?? '');
+    if ($birthDate !== '' && strtotime($birthDate) !== false) {
+        $birthYear = date('Y', strtotime($birthDate));
+    }
+
     return [
         ['key' => SWIMMER_PORTAL_INFO_ROW_BARCODE, 'label' => 'الباركود', 'value' => (string) ($player['barcode'] ?? '—')],
         ['key' => 'player_name', 'label' => 'اسم السباح', 'value' => (string) ($player['player_name'] ?? '—')],
-        ['key' => 'phone', 'label' => 'رقم الأب', 'value' => (string) (($player['phone'] ?? '') !== '' ? $player['phone'] : '—')],
-        ['key' => 'guardian_phone', 'label' => 'رقم الأم', 'value' => (string) (($player['guardian_phone'] ?? '') !== '' ? $player['guardian_phone'] : '—')],
-        ['key' => 'birth_date', 'label' => 'تاريخ الميلاد', 'value' => swimmerPortalFormatDate((string) ($player['birth_date'] ?? ''))],
+        ['key' => 'birth_year', 'label' => 'سنة الميلاد', 'value' => $birthYear],
         ['key' => 'age', 'label' => 'السن', 'value' => swimmerPortalAge((string) ($player['birth_date'] ?? ''))],
         ['key' => 'subscription_name', 'label' => 'المجموعة', 'value' => (string) (($player['subscription_name'] ?? '') !== '' ? $player['subscription_name'] : '—')],
         ['key' => 'subscription_category', 'label' => 'المستوى', 'value' => (string) (($player['subscription_category'] ?? '') !== '' ? $player['subscription_category'] : '—')],

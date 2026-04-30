@@ -373,7 +373,7 @@ function getAcademyMenuItems(): array
         ],
         [
             "key" => "settle_remaining",
-            "title" => "تسديد الباق",
+            "title" => "تسديد الباقي",
             "icon" => "💳",
             "type" => "link",
             "href" => "settle_remaining.php",

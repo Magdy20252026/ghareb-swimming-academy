@@ -31,7 +31,7 @@
 }
 
 .remaining-settlement-page .filter-form-horizontal {
-    grid-template-columns: minmax(0, 1.5fr) auto;
+    grid-template-columns: minmax(0, 1.5fr) minmax(180px, 240px) auto;
 }
 
 .remaining-settlement-page .toolbar-form-actions {
@@ -116,7 +116,7 @@
     width: 100%;
 }
 
-.remaining-settlement-page .table-wrapper td[data-label="تسديد الباق"] {
+.remaining-settlement-page .table-wrapper td[data-label="تسديد الباقي"] {
     white-space: normal;
 }
 
@@ -207,11 +207,11 @@ body.dark-mode .remaining-settlement-page .table-wrapper td::before {
         width: 100%;
     }
 
-    .remaining-settlement-page .table-wrapper td[data-label="تسديد الباق"] {
+    .remaining-settlement-page .table-wrapper td[data-label="تسديد الباقي"] {
         display: block;
     }
 
-    .remaining-settlement-page .table-wrapper td[data-label="تسديد الباق"]::before {
+    .remaining-settlement-page .table-wrapper td[data-label="تسديد الباقي"]::before {
         display: block;
         margin-bottom: 12px;
     }
