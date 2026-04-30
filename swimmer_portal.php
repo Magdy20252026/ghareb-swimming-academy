@@ -381,16 +381,20 @@ function swimmerPortalEnsureDir(string $directory): bool
 function swimmerPortalUploadImage(array $file, string $directory, string $publicDirectory, string $prefix): array
 {
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE || trim((string) ($file['name'] ?? '')) === '') {
-        return ['path' => null, 'error' => false];
+        return ['path' => null, 'error' => false, 'message' => null];
     }
 
-    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !swimmerPortalEnsureDir($directory)) {
-        return ['path' => null, 'error' => true];
+    $directoryReady = swimmerPortalEnsureDir($directory);
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !$directoryReady) {
+        $message = !$directoryReady
+            ? 'تعذر تجهيز مجلد الرفع.'
+            : 'حدثت مشكلة أثناء رفع الملف.';
+        return ['path' => null, 'error' => true, 'message' => $message];
     }
 
     $tmpName = (string) ($file['tmp_name'] ?? '');
     if ($tmpName === '' || !is_uploaded_file($tmpName)) {
-        return ['path' => null, 'error' => true];
+        return ['path' => null, 'error' => true, 'message' => 'ملف الرفع غير صالح.'];
     }
 
     $mime = '';
@@ -401,7 +405,7 @@ function swimmerPortalUploadImage(array $file, string $directory, string $public
     }
 
     if ($mime === '' || strpos($mime, 'image/') !== 0) {
-        return ['path' => null, 'error' => true];
+        return ['path' => null, 'error' => true, 'message' => 'يجب اختيار صورة صحيحة.'];
     }
 
     $extension = strtolower((string) pathinfo((string) ($file['name'] ?? ''), PATHINFO_EXTENSION));
@@ -411,10 +415,10 @@ function swimmerPortalUploadImage(array $file, string $directory, string $public
     $destination = $directory . DIRECTORY_SEPARATOR . $fileName;
 
     if (!move_uploaded_file($tmpName, $destination)) {
-        return ['path' => null, 'error' => true];
+        return ['path' => null, 'error' => true, 'message' => 'تعذر حفظ الصورة المرفوعة.'];
     }
 
-    return ['path' => $publicDirectory . '/' . $fileName, 'error' => false];
+    return ['path' => $publicDirectory . '/' . $fileName, 'error' => false, 'message' => null];
 }
 
 function swimmerPortalUploadImages(array $files, string $directory, string $publicDirectory, string $prefix): array
@@ -553,13 +557,6 @@ function swimmerPortalCardRequests(PDO $pdo, int $playerId): array
     $stmt = $pdo->prepare('SELECT * FROM swimmer_card_requests WHERE player_id = ? ORDER BY created_at DESC, id DESC');
     $stmt->execute([$playerId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-}
-
-function swimmerPortalHasCardRequest(PDO $pdo, int $playerId): bool
-{
-    $stmt = $pdo->prepare('SELECT id FROM swimmer_card_requests WHERE player_id = ? LIMIT 1');
-    $stmt->execute([$playerId]);
-    return (bool) $stmt->fetchColumn();
 }
 
 function swimmerPortalGroupEvaluation(PDO $pdo, int $subscriptionId, string $month): ?array
@@ -878,7 +875,7 @@ if ($player !== null && $_SERVER['REQUEST_METHOD'] === 'POST' && swimmerPortalVa
         if ($fileType === 'profile_image') {
             $upload = swimmerPortalUploadImage($_FILES['profile_image_file'] ?? [], SWIMMER_PORTAL_UPLOAD_DIR, SWIMMER_PORTAL_UPLOAD_PUBLIC_DIR, 'swimmer-profile');
             if (!empty($upload['error']) || empty($upload['path'])) {
-                $message = '❌ تعذر رفع الصورة الشخصية.';
+                $message = '❌ ' . ((string) ($upload['message'] ?? '') !== '' ? (string) $upload['message'] : 'تعذر رفع الصورة الشخصية.');
                 $messageType = 'error';
             } else {
                 $updateStmt = $pdo->prepare('UPDATE academy_players SET player_image_path = ? WHERE id = ?');
@@ -952,43 +949,53 @@ if ($player !== null && $_SERVER['REQUEST_METHOD'] === 'POST' && swimmerPortalVa
         header('Location: swimmer_portal.php?section=files');
         exit;
     } elseif ($action === 'card_request') {
-        $alreadyRequested = !empty($player['card_request_submitted_at']) || swimmerPortalHasCardRequest($pdo, (int) $player['id']);
-        if ($alreadyRequested) {
+        if (!empty($player['card_request_submitted_at'])) {
             $message = '❌ تم إرسال طلب الكارنية من قبل ولا يمكن تكراره.';
             $messageType = 'error';
         } else {
             $upload = swimmerPortalUploadImage($_FILES['card_request_image'] ?? [], SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_DIR, SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_PUBLIC_DIR, 'card-request');
             if (!empty($upload['error']) || empty($upload['path'])) {
-                $message = '❌ تعذر رفع الصورة.';
+                $message = '❌ ' . ((string) ($upload['message'] ?? '') !== '' ? (string) $upload['message'] : 'تعذر رفع الصورة.');
                 $messageType = 'error';
             } else {
                 try {
                     $pdo->beginTransaction();
 
-                    $markRequestStmt = $pdo->prepare(
-                        'UPDATE academy_players
-                         SET card_request_submitted_at = NOW()
-                         WHERE id = ? AND card_request_submitted_at IS NULL'
-                    );
-                    $markRequestStmt->execute([(int) $player['id']]);
+                    $existingRequestStmt = $pdo->prepare('SELECT id FROM swimmer_card_requests WHERE player_id = ? LIMIT 1 FOR UPDATE');
+                    $existingRequestStmt->execute([(int) $player['id']]);
 
-                    if ($markRequestStmt->rowCount() === 0) {
+                    if ($existingRequestStmt->fetchColumn()) {
                         $pdo->rollBack();
                         swimmerPortalDeleteImage((string) $upload['path']);
                         $message = '❌ تم إرسال طلب الكارنية من قبل ولا يمكن تكراره.';
                         $messageType = 'error';
                     } else {
-                        $insertStmt = $pdo->prepare('INSERT INTO swimmer_card_requests (player_id, player_name_snapshot, request_image_path) VALUES (?, ?, ?)');
-                        $insertStmt->execute([(int) $player['id'], (string) ($player['player_name'] ?? ''), $upload['path']]);
-                        $pdo->commit();
-                        header('Location: swimmer_portal.php?section=card-request');
-                        exit;
+                        $markRequestStmt = $pdo->prepare(
+                            'UPDATE academy_players
+                             SET card_request_submitted_at = NOW()
+                             WHERE id = ? AND card_request_submitted_at IS NULL'
+                        );
+                        $markRequestStmt->execute([(int) $player['id']]);
+
+                        if ($markRequestStmt->rowCount() === 0) {
+                            $pdo->rollBack();
+                            swimmerPortalDeleteImage((string) $upload['path']);
+                            $message = '❌ تم إرسال طلب الكارنية من قبل ولا يمكن تكراره.';
+                            $messageType = 'error';
+                        } else {
+                            $insertStmt = $pdo->prepare('INSERT INTO swimmer_card_requests (player_id, player_name_snapshot, request_image_path) VALUES (?, ?, ?)');
+                            $insertStmt->execute([(int) $player['id'], (string) ($player['player_name'] ?? ''), $upload['path']]);
+                            $pdo->commit();
+                            header('Location: swimmer_portal.php?section=card-request');
+                            exit;
+                        }
                     }
                 } catch (Throwable $exception) {
                     if ($pdo->inTransaction()) {
                         $pdo->rollBack();
                     }
                     swimmerPortalDeleteImage((string) $upload['path']);
+                    error_log('تعذر إرسال طلب الكارنية للاعب رقم ' . (int) ($player['id'] ?? 0) . ': ' . $exception->getMessage());
                     $message = '❌ حدث خطأ أثناء إرسال الطلب.';
                     $messageType = 'error';
                 }

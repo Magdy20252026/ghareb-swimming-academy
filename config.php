@@ -1097,7 +1097,13 @@ try {
         }
     }
 
+    $startedCardRequestBackfillTransaction = false;
     try {
+        if (!$pdo->inTransaction()) {
+            $pdo->beginTransaction();
+            $startedCardRequestBackfillTransaction = true;
+        }
+
         $pdo->exec("
             UPDATE academy_players ap
             INNER JOIN (
@@ -1108,7 +1114,14 @@ try {
             SET ap.card_request_submitted_at = requests.first_request_at
             WHERE ap.card_request_submitted_at IS NULL
         ");
+
+        if ($startedCardRequestBackfillTransaction && $pdo->inTransaction()) {
+            $pdo->commit();
+        }
     } catch (PDOException $exception) {
+        if ($startedCardRequestBackfillTransaction && $pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
         error_log('تعذر تحديث حالة إرسال طلبات الكارنية للاعبين أثناء مزامنة الطلبات السابقة: ' . $exception->getMessage());
     }
 
