@@ -754,8 +754,9 @@ function swimmerPortalInfoRows(array $player): array
 {
     $birthYear = '—';
     $birthDate = (string) ($player['birth_date'] ?? '');
-    if ($birthDate !== '' && strtotime($birthDate) !== false) {
-        $birthYear = date('Y', strtotime($birthDate));
+    $birthTimestamp = $birthDate !== '' ? strtotime($birthDate) : false;
+    if ($birthTimestamp !== false) {
+        $birthYear = date('Y', $birthTimestamp);
     }
 
     return [

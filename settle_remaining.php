@@ -172,8 +172,9 @@ function fetchSettleRemainingBranches(PDO $pdo): array
            AND subscription_branch <> ""
          ORDER BY subscription_branch ASC'
     );
-    $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
-    return array_values(array_filter(array_map('sanitizeSettleRemainingText', $branches), static fn(string $value): bool => $value !== ''));
+    $rawBranches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    $sanitizedBranches = array_map('sanitizeSettleRemainingText', $rawBranches);
+    return array_values(array_filter($sanitizedBranches, static fn(string $value): bool => $value !== ''));
 }
 
 function fetchSettleRemainingSummary(PDO $pdo, string $search, string $branch): array
