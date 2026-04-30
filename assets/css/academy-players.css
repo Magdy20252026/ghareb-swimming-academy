@@ -1677,10 +1677,6 @@ body.dark-mode .detail-grid-payment .detail-item {
 }
 
 @media (max-width: 640px) {
-    body {
-        padding: 12px;
-    }
-
     .page-header,
     .toolbar-card,
     .summary-page-card,
