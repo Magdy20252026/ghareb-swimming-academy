@@ -578,7 +578,7 @@ function fetchAcademyPlayersSubscriptions(PDO $pdo): array
                 s.max_trainees,
                 s.subscription_price,
                 c.id AS coach_id,
-                c.full_name AS coach_name,
+                COALESCE(c.full_name, "") AS coach_name,
                 COALESCE(SUM(CASE WHEN ap.subscription_end_date >= CURDATE() AND ap.available_exercises_count > 0 THEN 1 ELSE 0 END), 0) AS active_players_count
              FROM subscriptions s
              LEFT JOIN coaches c ON c.id = s.coach_id
@@ -599,7 +599,7 @@ function fetchAcademyPlayersSubscriptions(PDO $pdo): array
         );
         $subscriptions = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
     } catch (PDOException $e) {
-        error_log('Error fetching subscriptions: ' . $e->getMessage());
+        error_log('Error in fetchAcademyPlayersSubscriptions: ' . $e->getMessage());
         $subscriptions = [];
     }
     foreach ($subscriptions as &$subscription) {
@@ -654,7 +654,7 @@ function fetchAcademyPlayerStatistics(PDO $pdo): array
         );
         return $stmt ? ($stmt->fetch(PDO::FETCH_ASSOC) ?: []) : [];
     } catch (PDOException $e) {
-        error_log('Error fetching statistics: ' . $e->getMessage());
+        error_log('Error in fetchAcademyPlayerStatistics: ' . $e->getMessage());
         return [];
     }
 }
@@ -838,7 +838,7 @@ function fetchAcademyPlayersCategories(PDO $pdo): array
         $stmt = $pdo->query('SELECT DISTINCT subscription_category FROM academy_players WHERE subscription_category IS NOT NULL AND subscription_category <> "" ORDER BY subscription_category ASC');
         $categories = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
     } catch (PDOException $e) {
-        error_log('Error fetching categories: ' . $e->getMessage());
+        error_log('Error in fetchAcademyPlayersCategories: ' . $e->getMessage());
         $categories = [];
     }
     return array_values(array_filter(array_map(static fn($value): string => sanitizeAcademyPlayerText((string) $value), $categories)));
@@ -850,7 +850,7 @@ function fetchAcademyPlayersBranches(PDO $pdo): array
         $stmt = $pdo->query('SELECT DISTINCT subscription_branch FROM academy_players WHERE subscription_branch IS NOT NULL AND subscription_branch <> "" ORDER BY subscription_branch ASC');
         $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
     } catch (PDOException $e) {
-        error_log('Error fetching branches: ' . $e->getMessage());
+        error_log('Error in fetchAcademyPlayersBranches: ' . $e->getMessage());
         $branches = [];
     }
     return array_values(array_filter(array_map(static fn($value): string => sanitizeAcademyPlayerText((string) $value), $branches)));
