@@ -717,7 +717,11 @@ function academyPlayersColumnExists(PDO $pdo, string $tableName, string $columnN
     }
 
     try {
-        $stmt = $pdo->prepare('SHOW COLUMNS FROM `' . $normalizedTableName . '` LIKE ?');
+        $columnQuery = match ($normalizedTableName) {
+            'academy_players' => 'SHOW COLUMNS FROM `academy_players` LIKE ?',
+            'academy_player_payments' => 'SHOW COLUMNS FROM `academy_player_payments` LIKE ?',
+        };
+        $stmt = $pdo->prepare($columnQuery);
         $stmt->execute([$normalizedColumnName]);
         $cache[$cacheKey] = $stmt->fetchColumn() !== false;
     } catch (PDOException $exception) {
@@ -745,15 +749,17 @@ function academyPlayersCanFetchSettlementReceipts(PDO $pdo): bool
 
 function academyPlayersResolveOrderByClause(PDO $pdo): string
 {
+    $baseOrderByClause = 'ap.subscription_end_date ASC';
+
     if (academyPlayersColumnExists($pdo, 'academy_players', 'updated_at')) {
-        return 'ap.subscription_end_date ASC, ap.updated_at DESC, ap.id DESC';
+        return $baseOrderByClause . ', ap.updated_at DESC, ap.id DESC';
     }
 
     if (academyPlayersColumnExists($pdo, 'academy_players', 'created_at')) {
-        return 'ap.subscription_end_date ASC, ap.created_at DESC, ap.id DESC';
+        return $baseOrderByClause . ', ap.created_at DESC, ap.id DESC';
     }
 
-    return 'ap.subscription_end_date ASC, ap.id DESC';
+    return $baseOrderByClause . ', ap.id DESC';
 }
 
 function academyPlayersBuildFilteredQueryParts(array $filters): array
