@@ -417,15 +417,25 @@ function isSubscriptionPlaceholderText(string $value): bool
         return false;
     }
 
-    $containsReplacementCharacter = function_exists('mb_strpos')
-        ? mb_strpos($placeholderCandidate, '�') !== false
-        : strpos($placeholderCandidate, '�') !== false;
+    $containsReplacementCharacter = subscriptionTextContains($placeholderCandidate, '�');
     if ($containsReplacementCharacter) {
         $loggedValue = json_encode($normalizedValue, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         error_log('تم اكتشاف محرف الاستبدال في بيانات المجموعة أثناء فحص الرموز غير المفهومة: ' . ($loggedValue !== false ? $loggedValue : $normalizedValue));
     }
 
     return preg_match('/^[\?؟�]+$/u', $placeholderCandidate) === 1;
+}
+
+function subscriptionTextContains(string $value, string $needle): bool
+{
+    static $supportsMbString = null;
+    if ($supportsMbString === null) {
+        $supportsMbString = function_exists('mb_strpos');
+    }
+
+    return $supportsMbString
+        ? mb_strpos($value, $needle) !== false
+        : strpos($value, $needle) !== false;
 }
 
 function pickSubscriptionDisplayText(array $values): string
@@ -437,6 +447,7 @@ function pickSubscriptionDisplayText(array $values): string
         }
     }
 
+    // نحتفظ بآخر قيمة غير فارغة كخيار أخير حتى لا تظهر الخلية فارغة بالكامل عندما تكون كل المصادر القديمة تالفة.
     foreach ($values as $value) {
         $normalizedValue = sanitizeSubscriptionText((string) $value);
         if ($normalizedValue !== '') {
@@ -449,8 +460,6 @@ function pickSubscriptionDisplayText(array $values): string
 
 function resolveSubscriptionKnownValue(array $values, array $allowedValues): string
 {
-    $supportsMbString = function_exists('mb_strpos');
-
     foreach ($values as $value) {
         $normalizedValue = sanitizeSubscriptionText((string) $value);
         if ($normalizedValue === '') {
@@ -471,10 +480,7 @@ function resolveSubscriptionKnownValue(array $values, array $allowedValues): str
         }
 
         foreach ($allowedValues as $allowedValue) {
-            $containsAllowedValue = $supportsMbString
-                ? mb_strpos($normalizedValue, $allowedValue) !== false
-                : strpos($normalizedValue, $allowedValue) !== false;
-            if ($containsAllowedValue) {
+            if (subscriptionTextContains($normalizedValue, $allowedValue)) {
                 return $allowedValue;
             }
         }
