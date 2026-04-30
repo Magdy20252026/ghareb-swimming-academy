@@ -757,8 +757,9 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
 function fetchAcademyPlayersPage(PDO $pdo, array $filters, int $page, int $perPage): array
 {
     [$whereClauses, $params] = academyPlayersBuildFilteredQueryParts($filters);
+    $resolvedPage = max(1, $page);
     $resolvedPerPage = max(1, $perPage);
-    $offset = ($page - 1) * $resolvedPerPage;
+    $offset = ($resolvedPage - 1) * $resolvedPerPage;
     return academyPlayersFetchPlayers($pdo, $whereClauses, $params, $resolvedPerPage, $offset);
 }
 
@@ -784,8 +785,8 @@ function renderAcademyPlayersPagination(array $currentFilterParams, int $current
 
     $pageNumbers = [];
     $pageNumbers[] = 1;
-    for ($page = max(2, $currentPage - 2); $page <= min($totalPages - 1, $currentPage + 2); $page++) {
-        $pageNumbers[] = $page;
+    for ($pageNumber = max(2, $currentPage - 2); $pageNumber <= min($totalPages - 1, $currentPage + 2); $pageNumber++) {
+        $pageNumbers[] = $pageNumber;
     }
     $pageNumbers[] = $totalPages;
     $pageNumbers = array_values(array_unique($pageNumbers));
