@@ -27,8 +27,8 @@ define('ACADEMY_PLAYERS_UPLOAD_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'uploads' .
 define('ACADEMY_PLAYERS_UPLOAD_PUBLIC_DIR', 'uploads/academy_players');
 const ACADEMY_PLAYER_STATUS_FILTERS = [
     'all' => 'الكل',
-    'active' => 'المجموعات المستمرة',
-    'expired' => 'المجموعات المنتهية',
+    'active' => 'الاشتراكات المستمرة',
+    'expired' => 'الاشتراكات المنتهية',
     'with_balance' => 'مجموعات متبقي عليها مبالغ',
 ];
 const ACADEMY_PLAYER_MEDICAL_REPORT_FILTERS = [
@@ -665,6 +665,91 @@ function fetchAcademyPlayersList(PDO $pdo, array $filters): array
     return academyPlayersFetchPlayers($pdo, $whereClauses, $params);
 }
 
+function academyPlayersTableExists(PDO $pdo, string $tableName): bool
+{
+    static $cache = [];
+
+    $normalizedTableName = trim($tableName);
+    if ($normalizedTableName === '') {
+        return false;
+    }
+
+    if (array_key_exists($normalizedTableName, $cache)) {
+        return $cache[$normalizedTableName];
+    }
+
+    try {
+        $stmt = $pdo->prepare('SHOW TABLES LIKE ?');
+        $stmt->execute([$normalizedTableName]);
+        $cache[$normalizedTableName] = $stmt->fetchColumn() !== false;
+    } catch (PDOException $exception) {
+        error_log(sprintf('Error checking table %s existence: %s', $normalizedTableName, $exception->getMessage()));
+        $cache[$normalizedTableName] = false;
+    }
+
+    return $cache[$normalizedTableName];
+}
+
+function academyPlayersColumnExists(PDO $pdo, string $tableName, string $columnName): bool
+{
+    static $cache = [];
+
+    $normalizedTableName = trim($tableName);
+    $normalizedColumnName = trim($columnName);
+
+    if (
+        $normalizedTableName === ''
+        || $normalizedColumnName === ''
+        || preg_match('/^[A-Za-z0-9_]+$/', $normalizedTableName) !== 1
+    ) {
+        return false;
+    }
+
+    $cacheKey = $normalizedTableName . '.' . $normalizedColumnName;
+    if (array_key_exists($cacheKey, $cache)) {
+        return $cache[$cacheKey];
+    }
+
+    try {
+        $stmt = $pdo->prepare('SHOW COLUMNS FROM `' . $normalizedTableName . '` LIKE ?');
+        $stmt->execute([$normalizedColumnName]);
+        $cache[$cacheKey] = $stmt->fetchColumn() !== false;
+    } catch (PDOException $exception) {
+        error_log(sprintf('Error checking column %s.%s existence: %s', $normalizedTableName, $normalizedColumnName, $exception->getMessage()));
+        $cache[$cacheKey] = false;
+    }
+
+    return $cache[$cacheKey];
+}
+
+function academyPlayersCanFetchSettlementReceipts(PDO $pdo): bool
+{
+    if (!academyPlayersTableExists($pdo, 'academy_player_payments')) {
+        return false;
+    }
+
+    foreach (['id', 'player_id', 'payment_type', 'receipt_number', 'created_at'] as $columnName) {
+        if (!academyPlayersColumnExists($pdo, 'academy_player_payments', $columnName)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function academyPlayersResolveOrderByClause(PDO $pdo): string
+{
+    if (academyPlayersColumnExists($pdo, 'academy_players', 'updated_at')) {
+        return 'ap.subscription_end_date ASC, ap.updated_at DESC, ap.id DESC';
+    }
+
+    if (academyPlayersColumnExists($pdo, 'academy_players', 'created_at')) {
+        return 'ap.subscription_end_date ASC, ap.created_at DESC, ap.id DESC';
+    }
+
+    return 'ap.subscription_end_date ASC, ap.id DESC';
+}
+
 function academyPlayersBuildFilteredQueryParts(array $filters): array
 {
     $whereClauses = [];
@@ -713,8 +798,10 @@ function academyPlayersBuildFilteredQueryParts(array $filters): array
 
 function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params, ?int $limit = null, int $offset = 0): array
 {
-    $sql = 'SELECT
-                ap.*,
+    $sql = 'SELECT ap.*';
+
+    if (academyPlayersCanFetchSettlementReceipts($pdo)) {
+        $sql .= ',
                 (
                     SELECT GROUP_CONCAT(app.receipt_number ORDER BY app.created_at DESC, app.id DESC SEPARATOR " • ")
                     FROM academy_player_payments app
@@ -722,12 +809,16 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
                       AND app.payment_type = "settlement"
                       AND app.receipt_number IS NOT NULL
                       AND app.receipt_number <> ""
-                ) AS settlement_receipt_numbers
-            FROM academy_players ap';
+                ) AS settlement_receipt_numbers';
+    } else {
+        $sql .= ', NULL AS settlement_receipt_numbers';
+    }
+
+    $sql .= ' FROM academy_players ap';
     if ($whereClauses !== []) {
         $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
     }
-    $sql .= ' ORDER BY ap.subscription_end_date ASC, ap.updated_at DESC, ap.id DESC';
+    $sql .= ' ORDER BY ' . academyPlayersResolveOrderByClause($pdo);
 
     if ($limit !== null) {
         $sql .= ' LIMIT ? OFFSET ?';
@@ -2604,11 +2695,11 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
             <strong><?php echo (int) ($overallStats['total_players'] ?? 0); ?></strong>
         </article>
         <article class="hero-card">
-            <span>المجموعات المستمرة</span>
+            <span>الاشتراكات المستمرة</span>
             <strong><?php echo (int) ($overallStats['active_players'] ?? 0); ?></strong>
         </article>
         <article class="hero-card">
-            <span>المجموعات المنتهية</span>
+            <span>الاشتراكات المنتهية</span>
             <strong><?php echo (int) ($overallStats['expired_players'] ?? 0); ?></strong>
         </article>
         <article class="hero-card">
