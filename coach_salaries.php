@@ -647,12 +647,16 @@ $totalCoaches = count($coaches);
 $coachesReadyForPayment = 0;
 $totalOutstandingHours = 0.0;
 $totalOutstandingAdvances = 0.0;
+$totalOutstandingNetSalaries = 0.0;
 
 foreach ($coaches as $coachRow) {
     $coachHours = (float) ($coachRow['total_hours'] ?? 0);
     $coachAdvances = (float) ($coachRow['total_advances'] ?? 0);
+    $coachHourlyRate = (float) ($coachRow['hourly_rate'] ?? 0);
+    $coachNetSalary = ($coachHours * $coachHourlyRate) - $coachAdvances;
     $totalOutstandingHours += $coachHours;
     $totalOutstandingAdvances += $coachAdvances;
+    $totalOutstandingNetSalaries += max($coachNetSalary, 0);
 
     if ($coachHours > 0 || $coachAdvances > 0) {
         $coachesReadyForPayment++;
@@ -848,6 +852,14 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
             <div>
                 <h2><?php echo htmlspecialchars(number_format($totalOutstandingAdvances, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
                 <p>إجمالي السلف الحالية</p>
+            </div>
+        </article>
+
+        <article class="stat-card salary-total-card salary-stat-card">
+            <div class="stat-icon">🧾</div>
+            <div>
+                <h2><?php echo htmlspecialchars(number_format($totalOutstandingNetSalaries, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
+                <p>إجمالي المرتبات المطلوبة بعد خصم السلف</p>
             </div>
         </article>
     </section>

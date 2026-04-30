@@ -9,6 +9,10 @@
     grid-template-columns: minmax(360px, 1.05fr) minmax(320px, 0.95fr);
 }
 
+.stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
 .salary-control-card,
 .salary-history-preview-card {
     height: 100%;
@@ -197,6 +201,10 @@
 
 .salary-inline-form {
     margin: 0;
+}
+
+.salary-total-card .stat-icon {
+    background: rgba(34, 197, 94, 0.12);
 }
 
 .table-action-btn {
