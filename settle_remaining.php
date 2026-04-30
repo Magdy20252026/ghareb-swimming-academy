@@ -364,7 +364,7 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
     <section class="hero-grid">
         <article class="hero-card hero-card-main">
             <span class="hero-icon">💳</span>
-            <h2>السباحون عليهم باقي</h2>
+            <h2>السباحون عليهم متبقي</h2>
         </article>
         <article class="hero-card">
             <span>عدد السباحين</span>
