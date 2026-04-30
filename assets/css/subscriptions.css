@@ -159,18 +159,6 @@ body.modal-open {
     font-weight: 800;
 }
 
-.mobile-subscription-launcher {
-    display: none;
-    position: fixed;
-    right: 16px;
-    bottom: 16px;
-    bottom: calc(16px + env(safe-area-inset-bottom));
-    z-index: 1100;
-    min-height: 52px;
-    padding-inline: 20px;
-    box-shadow: 0 16px 36px rgba(124, 58, 237, 0.24);
-}
-
 .back-btn {
     background: linear-gradient(135deg, var(--primary-dark), var(--primary-main));
     color: #ffffff;
@@ -1057,11 +1045,4 @@ body.dark-mode .confirm-dialog-content p {
         flex-direction: column;
     }
 
-    .desktop-subscription-launcher {
-        display: none;
-    }
-
-    .mobile-subscription-launcher {
-        display: inline-flex;
-    }
 }

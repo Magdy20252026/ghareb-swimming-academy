@@ -288,6 +288,20 @@ function decodeSubscriptionSchedule(?string $value): array
     return array_values($schedule);
 }
 
+function buildSubscriptionsPlayerSnapshotSubquery(): string
+{
+    return '
+        SELECT
+            subscription_id,
+            MAX(NULLIF(TRIM(subscription_name), \'\')) AS player_subscription_name,
+            MAX(NULLIF(TRIM(subscription_branch), \'\')) AS player_subscription_branch,
+            MAX(NULLIF(TRIM(subscription_category), \'\')) AS player_subscription_category
+        FROM academy_players
+        WHERE subscription_id IS NOT NULL
+        GROUP BY subscription_id
+    ';
+}
+
 function buildSubscriptionScheduleSummary(array $schedule): string
 {
     $parts = [];
@@ -357,7 +371,20 @@ function fetchSubscriptionById(PDO $pdo, string $id): ?array
         return null;
     }
 
-    $stmt = $pdo->prepare('SELECT * FROM subscriptions WHERE id = ? LIMIT 1');
+    $snapshotSubquery = buildSubscriptionsPlayerSnapshotSubquery();
+    $stmt = $pdo->prepare('
+        SELECT
+            s.*,
+            COALESCE(c.full_name, "") AS coach_name,
+            aps.player_subscription_name,
+            aps.player_subscription_branch,
+            aps.player_subscription_category
+        FROM subscriptions s
+        LEFT JOIN coaches c ON c.id = s.coach_id
+        LEFT JOIN (' . $snapshotSubquery . ') aps ON aps.subscription_id = s.id
+        WHERE s.id = ?
+        LIMIT 1
+    ');
     $stmt->execute([$id]);
     $subscription = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -373,6 +400,120 @@ function buildSubscriptionsRegisteredSwimmersCountSubquery(): string
         FROM academy_players
         GROUP BY subscription_id
     ';
+}
+
+function isSubscriptionPlaceholderText(string $value): bool
+{
+    $normalizedValue = sanitizeSubscriptionText($value);
+    if ($normalizedValue === '') {
+        return false;
+    }
+
+    $placeholderCandidate = preg_replace('/[\s\p{Pd}•.,،:\/\\\\()]+/u', '', $normalizedValue);
+    if ($placeholderCandidate === null || $placeholderCandidate === '') {
+        return false;
+    }
+
+    return preg_match('/^[\?؟�]+$/u', $placeholderCandidate) === 1;
+}
+
+function pickSubscriptionDisplayText(array $values): string
+{
+    foreach ($values as $value) {
+        $normalizedValue = sanitizeSubscriptionText((string) $value);
+        if ($normalizedValue !== '' && !isSubscriptionPlaceholderText($normalizedValue)) {
+            return $normalizedValue;
+        }
+    }
+
+    foreach ($values as $value) {
+        $normalizedValue = sanitizeSubscriptionText((string) $value);
+        if ($normalizedValue !== '') {
+            return $normalizedValue;
+        }
+    }
+
+    return '';
+}
+
+function resolveSubscriptionKnownValue(array $values, array $allowedValues): string
+{
+    foreach ($values as $value) {
+        $normalizedValue = sanitizeSubscriptionText((string) $value);
+        if ($normalizedValue === '') {
+            continue;
+        }
+
+        foreach ($allowedValues as $allowedValue) {
+            if ($normalizedValue === $allowedValue) {
+                return $allowedValue;
+            }
+        }
+    }
+
+    foreach ($values as $value) {
+        $normalizedValue = sanitizeSubscriptionText((string) $value);
+        if ($normalizedValue === '' || isSubscriptionPlaceholderText($normalizedValue)) {
+            continue;
+        }
+
+        foreach ($allowedValues as $allowedValue) {
+            if (function_exists('mb_strpos')) {
+                if (mb_strpos($normalizedValue, $allowedValue) !== false) {
+                    return $allowedValue;
+                }
+            } elseif (strpos($normalizedValue, $allowedValue) !== false) {
+                return $allowedValue;
+            }
+        }
+    }
+
+    foreach ($values as $value) {
+        $normalizedValue = sanitizeSubscriptionText((string) $value);
+        if ($normalizedValue !== '' && !isSubscriptionPlaceholderText($normalizedValue)) {
+            return $normalizedValue;
+        }
+    }
+
+    return '';
+}
+
+function normalizeSubscriptionRecordForDisplay(array $subscription, array $coachLookup): array
+{
+    $coachId = (int) ($subscription['coach_id'] ?? 0);
+    $coachName = pickSubscriptionDisplayText([
+        (string) ($subscription['coach_name'] ?? ''),
+        (string) ($coachLookup[$coachId] ?? ''),
+    ]);
+    $fallbackName = pickSubscriptionDisplayText([
+        (string) ($subscription['subscription_name'] ?? ''),
+        (string) ($subscription['player_subscription_name'] ?? ''),
+    ]);
+    $resolvedBranch = resolveSubscriptionKnownValue([
+        (string) ($subscription['subscription_branch'] ?? ''),
+        (string) ($subscription['player_subscription_branch'] ?? ''),
+        $fallbackName,
+    ], SUBSCRIPTION_BRANCHES);
+    $resolvedCategory = resolveSubscriptionKnownValue([
+        (string) ($subscription['subscription_category'] ?? ''),
+        (string) ($subscription['player_subscription_category'] ?? ''),
+        $fallbackName,
+    ], SUBSCRIPTION_CATEGORIES);
+
+    $subscription['coach_name'] = $coachName;
+    $subscription['subscription_branch'] = $resolvedBranch;
+    $subscription['subscription_category'] = $resolvedCategory;
+    $subscription['subscription_branch_display'] = $resolvedBranch !== '' ? $resolvedBranch : '—';
+    $subscription['subscription_category_display'] = $resolvedCategory !== '' ? $resolvedCategory : '—';
+    $subscription['subscription_name'] = buildAcademySubscriptionName(
+        $resolvedCategory,
+        $coachName,
+        (string) ($subscription['schedule_summary'] ?? ''),
+        $resolvedBranch,
+        $fallbackName
+    );
+
+    return $subscription;
 }
 
 function getSubscriptionMysqlDriverErrorCode(PDOException $exception): int
@@ -593,10 +734,15 @@ if (isset($_GET['edit'])) {
     if ($editSubscription === null && $message === '') {
         $message = '❌ المجموعة المطلوبة غير موجودة.';
         $messageType = 'error';
+    } elseif (is_array($editSubscription)) {
+        $editSubscription['schedule_items'] = decodeSubscriptionSchedule($editSubscription['training_schedule'] ?? null);
+        $editSubscription['schedule_summary'] = buildSubscriptionScheduleSummary($editSubscription['schedule_items']);
+        $editSubscription = normalizeSubscriptionRecordForDisplay($editSubscription, $coachLookup);
     }
 }
 
 $registeredSwimmersCountSubquery = buildSubscriptionsRegisteredSwimmersCountSubquery();
+$playerSnapshotSubquery = buildSubscriptionsPlayerSnapshotSubquery();
 
 $statsStmt = $pdo->query('
     SELECT
@@ -614,9 +760,13 @@ $subscriptionsStmt = $pdo->query('
     SELECT
         s.*,
         c.full_name AS coach_name,
+        aps.player_subscription_name,
+        aps.player_subscription_branch,
+        aps.player_subscription_category,
         COALESCE(ap.registered_swimmers_count, 0) AS registered_swimmers_count
     FROM subscriptions s
     LEFT JOIN coaches c ON c.id = s.coach_id
+    LEFT JOIN (' . $playerSnapshotSubquery . ') aps ON aps.subscription_id = s.id
     LEFT JOIN (' . $registeredSwimmersCountSubquery . ') ap ON ap.subscription_id = s.id
     ORDER BY s.updated_at DESC, s.id DESC
 ');
@@ -625,13 +775,7 @@ $subscriptions = $subscriptionsStmt ? $subscriptionsStmt->fetchAll(PDO::FETCH_AS
 foreach ($subscriptions as &$subscription) {
     $subscription['schedule_items'] = decodeSubscriptionSchedule($subscription['training_schedule'] ?? null);
     $subscription['schedule_summary'] = buildSubscriptionScheduleSummary($subscription['schedule_items']);
-    $subscription['subscription_name'] = buildAcademySubscriptionName(
-        (string) ($subscription['subscription_category'] ?? ''),
-        (string) ($subscription['coach_name'] ?? ''),
-        (string) ($subscription['schedule_summary'] ?? ''),
-        (string) ($subscription['subscription_branch'] ?? ''),
-        (string) ($subscription['subscription_name'] ?? '')
-    );
+    $subscription = normalizeSubscriptionRecordForDisplay($subscription, $coachLookup);
 }
 unset($subscription);
 
@@ -744,18 +888,6 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
             <strong><?php echo (int) ($subscriptionsStats['total_categories'] ?? 0); ?></strong>
         </article>
     </section>
-
-    <button
-        type="button"
-        class="save-btn mobile-subscription-launcher"
-        data-open-subscription-modal
-        aria-label="إضافة مجموعة"
-        aria-haspopup="dialog"
-        aria-controls="subscriptionFormModal"
-        aria-expanded="false"
-    >
-        إضافة مجموعة
-    </button>
 
     <div class="modal-overlay hidden" id="subscriptionFormModal" role="dialog" aria-modal="true" aria-labelledby="subscriptionFormModalTitle">
         <div class="modal-shell">
@@ -943,8 +1075,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                         </div>
                                     </div>
                                 </td>
-                                <td data-label="الفرع"><span class="soft-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="المستوى"><span class="metric-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_category'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="الفرع"><span class="soft-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_branch_display'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="المستوى"><span class="metric-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_category_display'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="المدرب"><?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الأيام"><span class="days-count"><?php echo (int) ($subscription['training_days_count'] ?? 0); ?> يوم</span></td>
                                 <td data-label="التمارين المتاحة"><span class="soft-badge"><?php echo (int) ($subscription['available_exercises_count'] ?? 0); ?> تمرين</span></td>
