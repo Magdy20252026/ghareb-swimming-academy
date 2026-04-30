@@ -565,6 +565,7 @@ function academyPlayerAllowedStarsOptions(string $category): array
 function fetchAcademyPlayersSubscriptions(PDO $pdo): array
 {
     try {
+        // Keep the grouped coach identifier explicit for stricter SQL modes on shared hosting.
         $stmt = $pdo->query(
              'SELECT
                 s.id,
