@@ -31,6 +31,10 @@
     --sidebar-scrollbar-shadow: rgba(125, 177, 255, 0.22);
 }
 
+html {
+    overscroll-behavior-y: none;
+}
+
 body {
     background:
         radial-gradient(circle at top right, rgba(47, 111, 237, 0.10), transparent 25%),
