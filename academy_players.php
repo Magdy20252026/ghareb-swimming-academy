@@ -619,26 +619,33 @@ function fetchAcademyPlayersSubscriptions(PDO $pdo): array
     return $subscriptions;
 }
 
-function academyPlayersReadFailureState(?bool $setValue = null): bool
+function &academyPlayersReadFailureStorage(): bool
 {
     static $hasReadFailure = false;
+    return $hasReadFailure;
+}
 
-    if ($setValue !== null) {
-        $hasReadFailure = $setValue;
-    }
+function setAcademyPlayersReadFailure(bool $value): void
+{
+    $hasReadFailure = &academyPlayersReadFailureStorage();
+    $hasReadFailure = $value;
+}
 
+function getAcademyPlayersReadFailure(): bool
+{
+    $hasReadFailure = &academyPlayersReadFailureStorage();
     return $hasReadFailure;
 }
 
 function academyPlayersMarkReadFailure(string $context, PDOException $exception): void
 {
-    academyPlayersReadFailureState(true);
+    setAcademyPlayersReadFailure(true);
     error_log(sprintf('Academy players read error (%s): %s', $context, $exception->getMessage()));
 }
 
 function academyPlayersHasReadFailure(): bool
 {
-    return academyPlayersReadFailureState();
+    return getAcademyPlayersReadFailure();
 }
 
 function fetchAcademyPlayerById(PDO $pdo, int $playerId): ?array
@@ -2702,8 +2709,13 @@ $playerFormLauncherButtonText = $editPlayer ? 'تعديل سباح' : 'إضاف�
 
 $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
 
-if ($message === '' && academyPlayersHasReadFailure()) {
-    $message = '⚠️ تعذر تحميل بعض بيانات صفحة السباحين حاليًا. تم إظهار البيانات المتاحة فقط.';
+if (academyPlayersHasReadFailure()) {
+    $readFailureMessage = '⚠️ تعذر تحميل بعض بيانات صفحة السباحين حاليًا. تم إظهار البيانات المتاحة فقط.';
+    if ($message === '') {
+        $message = $readFailureMessage;
+    } else {
+        $message .= ' — ' . $readFailureMessage;
+    }
     $messageType = 'error';
 }
 ?>
