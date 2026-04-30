@@ -965,6 +965,7 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
             $stmt = $pdo->prepare($sql);
             $stmt->execute($statementParams);
             $players = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            $lastException = null;
             break;
         } catch (PDOException $exception) {
             $lastException = $exception;
