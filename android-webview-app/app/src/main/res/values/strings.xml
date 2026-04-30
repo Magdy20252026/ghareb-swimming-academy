@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Ghareb Swimming Academy</string>
+    <string name="webview_url">https://ghareb-swimming-academy.gt.tc/admin/login.php</string>
+    <string name="webview_trusted_host">ghareb-swimming-academy.gt.tc</string>
+    <string name="file_chooser_title">اختر صورة أو التقط صورة</string>
+    <string name="camera_permission_denied">يجب السماح للكاميرا لتشغيل حضور السباحين من التطبيق.</string>
+    <string name="browser_open_failed">تعذر فتح الرابط خارج التطبيق.</string>
+    <string name="file_chooser_failed">تعذر فتح محدد الملفات.</string>
+    <string name="web_loading_error">تعذر تحميل الصفحة.</string>
+</resources>
