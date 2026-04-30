@@ -892,7 +892,9 @@ function renderAcademyPlayersHorizontalToolbar(
     $categoryId = 'category_filter_' . $toolbarKey;
     $statusId = 'status_filter_' . $toolbarKey;
     $medicalReportId = 'medical_report_filter_' . $toolbarKey;
-    $exportUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => null, 'export' => 'xlsx']));
+    $exportParams = $currentFilterParams;
+    unset($exportParams['page']);
+    $exportUrl = buildAcademyPlayersPageUrl(array_merge($exportParams, ['export' => 'xlsx']));
     ?>
     <section class="toolbar-card">
         <div class="toolbar-row">
