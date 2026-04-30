@@ -933,15 +933,17 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
         $statementParams[] = $offset;
     }
 
+    $canFetchSettlementReceipts = academyPlayersCanFetchSettlementReceipts($pdo);
+    $resolvedOrderByClause = academyPlayersResolveOrderByClause($pdo);
     $queryAttempts = [
         [
-            'include_settlement_receipts' => academyPlayersCanFetchSettlementReceipts($pdo),
-            'order_by' => academyPlayersResolveOrderByClause($pdo),
+            'include_settlement_receipts' => $canFetchSettlementReceipts,
+            'order_by' => $resolvedOrderByClause,
             'label' => 'primary',
         ],
         [
             'include_settlement_receipts' => false,
-            'order_by' => academyPlayersResolveOrderByClause($pdo),
+            'order_by' => $resolvedOrderByClause,
             'label' => 'without settlement receipts',
         ],
         [
@@ -970,7 +972,7 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
         } catch (PDOException $exception) {
             $lastException = $exception;
             error_log(sprintf(
-                'Academy players list query fallback (%s) [code=%s]: %s',
+                'Warning: retrying academy players list query with fallback (%s) [code=%s]: %s',
                 $attempt['label'],
                 (string) $exception->getCode(),
                 $exception->getMessage()
