@@ -1099,24 +1099,34 @@ try {
 
     $startedCardRequestBackfillTransaction = false;
     try {
-        if (!$pdo->inTransaction()) {
-            $pdo->beginTransaction();
-            $startedCardRequestBackfillTransaction = true;
-        }
-
-        $pdo->exec("
-            UPDATE academy_players ap
-            INNER JOIN (
-                SELECT player_id, MIN(created_at) AS first_request_at
-                FROM swimmer_card_requests
-                GROUP BY player_id
-            ) requests ON requests.player_id = ap.id
-            SET ap.card_request_submitted_at = requests.first_request_at
+        $needsCardRequestBackfillStmt = $pdo->query("
+            SELECT 1
+            FROM academy_players ap
+            INNER JOIN swimmer_card_requests requests ON requests.player_id = ap.id
             WHERE ap.card_request_submitted_at IS NULL
+            LIMIT 1
         ");
 
-        if ($startedCardRequestBackfillTransaction && $pdo->inTransaction()) {
-            $pdo->commit();
+        if ($needsCardRequestBackfillStmt && $needsCardRequestBackfillStmt->fetchColumn()) {
+            if (!$pdo->inTransaction()) {
+                $pdo->beginTransaction();
+                $startedCardRequestBackfillTransaction = true;
+            }
+
+            $pdo->exec("
+                UPDATE academy_players ap
+                INNER JOIN (
+                    SELECT player_id, MIN(created_at) AS first_request_at
+                    FROM swimmer_card_requests
+                    GROUP BY player_id
+                ) requests ON requests.player_id = ap.id
+                SET ap.card_request_submitted_at = requests.first_request_at
+                WHERE ap.card_request_submitted_at IS NULL
+            ");
+
+            if ($startedCardRequestBackfillTransaction && $pdo->inTransaction()) {
+                $pdo->commit();
+            }
         }
     } catch (PDOException $exception) {
         if ($startedCardRequestBackfillTransaction && $pdo->inTransaction()) {

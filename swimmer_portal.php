@@ -949,19 +949,31 @@ if ($player !== null && $_SERVER['REQUEST_METHOD'] === 'POST' && swimmerPortalVa
         header('Location: swimmer_portal.php?section=files');
         exit;
     } elseif ($action === 'card_request') {
-        if (!empty($player['card_request_submitted_at'])) {
-            $message = '❌ تم إرسال طلب الكارنية من قبل ولا يمكن تكراره.';
+        $upload = swimmerPortalUploadImage($_FILES['card_request_image'] ?? [], SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_DIR, SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_PUBLIC_DIR, 'card-request');
+        if (!empty($upload['error']) || empty($upload['path'])) {
+            $message = '❌ ' . ((string) ($upload['message'] ?? '') !== '' ? (string) $upload['message'] : 'تعذر رفع الصورة.');
             $messageType = 'error';
         } else {
-            $upload = swimmerPortalUploadImage($_FILES['card_request_image'] ?? [], SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_DIR, SWIMMER_PORTAL_CARD_REQUESTS_UPLOAD_PUBLIC_DIR, 'card-request');
-            if (!empty($upload['error']) || empty($upload['path'])) {
-                $message = '❌ ' . ((string) ($upload['message'] ?? '') !== '' ? (string) $upload['message'] : 'تعذر رفع الصورة.');
-                $messageType = 'error';
-            } else {
-                try {
-                    $pdo->beginTransaction();
+            try {
+                $pdo->beginTransaction();
 
-                    $existingRequestStmt = $pdo->prepare('SELECT id FROM swimmer_card_requests WHERE player_id = ? LIMIT 1 FOR UPDATE');
+                $playerLockStmt = $pdo->prepare(
+                    'SELECT card_request_submitted_at
+                     FROM academy_players
+                     WHERE id = ?
+                     LIMIT 1
+                     FOR UPDATE'
+                );
+                $playerLockStmt->execute([(int) $player['id']]);
+                $lockedPlayer = $playerLockStmt->fetch(PDO::FETCH_ASSOC) ?: null;
+
+                if ($lockedPlayer === null || !empty($lockedPlayer['card_request_submitted_at'])) {
+                    $pdo->rollBack();
+                    swimmerPortalDeleteImage((string) $upload['path']);
+                    $message = '❌ تم إرسال طلب الكارنية من قبل ولا يمكن تكراره.';
+                    $messageType = 'error';
+                } else {
+                    $existingRequestStmt = $pdo->prepare('SELECT id FROM swimmer_card_requests WHERE player_id = ? LIMIT 1');
                     $existingRequestStmt->execute([(int) $player['id']]);
 
                     if ($existingRequestStmt->fetchColumn()) {
@@ -990,15 +1002,15 @@ if ($player !== null && $_SERVER['REQUEST_METHOD'] === 'POST' && swimmerPortalVa
                             exit;
                         }
                     }
-                } catch (Throwable $exception) {
-                    if ($pdo->inTransaction()) {
-                        $pdo->rollBack();
-                    }
-                    swimmerPortalDeleteImage((string) $upload['path']);
-                    error_log('تعذر إرسال طلب الكارنية للاعب رقم ' . (int) ($player['id'] ?? 0) . ': ' . $exception->getMessage());
-                    $message = '❌ حدث خطأ أثناء إرسال الطلب.';
-                    $messageType = 'error';
                 }
+            } catch (Throwable $exception) {
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                swimmerPortalDeleteImage((string) $upload['path']);
+                error_log('تعذر إرسال طلب الكارنية للاعب رقم ' . (int) ($player['id'] ?? 0) . ': ' . $exception->getMessage());
+                $message = '❌ حدث خطأ أثناء إرسال الطلب.';
+                $messageType = 'error';
             }
         }
     } elseif ($action === 'change_password') {
