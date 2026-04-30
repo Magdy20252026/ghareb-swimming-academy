@@ -412,7 +412,7 @@ function isSubscriptionPlaceholderText(string $value): bool
 
     $placeholderCandidate = preg_replace('/[\s\p{Pd}•.,،:\/\\\\()]+/u', '', $normalizedValue);
     if ($placeholderCandidate === null) {
-        error_log('تعذر تنفيذ فحص regex على بيانات المجموعة أثناء التحقق من الرموز غير المفهومة: ' . formatSubscriptionLogValue($normalizedValue));
+        error_log('تعذر تنفيذ preg_replace بسبب خطأ في محرك PCRE أثناء فحص بيانات المجموعة: ' . formatSubscriptionLogValue($normalizedValue));
         return false;
     }
 
@@ -507,19 +507,20 @@ function normalizeSubscriptionRecordForDisplay(array $subscription, array $coach
         (string) ($subscription['coach_name'] ?? ''),
         (string) ($coachLookup[$coachId] ?? ''),
     ]);
-    $fallbackName = pickSubscriptionDisplayText([
+    $storedNameSources = [
         (string) ($subscription['subscription_name'] ?? ''),
         (string) ($subscription['player_subscription_name'] ?? ''),
-    ]);
+    ];
+    $fallbackDisplayName = pickSubscriptionDisplayText($storedNameSources);
     $resolvedBranch = resolveSubscriptionKnownValue([
         (string) ($subscription['subscription_branch'] ?? ''),
         (string) ($subscription['player_subscription_branch'] ?? ''),
-        $fallbackName,
+        ...$storedNameSources,
     ], SUBSCRIPTION_BRANCHES);
     $resolvedCategory = resolveSubscriptionKnownValue([
         (string) ($subscription['subscription_category'] ?? ''),
         (string) ($subscription['player_subscription_category'] ?? ''),
-        $fallbackName,
+        ...$storedNameSources,
     ], SUBSCRIPTION_CATEGORIES);
 
     $subscription['coach_name'] = $coachName;
@@ -532,7 +533,7 @@ function normalizeSubscriptionRecordForDisplay(array $subscription, array $coach
         $coachName,
         (string) ($subscription['schedule_summary'] ?? ''),
         $resolvedBranch,
-        $fallbackName
+        $fallbackDisplayName
     );
 
     return $subscription;
