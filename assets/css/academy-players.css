@@ -1676,6 +1676,91 @@ body.dark-mode .detail-grid-payment .detail-item {
     }
 }
 
+@media (max-width: 640px) {
+    body {
+        padding: 12px;
+    }
+
+    .page-header,
+    .toolbar-card,
+    .summary-page-card,
+    .form-card,
+    .launcher-card,
+    .side-card,
+    .table-card {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .header-actions,
+    .summary-page-header,
+    .toolbar-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .header-actions > *,
+    .toolbar-actions > *,
+    .summary-page-header .toolbar-actions > * {
+        width: 100%;
+    }
+
+    .header-actions .theme-switch-box {
+        justify-content: center;
+    }
+
+    .table-head,
+    .table-pagination,
+    .table-pagination-summary {
+        text-align: center;
+    }
+
+    .table-head {
+        align-items: center;
+    }
+
+    .table-count,
+    .table-pagination-summary {
+        line-height: 1.7;
+    }
+
+    .table-wrapper tbody tr {
+        padding: 16px;
+        border-radius: 20px;
+    }
+
+    .table-wrapper tbody td:not(.empty-row) {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 12px 0;
+    }
+
+    .table-wrapper tbody td.table-avatar-cell {
+        justify-items: stretch;
+        text-align: right;
+    }
+
+    .table-wrapper tbody td.table-avatar-cell::before {
+        text-align: right;
+    }
+
+    .table-avatar-box {
+        justify-content: flex-start;
+    }
+
+    .table-cell-date {
+        white-space: normal;
+    }
+
+    .table-cell-multiline {
+        min-width: 0;
+    }
+
+    .table-wrapper .action-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 520px) {
     .hero-grid {
         grid-template-columns: 1fr;
@@ -1707,6 +1792,17 @@ body.dark-mode .detail-grid-payment .detail-item {
     .side-card h3,
     .table-head h2 {
         font-size: 22px;
+    }
+
+    .header-actions,
+    .toolbar-actions,
+    .summary-page-header .toolbar-actions,
+    .form-actions.compact-actions {
+        gap: 10px;
+    }
+
+    .table-wrapper tbody td:not(.empty-row)::before {
+        font-size: 11px;
     }
 
     .modal-overlay {
