@@ -564,37 +564,42 @@ function academyPlayerAllowedStarsOptions(string $category): array
 
 function fetchAcademyPlayersSubscriptions(PDO $pdo): array
 {
-    $stmt = $pdo->query(
-         'SELECT
-            s.id,
-            s.subscription_name,
-            s.subscription_branch,
-            s.subscription_category,
-            s.training_days_count,
-            s.available_exercises_count,
-            s.training_schedule,
-            s.max_trainees,
-            s.subscription_price,
-            c.full_name AS coach_name,
-            COALESCE(SUM(CASE WHEN ap.subscription_end_date >= CURDATE() AND ap.available_exercises_count > 0 THEN 1 ELSE 0 END), 0) AS active_players_count
-         FROM subscriptions s
-         INNER JOIN coaches c ON c.id = s.coach_id
-         LEFT JOIN academy_players ap ON ap.subscription_id = s.id
-         GROUP BY
-            s.id,
-            s.subscription_name,
-            s.subscription_branch,
-            s.subscription_category,
-            s.training_days_count,
-            s.available_exercises_count,
-            s.training_schedule,
-            s.max_trainees,
-            s.subscription_price,
-            c.full_name
-         ORDER BY s.subscription_name ASC, s.id ASC'
-    );
-
-    $subscriptions = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
+    try {
+        $stmt = $pdo->query(
+             'SELECT
+                s.id,
+                s.subscription_name,
+                s.subscription_branch,
+                s.subscription_category,
+                s.training_days_count,
+                s.available_exercises_count,
+                s.training_schedule,
+                s.max_trainees,
+                s.subscription_price,
+                c.full_name AS coach_name,
+                COALESCE(SUM(CASE WHEN ap.subscription_end_date >= CURDATE() AND ap.available_exercises_count > 0 THEN 1 ELSE 0 END), 0) AS active_players_count
+             FROM subscriptions s
+             LEFT JOIN coaches c ON c.id = s.coach_id
+             LEFT JOIN academy_players ap ON ap.subscription_id = s.id
+             GROUP BY
+                s.id,
+                s.subscription_name,
+                s.subscription_branch,
+                s.subscription_category,
+                s.training_days_count,
+                s.available_exercises_count,
+                s.training_schedule,
+                s.max_trainees,
+                s.subscription_price,
+                c.id,
+                c.full_name
+             ORDER BY s.subscription_name ASC, s.id ASC'
+        );
+        $subscriptions = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
+    } catch (PDOException $e) {
+        error_log('Error fetching subscriptions: ' . $e->getMessage());
+        $subscriptions = [];
+    }
     foreach ($subscriptions as &$subscription) {
         $schedule = decodeAcademyPlayerSchedule((string) ($subscription['training_schedule'] ?? ''));
         $subscription['schedule_summary'] = buildAcademyPlayerScheduleSummary($schedule);
@@ -634,18 +639,22 @@ function fetchAcademyPlayerPayments(PDO $pdo, int $playerId): array
 
 function fetchAcademyPlayerStatistics(PDO $pdo): array
 {
-    $stmt = $pdo->query(
-        'SELECT
-            COUNT(*) AS total_players,
-            COALESCE(SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END), 0) AS active_players,
-            COALESCE(SUM(CASE WHEN subscription_end_date < CURDATE() OR available_exercises_count <= 0 THEN 1 ELSE 0 END), 0) AS expired_players,
-            COALESCE(SUM(CASE WHEN remaining_amount > 0 THEN 1 ELSE 0 END), 0) AS players_with_balance,
-            COALESCE(SUM(remaining_amount), 0) AS total_remaining,
-            COALESCE(SUM(paid_amount), 0) AS total_paid
-         FROM academy_players'
-    );
-
-    return $stmt ? ($stmt->fetch(PDO::FETCH_ASSOC) ?: []) : [];
+    try {
+        $stmt = $pdo->query(
+            'SELECT
+                COUNT(*) AS total_players,
+                COALESCE(SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END), 0) AS active_players,
+                COALESCE(SUM(CASE WHEN subscription_end_date < CURDATE() OR available_exercises_count <= 0 THEN 1 ELSE 0 END), 0) AS expired_players,
+                COALESCE(SUM(CASE WHEN remaining_amount > 0 THEN 1 ELSE 0 END), 0) AS players_with_balance,
+                COALESCE(SUM(remaining_amount), 0) AS total_remaining,
+                COALESCE(SUM(paid_amount), 0) AS total_paid
+             FROM academy_players'
+        );
+        return $stmt ? ($stmt->fetch(PDO::FETCH_ASSOC) ?: []) : [];
+    } catch (PDOException $e) {
+        error_log('Error fetching statistics: ' . $e->getMessage());
+        return [];
+    }
 }
 
 function fetchAcademyPlayersList(PDO $pdo, array $filters): array
@@ -823,15 +832,25 @@ function renderAcademyPlayersPagination(array $currentFilterParams, int $current
 
 function fetchAcademyPlayersCategories(PDO $pdo): array
 {
-    $stmt = $pdo->query('SELECT DISTINCT subscription_category FROM academy_players WHERE subscription_category IS NOT NULL AND subscription_category <> "" ORDER BY subscription_category ASC');
-    $categories = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    try {
+        $stmt = $pdo->query('SELECT DISTINCT subscription_category FROM academy_players WHERE subscription_category IS NOT NULL AND subscription_category <> "" ORDER BY subscription_category ASC');
+        $categories = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    } catch (PDOException $e) {
+        error_log('Error fetching categories: ' . $e->getMessage());
+        $categories = [];
+    }
     return array_values(array_filter(array_map(static fn($value): string => sanitizeAcademyPlayerText((string) $value), $categories)));
 }
 
 function fetchAcademyPlayersBranches(PDO $pdo): array
 {
-    $stmt = $pdo->query('SELECT DISTINCT subscription_branch FROM academy_players WHERE subscription_branch IS NOT NULL AND subscription_branch <> "" ORDER BY subscription_branch ASC');
-    $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    try {
+        $stmt = $pdo->query('SELECT DISTINCT subscription_branch FROM academy_players WHERE subscription_branch IS NOT NULL AND subscription_branch <> "" ORDER BY subscription_branch ASC');
+        $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    } catch (PDOException $e) {
+        error_log('Error fetching branches: ' . $e->getMessage());
+        $branches = [];
+    }
     return array_values(array_filter(array_map(static fn($value): string => sanitizeAcademyPlayerText((string) $value), $branches)));
 }
 
