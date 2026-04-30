@@ -453,9 +453,9 @@ function fetchRenewBranches(PDO $pdo): array
          ORDER BY subscription_branch ASC'
     );
     $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
-    $sanitizedBranches = array_map(static fn($value): string => sanitizeRenewText((string) $value), $branches);
+    $sanitizedBranches = array_map(static fn($branch): string => sanitizeRenewText((string) $branch), $branches);
 
-    return array_values(array_filter($sanitizedBranches, static fn(string $value): bool => $value !== ''));
+    return array_values(array_filter($sanitizedBranches, static fn(string $branch): bool => $branch !== ''));
 }
 
 function fetchRenewSummary(PDO $pdo): array
