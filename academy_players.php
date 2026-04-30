@@ -576,6 +576,7 @@ function fetchAcademyPlayersSubscriptions(PDO $pdo): array
                 s.training_schedule,
                 s.max_trainees,
                 s.subscription_price,
+                c.id AS coach_id,
                 c.full_name AS coach_name,
                 COALESCE(SUM(CASE WHEN ap.subscription_end_date >= CURDATE() AND ap.available_exercises_count > 0 THEN 1 ELSE 0 END), 0) AS active_players_count
              FROM subscriptions s
