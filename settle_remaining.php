@@ -57,6 +57,12 @@ function sanitizeSettleRemainingText(string $value): string
     return $sanitizedValue === null ? '' : $sanitizedValue;
 }
 
+function sanitizeSettleRemainingBranch(string $value): string
+{
+    $sanitizedValue = preg_replace('/\s+/u', ' ', trim($value));
+    return $sanitizedValue === null ? '' : $sanitizedValue;
+}
+
 function normalizeSettleRemainingDecimal(string $value): string
 {
     $value = trim(normalizeSettleRemainingArabicNumbers($value));
@@ -173,7 +179,7 @@ function fetchSettleRemainingBranches(PDO $pdo): array
          ORDER BY subscription_branch ASC'
     );
     $rawBranches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
-    $sanitizedBranches = array_map('sanitizeSettleRemainingText', $rawBranches);
+    $sanitizedBranches = array_map('sanitizeSettleRemainingBranch', $rawBranches);
     return array_values(array_filter($sanitizedBranches, static fn(string $value): bool => $value !== ''));
 }
 
@@ -265,12 +271,12 @@ $flashMessage = consumeSettleRemainingFlash();
 $message = $flashMessage['message'];
 $messageType = $flashMessage['type'];
 $search = sanitizeSettleRemainingText((string) ($_GET['search'] ?? ''));
-$branch = sanitizeSettleRemainingText((string) ($_GET['branch'] ?? ''));
+$branch = sanitizeSettleRemainingBranch((string) ($_GET['branch'] ?? ''));
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = trim((string) ($_POST['action'] ?? ''));
     $search = sanitizeSettleRemainingText((string) ($_POST['current_search'] ?? $search));
-    $branch = sanitizeSettleRemainingText((string) ($_POST['current_branch'] ?? $branch));
+    $branch = sanitizeSettleRemainingBranch((string) ($_POST['current_branch'] ?? $branch));
 
     if ($action !== '' && !isValidSettleRemainingCsrfToken($_POST['csrf_token'] ?? null)) {
         $message = '❌ انتهت صلاحية الطلب، يرجى إعادة المحاولة.';
@@ -355,6 +361,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $branchOptions = fetchSettleRemainingBranches($pdo);
 if ($branch !== '' && !in_array($branch, $branchOptions, true)) {
+    if ($message === '') {
+        $message = '⚠️ الفرع المحدد غير متاح حاليًا.';
+        $messageType = 'error';
+    }
     $branch = '';
 }
 
