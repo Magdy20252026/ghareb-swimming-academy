@@ -412,7 +412,7 @@ function isRenewableExpiredPlayer(?array $player): bool
     return $availableExercisesCount <= 0 || ($endDate !== '' && $endDate < $today);
 }
 
-function fetchExpiredRenewalPlayers(PDO $pdo, string $search): array
+function fetchExpiredRenewalPlayers(PDO $pdo, string $search, string $branch): array
 {
     $sql = 'SELECT *
             FROM academy_players
@@ -429,11 +429,33 @@ function fetchExpiredRenewalPlayers(PDO $pdo, string $search): array
         $params[] = $searchValue;
     }
 
+    if ($branch !== '') {
+        $sql .= ' AND subscription_branch = ?';
+        $params[] = $branch;
+    }
+
     $sql .= ' ORDER BY subscription_end_date ASC, updated_at DESC, id DESC';
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+}
+
+function fetchRenewBranches(PDO $pdo): array
+{
+    $stmt = $pdo->query(
+        'SELECT DISTINCT subscription_branch
+         FROM academy_players
+         WHERE academy_id = 0
+           AND subscription_branch IS NOT NULL
+           AND CHAR_LENGTH(TRIM(subscription_branch)) > 0
+           AND (subscription_end_date < CURDATE() OR available_exercises_count <= 0)
+         ORDER BY subscription_branch ASC'
+    );
+    $branches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    $cleanedBranches = array_map(static fn($branch): string => sanitizeRenewText((string) $branch), $branches);
+
+    return array_values(array_filter($cleanedBranches, static fn(string $branch): bool => $branch !== ''));
 }
 
 function fetchRenewSummary(PDO $pdo): array
@@ -475,10 +497,16 @@ $flashMessage = consumeRenewFlash();
 $message = $flashMessage['message'];
 $messageType = $flashMessage['type'];
 $search = sanitizeRenewText((string) ($_GET['search'] ?? ''));
+$branch = sanitizeRenewText((string) ($_GET['branch'] ?? ''));
 $subscriptions = fetchRenewSubscriptions($pdo);
 $subscriptionsById = [];
 foreach ($subscriptions as $subscription) {
     $subscriptionsById[(int) ($subscription['id'] ?? 0)] = $subscription;
+}
+$branchOptions = fetchRenewBranches($pdo);
+if ($branch !== '' && !in_array($branch, $branchOptions, true)) {
+    $branchOptions[] = $branch;
+    sort($branchOptions);
 }
 
 $renewPlayer = null;
@@ -487,6 +515,7 @@ $submittedRenewData = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = trim((string) ($_POST['action'] ?? ''));
     $search = sanitizeRenewText((string) ($_POST['current_search'] ?? $search));
+    $branch = sanitizeRenewText((string) ($_POST['current_branch'] ?? $branch));
 
     if ($action !== '' && !isValidRenewCsrfToken($_POST['csrf_token'] ?? null)) {
         $message = '❌ انتهت صلاحية الطلب، يرجى إعادة المحاولة.';
@@ -645,7 +674,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         $pdo->commit();
                         setRenewFlash('✅ تم تجديد اشتراك السباح بنجاح.', 'success');
-                        header('Location: ' . buildRenewPageUrl(['search' => $search]));
+                        header('Location: ' . buildRenewPageUrl(['search' => $search, 'branch' => $branch]));
                         exit;
                     } catch (Throwable $exception) {
                         if ($pdo->inTransaction()) {
@@ -671,7 +700,7 @@ if (isset($_GET['renew']) && ctype_digit((string) $_GET['renew'])) {
     }
 }
 
-$expiredPlayers = fetchExpiredRenewalPlayers($pdo, $search);
+$expiredPlayers = fetchExpiredRenewalPlayers($pdo, $search, $branch);
 $renewSummary = fetchRenewSummary($pdo);
 $renewFormData = [
     'subscription_id' => $renewPlayer !== null && isset($renewPlayer['subscription_id']) ? (string) $renewPlayer['subscription_id'] : '',
@@ -798,6 +827,7 @@ $renewCsrfToken = getRenewCsrfToken();
                     <input type="hidden" name="player_id" value="<?php echo (int) ($renewPlayer['id'] ?? 0); ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($renewCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                     <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>">
 
                     <div class="form-grid form-grid-compact">
                         <div class="form-group form-group-full subscription-select-group">
@@ -885,7 +915,7 @@ $renewCsrfToken = getRenewCsrfToken();
 
                     <div class="form-actions">
                         <button type="submit" class="save-btn" <?php echo $subscriptions === [] ? 'disabled' : ''; ?>>تجديد الاشتراك</button>
-                        <a href="<?php echo htmlspecialchars(buildRenewPageUrl(['search' => $search]), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إلغاء</a>
+                        <a href="<?php echo htmlspecialchars(buildRenewPageUrl(['search' => $search, 'branch' => $branch]), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إلغاء</a>
                     </div>
                 </form>
             <?php endif; ?>
@@ -898,6 +928,17 @@ $renewCsrfToken = getRenewCsrfToken();
                     <div class="form-group">
                         <label for="search">ابحث بالكود أو اسم السباح أو رقم ولي الأمر</label>
                         <input type="text" name="search" id="search" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="branch">الفرع</label>
+                        <select name="branch" id="branch">
+                            <option value="">كل الفروع</option>
+                            <?php foreach ($branchOptions as $branchOption): ?>
+                                <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $branch === $branchOption ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-actions compact-actions">
                         <button type="submit" class="save-btn">بحث</button>
@@ -944,7 +985,7 @@ $renewCsrfToken = getRenewCsrfToken();
                                 <td data-label="مرات التجديد"><span class="table-cell-text"><?php echo (int) ($player['renewal_count'] ?? 0); ?></span></td>
                                 <td data-label="الإجراءات">
                                     <div class="action-buttons">
-                                        <a href="<?php echo htmlspecialchars(buildRenewPageUrl(['search' => $search, 'renew' => $player['id']]), ENT_QUOTES, 'UTF-8'); ?>#renewSubscriptionForm" class="pay-btn">تجديد</a>
+                                        <a href="<?php echo htmlspecialchars(buildRenewPageUrl(['search' => $search, 'branch' => $branch, 'renew' => $player['id']]), ENT_QUOTES, 'UTF-8'); ?>#renewSubscriptionForm" class="pay-btn">تجديد</a>
                                         <a href="<?php echo htmlspecialchars('academy_players.php?search=' . urlencode((string) ($player['barcode'] ?? '')), ENT_QUOTES, 'UTF-8'); ?>" class="link-btn files-btn">صفحة السباحين</a>
                                     </div>
                                 </td>
