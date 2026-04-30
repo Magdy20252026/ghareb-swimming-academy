@@ -720,8 +720,8 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
 
     if ($limit !== null) {
         $sql .= ' LIMIT ? OFFSET ?';
-        $params[] = max(1, $limit);
-        $params[] = max(0, $offset);
+        $params[] = $limit;
+        $params[] = $offset;
     }
 
     $stmt = $pdo->prepare($sql);
@@ -757,8 +757,9 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
 function fetchAcademyPlayersPage(PDO $pdo, array $filters, int $page, int $perPage): array
 {
     [$whereClauses, $params] = academyPlayersBuildFilteredQueryParts($filters);
-    $offset = max(0, ($page - 1) * $perPage);
-    return academyPlayersFetchPlayers($pdo, $whereClauses, $params, $perPage, $offset);
+    $resolvedPerPage = max(1, $perPage);
+    $offset = ($page - 1) * $resolvedPerPage;
+    return academyPlayersFetchPlayers($pdo, $whereClauses, $params, $resolvedPerPage, $offset);
 }
 
 function countAcademyPlayers(PDO $pdo, array $filters): int
