@@ -38,12 +38,14 @@ body {
         var(--gray-light);
     color: var(--text-dark);
     min-height: 100vh;
+    overscroll-behavior-y: none;
     transition: var(--transition);
 }
 
 .dashboard-layout {
     display: flex;
     min-height: 100vh;
+    overscroll-behavior: contain;
 }
 
 .sidebar {
@@ -166,6 +168,7 @@ body {
     flex-direction: column;
     gap: 8px;
     padding-left: 2px;
+    overscroll-behavior: contain;
     scrollbar-width: auto;
     scrollbar-color: var(--sidebar-scrollbar-thumb) var(--sidebar-scrollbar-track);
 }
@@ -276,6 +279,7 @@ body {
     flex: 1;
     min-width: 0;
     padding: 20px;
+    overscroll-behavior: contain;
 }
 
 .topbar {
