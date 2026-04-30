@@ -35,7 +35,7 @@ const SUBSCRIPTIONS_TIME_AM_AR = 'ص';
 const SUBSCRIPTIONS_TIME_PM_AR = 'م';
 let pendingDeleteForm = null;
 
-function openSubscriptionsFormModal(triggerElement = null) {
+function openSubscriptionsFormModal() {
     if (!subscriptionsFormModal) {
         return;
     }

@@ -558,12 +558,12 @@ $statsStmt = $pdo->query('
         COALESCE(SUM(s.max_trainees), 0) AS total_capacity,
         COUNT(DISTINCT s.subscription_category) AS total_categories,
         COUNT(DISTINCT s.coach_id) AS total_coaches,
-        COALESCE(SUM(COALESCE(ap.active_players_count, 0)), 0) AS total_registered_swimmers
+        COALESCE(SUM(COALESCE(ap.registered_players_count, 0)), 0) AS total_registered_swimmers
     FROM subscriptions s
     LEFT JOIN (
         SELECT
             subscription_id,
-            SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END) AS active_players_count
+            SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END) AS registered_players_count
         FROM academy_players
         GROUP BY subscription_id
     ) ap ON ap.subscription_id = s.id
@@ -574,13 +574,13 @@ $subscriptionsStmt = $pdo->query('
     SELECT
         s.*,
         c.full_name AS coach_name,
-        COALESCE(ap.active_players_count, 0) AS active_players_count
+        COALESCE(ap.registered_players_count, 0) AS registered_players_count
     FROM subscriptions s
     LEFT JOIN coaches c ON c.id = s.coach_id
     LEFT JOIN (
         SELECT
             subscription_id,
-            SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END) AS active_players_count
+            SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END) AS registered_players_count
         FROM academy_players
         GROUP BY subscription_id
     ) ap ON ap.subscription_id = s.id
@@ -928,7 +928,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                 <td data-label="الجدول">
                                     <div class="schedule-summary"><?php echo htmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></div>
                                 </td>
-                                <td data-label="السباحين / الحد الأقصى"><span class="capacity-chip"><?php echo (int) ($subscription['active_players_count'] ?? 0); ?> / <?php echo (int) ($subscription['max_trainees'] ?? 0); ?> سباح</span></td>
+                                <td data-label="السباحين / الحد الأقصى"><span class="capacity-chip"><?php echo (int) ($subscription['registered_players_count'] ?? 0); ?> / <?php echo (int) ($subscription['max_trainees'] ?? 0); ?> سباح</span></td>
                                 <td data-label="السعر"><span class="soft-badge"><?php echo formatSubscriptionMoney($subscription['subscription_price'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="الإجراءات">
                                     <div class="action-buttons">
