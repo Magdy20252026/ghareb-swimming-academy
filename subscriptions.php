@@ -364,6 +364,17 @@ function fetchSubscriptionById(PDO $pdo, string $id): ?array
     return $subscription ?: null;
 }
 
+function buildSubscriptionsRegisteredSwimmersCountSubquery(): string
+{
+    return '
+        SELECT
+            subscription_id,
+            SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END) AS registered_swimmers_count
+        FROM academy_players
+        GROUP BY subscription_id
+    ';
+}
+
 function getSubscriptionMysqlDriverErrorCode(PDOException $exception): int
 {
     $errorInfo = $exception->errorInfo;
@@ -375,14 +386,51 @@ function getSubscriptionMysqlDriverErrorCode(PDOException $exception): int
     return is_numeric($exception->getCode()) ? (int) $exception->getCode() : 0;
 }
 
+function resolveSubscriptionsFormData(
+    string $submittedAction,
+    string $messageType,
+    ?array $submittedSubscriptionFormData,
+    ?array $editSubscription
+): array {
+    if ($submittedAction === 'save' && $messageType === 'error' && is_array($submittedSubscriptionFormData)) {
+        return $submittedSubscriptionFormData;
+    }
+
+    return is_array($editSubscription) ? $editSubscription : [];
+}
+
+function buildSubscriptionScheduleFromSubmittedData(array $submittedScheduleLookup): array
+{
+    $schedule = [];
+
+    foreach ($submittedScheduleLookup as $dayKey => $timeValue) {
+        if (!is_string($dayKey) || !isValidSubscriptionWeekDay($dayKey)) {
+            continue;
+        }
+
+        $normalizedTimeValue = normalizeAcademyTimeInputValue((string) $timeValue);
+        $schedule[] = [
+            'key' => $dayKey,
+            'label' => SUBSCRIPTION_WEEK_DAYS[$dayKey],
+            'time' => $normalizedTimeValue !== '' ? formatAcademyTimeTo12Hour($normalizedTimeValue) : '',
+        ];
+    }
+
+    return $schedule;
+}
+
 $message = '';
 $messageType = '';
 $editSubscription = null;
+$submittedAction = '';
+$submittedSubscriptionFormData = null;
+$submittedScheduleLookup = [];
 $coaches = fetchSubscriptionCoaches($pdo);
 $coachLookup = fetchSubscriptionCoachLookup($coaches);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
+    $submittedAction = is_string($action) ? $action : '';
     $submittedToken = $_POST['csrf_token'] ?? '';
 
     if (!isValidSubscriptionsCsrfToken($submittedToken)) {
@@ -396,11 +444,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trainingDaysCount = sanitizeSubscriptionInteger((string) ($_POST['training_days_count'] ?? ''));
         $availableExercisesCount = sanitizeSubscriptionInteger((string) ($_POST['available_exercises_count'] ?? ''));
         $selectedDays = $_POST['training_days'] ?? [];
-        $scheduleTimes = $_POST['schedule_time'] ?? [];
+        $submittedScheduleTimes = is_array($_POST['schedule_time'] ?? null) ? $_POST['schedule_time'] : [];
         $coachId = sanitizeSubscriptionInteger((string) ($_POST['coach_id'] ?? ''));
         $maxTrainees = sanitizeSubscriptionInteger((string) ($_POST['max_trainees'] ?? ''));
         $subscriptionPriceInput = sanitizeSubscriptionDecimal((string) ($_POST['subscription_price'] ?? ''));
-        $trainingSchedule = normalizeSubscriptionSchedule($selectedDays, $scheduleTimes, $trainingDaysCount);
+        $trainingSchedule = normalizeSubscriptionSchedule($selectedDays, $submittedScheduleTimes, $trainingDaysCount);
         $scheduleSummary = buildSubscriptionScheduleSummary($trainingSchedule);
         $coachName = $coachLookup[$coachId] ?? '';
         $subscriptionName = buildAcademySubscriptionName(
@@ -410,6 +458,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $subscriptionBranch,
             $submittedSubscriptionName
         );
+
+        $selectedDayLookup = [];
+        if (is_array($selectedDays)) {
+            foreach ($selectedDays as $dayKey) {
+                if (!is_string($dayKey)) {
+                    continue;
+                }
+
+                $normalizedDayKey = trim($dayKey);
+                if (!isValidSubscriptionWeekDay($normalizedDayKey) || isset($selectedDayLookup[$normalizedDayKey])) {
+                    continue;
+                }
+
+                $selectedDayLookup[$normalizedDayKey] = normalizeAcademyTimeInputValue((string) ($submittedScheduleTimes[$normalizedDayKey] ?? ''));
+            }
+        }
+
+        $submittedSubscriptionFormData = [
+            'id' => $id,
+            'subscription_name' => $subscriptionName,
+            'subscription_branch' => $subscriptionBranch,
+            'subscription_category' => $subscriptionCategory,
+            'training_days_count' => $trainingDaysCount > 0 ? $trainingDaysCount : 1,
+            'available_exercises_count' => $availableExercisesCount > 0 ? $availableExercisesCount : 1,
+            'coach_id' => $coachId,
+            'max_trainees' => $maxTrainees > 0 ? $maxTrainees : '',
+            'subscription_price' => $subscriptionPriceInput !== '' ? $subscriptionPriceInput : '0.00',
+        ];
+        $submittedScheduleLookup = $selectedDayLookup;
 
         if (!isValidSubscriptionCategory($subscriptionCategory)) {
             $message = '❌ يرجى اختيار تصنيف مجموعة صحيح.';
@@ -519,20 +596,28 @@ if (isset($_GET['edit'])) {
     }
 }
 
+$registeredSwimmersCountSubquery = buildSubscriptionsRegisteredSwimmersCountSubquery();
+
 $statsStmt = $pdo->query('
     SELECT
         COUNT(*) AS total_subscriptions,
-        COALESCE(SUM(max_trainees), 0) AS total_capacity,
-        COUNT(DISTINCT subscription_category) AS total_categories,
-        COUNT(DISTINCT coach_id) AS total_coaches
-    FROM subscriptions
+        COALESCE(SUM(s.max_trainees), 0) AS total_capacity,
+        COUNT(DISTINCT s.subscription_category) AS total_categories,
+        COUNT(DISTINCT s.coach_id) AS total_coaches,
+        COALESCE(SUM(COALESCE(ap.registered_swimmers_count, 0)), 0) AS total_registered_swimmers
+    FROM subscriptions s
+    LEFT JOIN (' . $registeredSwimmersCountSubquery . ') ap ON ap.subscription_id = s.id
 ');
 $subscriptionsStats = $statsStmt ? $statsStmt->fetch(PDO::FETCH_ASSOC) : [];
 
 $subscriptionsStmt = $pdo->query('
-    SELECT s.*, c.full_name AS coach_name
+    SELECT
+        s.*,
+        c.full_name AS coach_name,
+        COALESCE(ap.registered_swimmers_count, 0) AS registered_swimmers_count
     FROM subscriptions s
     LEFT JOIN coaches c ON c.id = s.coach_id
+    LEFT JOIN (' . $registeredSwimmersCountSubquery . ') ap ON ap.subscription_id = s.id
     ORDER BY s.updated_at DESC, s.id DESC
 ');
 $subscriptions = $subscriptionsStmt ? $subscriptionsStmt->fetchAll(PDO::FETCH_ASSOC) : [];
@@ -554,23 +639,38 @@ if (isset($_GET['export']) && $_GET['export'] === 'xlsx') {
     exportSubscriptionsAsXlsx($subscriptions);
 }
 
-$editSchedule = $editSubscription ? decodeSubscriptionSchedule($editSubscription['training_schedule'] ?? null) : [];
+$subscriptionFormData = resolveSubscriptionsFormData(
+    $submittedAction,
+    $messageType,
+    $submittedSubscriptionFormData,
+    $editSubscription
+);
+$isEditingSubscription = isset($subscriptionFormData['id']) && trim((string) ($subscriptionFormData['id'] ?? '')) !== '';
+$shouldAutoOpenSubscriptionModal = $isEditingSubscription || ($submittedAction === 'save' && $messageType === 'error');
+$shouldResetSubscriptionModalOnClose = $isEditingSubscription;
+$editSchedule = $submittedAction === 'save' && $messageType === 'error'
+    ? buildSubscriptionScheduleFromSubmittedData($submittedScheduleLookup)
+    : ($editSubscription ? decodeSubscriptionSchedule($editSubscription['training_schedule'] ?? null) : []);
 $editScheduleLookup = [];
-foreach ($editSchedule as $scheduleItem) {
-    $dayKey = $scheduleItem['key'] ?? '';
-    if (is_string($dayKey) && $dayKey !== '') {
-        $editScheduleLookup[$dayKey] = normalizeAcademyTimeInputValue((string) ($scheduleItem['time'] ?? ''));
+if ($submittedAction === 'save' && $messageType === 'error') {
+    $editScheduleLookup = $submittedScheduleLookup;
+} else {
+    foreach ($editSchedule as $scheduleItem) {
+        $dayKey = $scheduleItem['key'] ?? '';
+        if (is_string($dayKey) && $dayKey !== '') {
+            $editScheduleLookup[$dayKey] = normalizeAcademyTimeInputValue((string) ($scheduleItem['time'] ?? ''));
+        }
     }
 }
 
 $editSubscriptionScheduleSummary = buildSubscriptionScheduleSummary($editSchedule);
-$editSubscriptionGeneratedName = $editSubscription
+$editSubscriptionGeneratedName = $subscriptionFormData !== []
     ? buildAcademySubscriptionName(
-        (string) ($editSubscription['subscription_category'] ?? ''),
-        (string) ($coachLookup[(int) ($editSubscription['coach_id'] ?? 0)] ?? ''),
+        (string) ($subscriptionFormData['subscription_category'] ?? ''),
+        (string) ($coachLookup[(int) ($subscriptionFormData['coach_id'] ?? 0)] ?? ''),
         $editSubscriptionScheduleSummary,
-        (string) ($editSubscription['subscription_branch'] ?? ''),
-        (string) ($editSubscription['subscription_name'] ?? '')
+        (string) ($subscriptionFormData['subscription_branch'] ?? ''),
+        (string) ($subscriptionFormData['subscription_name'] ?? '')
     )
     : '';
 
@@ -584,7 +684,13 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
     <title>إدارة المجموعات</title>
     <link rel="stylesheet" href="assets/css/subscriptions.css">
 </head>
-<body class="light-mode" data-page-url="<?php echo htmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>">
+<body
+    class="light-mode"
+    data-page-url="<?php echo htmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
+    data-form-close-url="<?php echo htmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
+    data-form-modal-open="<?php echo $shouldAutoOpenSubscriptionModal ? '1' : '0'; ?>"
+    data-form-modal-reset-page="<?php echo $shouldResetSubscriptionModalOnClose ? '1' : '0'; ?>"
+>
 <div class="subscriptions-page">
     <header class="page-header">
         <div class="header-text">
@@ -629,8 +735,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
         </article>
 
         <article class="hero-card">
-            <span>السعة الكلية</span>
-            <strong><?php echo (int) ($subscriptionsStats['total_capacity'] ?? 0); ?></strong>
+            <span>السباحين المسجلين / السعة الكلية</span>
+            <strong><?php echo (int) ($subscriptionsStats['total_registered_swimmers'] ?? 0); ?> / <?php echo (int) ($subscriptionsStats['total_capacity'] ?? 0); ?></strong>
         </article>
 
         <article class="hero-card">
@@ -639,15 +745,29 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
         </article>
     </section>
 
-    <section class="content-grid">
-        <div class="form-card">
-            <div class="card-head">
-                <h2><?php echo $editSubscription ? '✏️ تعديل مجموعة' : '➕ إضافة مجموعة'; ?></h2>
-            </div>
+    <button
+        type="button"
+        class="save-btn mobile-subscription-launcher"
+        data-open-subscription-modal
+        aria-label="إضافة مجموعة"
+        aria-haspopup="dialog"
+        aria-controls="subscriptionFormModal"
+        aria-expanded="false"
+    >
+        إضافة مجموعة
+    </button>
 
-            <form method="POST" id="subscriptionsForm" class="subscriptions-form" autocomplete="off">
+    <div class="modal-overlay hidden" id="subscriptionFormModal" role="dialog" aria-modal="true" aria-labelledby="subscriptionFormModalTitle">
+        <div class="modal-shell">
+            <div class="form-card modal-form-card">
+                <div class="card-head modal-card-head">
+                    <h2 id="subscriptionFormModalTitle"><?php echo $isEditingSubscription ? '✏️ تعديل مجموعة' : '➕ إضافة مجموعة'; ?></h2>
+                    <button type="button" class="modal-close-btn" data-close-subscription-modal>إغلاق</button>
+                </div>
+
+                <form method="POST" id="subscriptionsForm" class="subscriptions-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars((string) ($editSubscription['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars((string) ($subscriptionFormData['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($subscriptionsCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="client-message" id="clientMessage" aria-live="assertive" hidden></div>
@@ -665,7 +785,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                             <select name="subscription_category" id="subscription_category" required>
                                 <option value="">اختر المستوى</option>
                                 <?php foreach (SUBSCRIPTION_CATEGORIES as $category): ?>
-                                    <option value="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($editSubscription['subscription_category'] ?? '') === $category) ? 'selected' : ''; ?>>
+                                    <option value="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($subscriptionFormData['subscription_category'] ?? '') === $category) ? 'selected' : ''; ?>>
                                         <?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -681,7 +801,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                             <select name="subscription_branch" id="subscription_branch" required>
                                 <option value="">اختر الفرع</option>
                                 <?php foreach (SUBSCRIPTION_BRANCHES as $branch): ?>
-                                    <option value="<?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($editSubscription['subscription_branch'] ?? '') === $branch) ? 'selected' : ''; ?>>
+                                    <option value="<?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($subscriptionFormData['subscription_branch'] ?? '') === $branch) ? 'selected' : ''; ?>>
                                         <?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -694,7 +814,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                         <div class="select-shell">
                             <select name="training_days_count" id="training_days_count" required>
                                 <?php for ($count = 1; $count <= SUBSCRIPTIONS_MAX_TRAINING_DAYS; $count++): ?>
-                                    <option value="<?php echo $count; ?>" <?php echo ((int) ($editSubscription['training_days_count'] ?? 1) === $count) ? 'selected' : ''; ?>>
+                                    <option value="<?php echo $count; ?>" <?php echo ((int) ($subscriptionFormData['training_days_count'] ?? 1) === $count) ? 'selected' : ''; ?>>
                                         <?php echo $count; ?> يوم
                                     </option>
                                 <?php endfor; ?>
@@ -704,7 +824,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
 
                     <div class="form-group">
                         <label for="available_exercises_count">🎽 عدد التمارين المتاحة</label>
-                        <input type="number" min="1" step="1" name="available_exercises_count" id="available_exercises_count" value="<?php echo htmlspecialchars((string) ($editSubscription['available_exercises_count'] ?? 1), ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="number" min="1" step="1" name="available_exercises_count" id="available_exercises_count" value="<?php echo htmlspecialchars((string) ($subscriptionFormData['available_exercises_count'] ?? 1), ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
 
                     <div class="form-group">
@@ -714,7 +834,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                 <option value="">اختر المدرب</option>
                                 <?php foreach ($coaches as $coach): ?>
                                     <?php $coachId = (int) ($coach['id'] ?? 0); ?>
-                                    <option value="<?php echo $coachId; ?>" <?php echo ((int) ($editSubscription['coach_id'] ?? 0) === $coachId) ? 'selected' : ''; ?>>
+                                    <option value="<?php echo $coachId; ?>" <?php echo ((int) ($subscriptionFormData['coach_id'] ?? 0) === $coachId) ? 'selected' : ''; ?>>
                                         <?php echo htmlspecialchars((string) ($coach['full_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -724,12 +844,12 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
 
                     <div class="form-group">
                         <label for="max_trainees">👥 أقصى عدد سباحين</label>
-                        <input type="number" min="1" step="1" name="max_trainees" id="max_trainees" value="<?php echo htmlspecialchars((string) ($editSubscription['max_trainees'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="number" min="1" step="1" name="max_trainees" id="max_trainees" value="<?php echo htmlspecialchars((string) ($subscriptionFormData['max_trainees'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label for="subscription_price">💰 سعر المجموعة</label>
-                        <input type="number" min="0.01" step="0.01" name="subscription_price" id="subscription_price" value="<?php echo htmlspecialchars(formatSubscriptionDecimal($editSubscription['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="number" min="0.01" step="0.01" name="subscription_price" id="subscription_price" value="<?php echo htmlspecialchars(formatSubscriptionDecimal($subscriptionFormData['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
 
                 </div>
@@ -737,7 +857,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                 <div class="schedule-card">
                     <div class="schedule-head">
                         <h3>أيام التمرين الأسبوعية</h3>
-                        <span class="selection-badge"><strong id="selectedDaysCount"><?php echo count($editScheduleLookup); ?></strong>/<span id="allowedDaysCount"><?php echo (int) ($editSubscription['training_days_count'] ?? 1); ?></span></span>
+                        <span class="selection-badge"><strong id="selectedDaysCount"><?php echo count($editScheduleLookup); ?></strong>/<span id="allowedDaysCount"><?php echo (int) ($subscriptionFormData['training_days_count'] ?? 1); ?></span></span>
                     </div>
 
                     <div class="weekdays-grid">
@@ -762,36 +882,32 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="save-btn"><?php echo $editSubscription ? '💾 حفظ التعديل' : '✅ إضافة المجموعة'; ?></button>
+                    <button type="submit" class="save-btn"><?php echo $isEditingSubscription ? '💾 حفظ التعديل' : '✅ إضافة المجموعة'; ?></button>
                     <button type="button" class="clear-btn" id="clearBtn">🧹 تصفية الحقول</button>
                 </div>
-            </form>
-        </div>
-
-        <aside class="side-panel">
-            <div class="side-card">
-                <h3>📌 الملخص</h3>
-                <div class="mini-stats">
-                    <div class="mini-stat">
-                        <span>المدربين المتاحين</span>
-                        <strong><?php echo count($coaches); ?></strong>
-                    </div>
-                    <div class="mini-stat accent-stat">
-                        <span>المجموعات المعروضة</span>
-                        <strong><?php echo count($subscriptions); ?></strong>
-                    </div>
-                </div>
+                </form>
             </div>
-        </aside>
-    </section>
+        </div>
+    </div>
 
     <section class="table-card">
         <div class="card-head table-head">
             <div>
                 <h2>📋 جدول المجموعات</h2>
             </div>
-            <div class="header-actions">
+            <div class="table-head-actions">
                 <span class="table-count"><?php echo count($subscriptions); ?> مجموعة</span>
+                <button
+                    type="button"
+                    class="save-btn desktop-subscription-launcher"
+                    data-open-subscription-modal
+                    aria-label="إضافة مجموعة"
+                    aria-haspopup="dialog"
+                    aria-controls="subscriptionFormModal"
+                    aria-expanded="false"
+                >
+                    إضافة مجموعة
+                </button>
                 <a href="<?php echo htmlspecialchars(buildSubscriptionsPageUrl(['export' => 'xlsx']), ENT_QUOTES, 'UTF-8'); ?>" class="back-btn">استخراج إكسل</a>
             </div>
         </div>
@@ -808,7 +924,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                         <th>الأيام</th>
                         <th>التمارين المتاحة</th>
                         <th>الجدول</th>
-                        <th>الحد الأقصى</th>
+                        <th>السباحين / الحد الأقصى</th>
                         <th>السعر</th>
                         <th>الإجراءات</th>
                     </tr>
@@ -835,7 +951,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                 <td data-label="الجدول">
                                     <div class="schedule-summary"><?php echo htmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></div>
                                 </td>
-                                <td data-label="الحد الأقصى"><span class="capacity-chip"><?php echo (int) ($subscription['max_trainees'] ?? 0); ?> سباح</span></td>
+                                <td data-label="السباحين / الحد الأقصى"><span class="capacity-chip"><?php echo (int) ($subscription['registered_swimmers_count'] ?? 0); ?> / <?php echo (int) ($subscription['max_trainees'] ?? 0); ?> سباح</span></td>
                                 <td data-label="السعر"><span class="soft-badge"><?php echo formatSubscriptionMoney($subscription['subscription_price'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="الإجراءات">
                                     <div class="action-buttons">

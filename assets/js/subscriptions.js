@@ -2,7 +2,12 @@ const subscriptionsBody = document.body;
 const subscriptionsThemeToggle = document.getElementById('themeToggle');
 const subscriptionsClearBtn = document.getElementById('clearBtn');
 const subscriptionsPageUrl = subscriptionsBody?.dataset.pageUrl || window.location.pathname.split('/').pop() || '';
+const subscriptionsFormCloseUrl = subscriptionsBody?.dataset.formCloseUrl || subscriptionsPageUrl;
+const subscriptionsShouldOpenFormModal = subscriptionsBody?.dataset.formModalOpen === '1';
+const subscriptionsShouldResetModalOnClose = subscriptionsBody?.dataset.formModalResetPage === '1';
 const subscriptionsForm = document.getElementById('subscriptionsForm');
+const subscriptionsOpenModalButtons = Array.from(document.querySelectorAll('[data-open-subscription-modal]'));
+const subscriptionsFormModal = document.getElementById('subscriptionFormModal');
 const subscriptionsIdField = document.getElementById('id');
 const subscriptionsNameField = document.getElementById('subscription_name');
 const subscriptionsCategoryField = document.getElementById('subscription_category');
@@ -29,6 +34,43 @@ const SUBSCRIPTIONS_MESSAGES = {
 const SUBSCRIPTIONS_TIME_AM_AR = 'ص';
 const SUBSCRIPTIONS_TIME_PM_AR = 'م';
 let pendingDeleteForm = null;
+
+function openSubscriptionsFormModal() {
+    if (!subscriptionsFormModal) {
+        return;
+    }
+
+    subscriptionsFormModal.classList.remove('hidden');
+    subscriptionsBody.classList.add('modal-open');
+    subscriptionsOpenModalButtons.forEach((button) => {
+        button.setAttribute('aria-expanded', 'true');
+    });
+
+    window.requestAnimationFrame(() => {
+        subscriptionsCategoryField?.focus();
+    });
+}
+
+function isSubscriptionsFormModalOpen() {
+    return Boolean(subscriptionsFormModal) && !subscriptionsFormModal.classList.contains('hidden');
+}
+
+function closeSubscriptionsFormModal(shouldResetPage = false) {
+    if (shouldResetPage) {
+        window.location.href = subscriptionsFormCloseUrl;
+        return;
+    }
+
+    if (!subscriptionsFormModal) {
+        return;
+    }
+
+    subscriptionsFormModal.classList.add('hidden');
+    subscriptionsBody.classList.remove('modal-open');
+    subscriptionsOpenModalButtons.forEach((button) => {
+        button.setAttribute('aria-expanded', 'false');
+    });
+}
 
 function setSubscriptionsTheme(theme) {
     if (theme === 'dark') {
@@ -253,6 +295,10 @@ window.addEventListener('load', () => {
     updateSubscriptionsScheduleVisibility();
     updateGeneratedSubscriptionName();
 
+    if (subscriptionsShouldOpenFormModal) {
+        openSubscriptionsFormModal();
+    }
+
     if (successMessage && window.location.search.includes('edit=')) {
         window.history.replaceState({}, document.title, subscriptionsPageUrl);
     }
@@ -269,6 +315,10 @@ if (subscriptionsThemeToggle) {
 if (subscriptionsClearBtn) {
     subscriptionsClearBtn.addEventListener('click', clearSubscriptionsForm);
 }
+
+subscriptionsOpenModalButtons.forEach((button) => {
+    button.addEventListener('click', () => openSubscriptionsFormModal());
+});
 
 subscriptionsCategoryField?.addEventListener('change', updateGeneratedSubscriptionName);
 subscriptionsBranchField?.addEventListener('change', updateGeneratedSubscriptionName);
@@ -328,6 +378,32 @@ subscriptionsCancelDeleteBtn?.addEventListener('click', closeSubscriptionsDelete
 subscriptionsDeleteConfirmDialog?.addEventListener('cancel', (event) => {
     event.preventDefault();
     closeSubscriptionsDeleteDialog();
+});
+
+if (subscriptionsFormModal) {
+    subscriptionsFormModal.addEventListener('click', (event) => {
+        if (event.target === subscriptionsFormModal) {
+            closeSubscriptionsFormModal(subscriptionsShouldResetModalOnClose);
+            return;
+        }
+
+        const closeButton = event.target.closest('[data-close-subscription-modal]');
+        if (closeButton) {
+            closeSubscriptionsFormModal(subscriptionsShouldResetModalOnClose);
+        }
+    });
+}
+
+document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !isSubscriptionsFormModalOpen()) {
+        return;
+    }
+
+    if (document.activeElement instanceof HTMLSelectElement) {
+        return;
+    }
+
+    closeSubscriptionsFormModal(subscriptionsShouldResetModalOnClose);
 });
 
 subscriptionsConfirmDeleteBtn?.addEventListener('click', () => {
