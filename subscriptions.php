@@ -364,6 +364,17 @@ function fetchSubscriptionById(PDO $pdo, string $id): ?array
     return $subscription ?: null;
 }
 
+function buildSubscriptionsRegisteredSwimmersCountSubquery(): string
+{
+    return '
+        SELECT
+            subscription_id,
+            SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END) AS registered_swimmers_count
+        FROM academy_players
+        GROUP BY subscription_id
+    ';
+}
+
 function getSubscriptionMysqlDriverErrorCode(PDOException $exception): int
 {
     $errorInfo = $exception->errorInfo;
@@ -373,6 +384,39 @@ function getSubscriptionMysqlDriverErrorCode(PDOException $exception): int
     }
 
     return is_numeric($exception->getCode()) ? (int) $exception->getCode() : 0;
+}
+
+function resolveSubscriptionsFormData(
+    string $submittedAction,
+    string $messageType,
+    ?array $submittedSubscriptionFormData,
+    ?array $editSubscription
+): array {
+    if ($submittedAction === 'save' && $messageType === 'error' && is_array($submittedSubscriptionFormData)) {
+        return $submittedSubscriptionFormData;
+    }
+
+    return is_array($editSubscription) ? $editSubscription : [];
+}
+
+function buildSubscriptionScheduleFromSubmittedLookup(array $submittedScheduleLookup): array
+{
+    $schedule = [];
+
+    foreach ($submittedScheduleLookup as $dayKey => $timeValue) {
+        if (!is_string($dayKey) || !isValidSubscriptionWeekDay($dayKey)) {
+            continue;
+        }
+
+        $normalizedTimeValue = normalizeAcademyTimeInputValue((string) $timeValue);
+        $schedule[] = [
+            'key' => $dayKey,
+            'label' => SUBSCRIPTION_WEEK_DAYS[$dayKey],
+            'time' => $normalizedTimeValue !== '' ? formatAcademyTimeTo12Hour($normalizedTimeValue) : '',
+        ];
+    }
+
+    return $schedule;
 }
 
 $message = '';
@@ -552,6 +596,8 @@ if (isset($_GET['edit'])) {
     }
 }
 
+$registeredSwimmersCountSubquery = buildSubscriptionsRegisteredSwimmersCountSubquery();
+
 $statsStmt = $pdo->query('
     SELECT
         COUNT(*) AS total_subscriptions,
@@ -560,13 +606,7 @@ $statsStmt = $pdo->query('
         COUNT(DISTINCT s.coach_id) AS total_coaches,
         COALESCE(SUM(COALESCE(ap.registered_swimmers_count, 0)), 0) AS total_registered_swimmers
     FROM subscriptions s
-    LEFT JOIN (
-        SELECT
-            subscription_id,
-            SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END) AS registered_swimmers_count
-        FROM academy_players
-        GROUP BY subscription_id
-    ) ap ON ap.subscription_id = s.id
+    LEFT JOIN (' . $registeredSwimmersCountSubquery . ') ap ON ap.subscription_id = s.id
 ');
 $subscriptionsStats = $statsStmt ? $statsStmt->fetch(PDO::FETCH_ASSOC) : [];
 
@@ -577,13 +617,7 @@ $subscriptionsStmt = $pdo->query('
         COALESCE(ap.registered_swimmers_count, 0) AS registered_swimmers_count
     FROM subscriptions s
     LEFT JOIN coaches c ON c.id = s.coach_id
-    LEFT JOIN (
-        SELECT
-            subscription_id,
-            SUM(CASE WHEN subscription_end_date >= CURDATE() AND available_exercises_count > 0 THEN 1 ELSE 0 END) AS registered_swimmers_count
-        FROM academy_players
-        GROUP BY subscription_id
-    ) ap ON ap.subscription_id = s.id
+    LEFT JOIN (' . $registeredSwimmersCountSubquery . ') ap ON ap.subscription_id = s.id
     ORDER BY s.updated_at DESC, s.id DESC
 ');
 $subscriptions = $subscriptionsStmt ? $subscriptionsStmt->fetchAll(PDO::FETCH_ASSOC) : [];
@@ -605,28 +639,17 @@ if (isset($_GET['export']) && $_GET['export'] === 'xlsx') {
     exportSubscriptionsAsXlsx($subscriptions);
 }
 
-$subscriptionFormData = $submittedAction === 'save' && $messageType === 'error'
-    ? ($submittedSubscriptionFormData ?? [])
-    : ($editSubscription ?? []);
+$subscriptionFormData = resolveSubscriptionsFormData(
+    $submittedAction,
+    $messageType,
+    $submittedSubscriptionFormData,
+    $editSubscription
+);
 $isEditingSubscription = isset($subscriptionFormData['id']) && trim((string) ($subscriptionFormData['id'] ?? '')) !== '';
 $shouldAutoOpenSubscriptionModal = $isEditingSubscription || ($submittedAction === 'save' && $messageType === 'error');
 $shouldResetSubscriptionModalOnClose = $isEditingSubscription;
 $editSchedule = $submittedAction === 'save' && $messageType === 'error'
-    ? array_values(array_filter(array_map(
-        static function (string $dayKey, string $timeValue): ?array {
-            if (!isValidSubscriptionWeekDay($dayKey)) {
-                return null;
-            }
-
-            return [
-                'key' => $dayKey,
-                'label' => SUBSCRIPTION_WEEK_DAYS[$dayKey],
-                'time' => $timeValue !== '' ? formatAcademyTimeTo12Hour($timeValue) : '',
-            ];
-        },
-        array_keys($submittedScheduleLookup),
-        array_values($submittedScheduleLookup)
-    )))
+    ? buildSubscriptionScheduleFromSubmittedLookup($submittedScheduleLookup)
     : ($editSubscription ? decodeSubscriptionSchedule($editSubscription['training_schedule'] ?? null) : []);
 $editScheduleLookup = [];
 if ($submittedAction === 'save' && $messageType === 'error') {

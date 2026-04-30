@@ -395,9 +395,19 @@ if (subscriptionsFormModal) {
 }
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && isSubscriptionsFormModalOpen()) {
-        closeSubscriptionsFormModal(subscriptionsShouldResetModalOnClose);
+    if (event.key !== 'Escape' || !isSubscriptionsFormModalOpen()) {
+        return;
     }
+
+    if (document.activeElement instanceof HTMLSelectElement) {
+        return;
+    }
+
+    if (event.target instanceof HTMLSelectElement) {
+        return;
+    }
+
+    closeSubscriptionsFormModal(subscriptionsShouldResetModalOnClose);
 });
 
 subscriptionsConfirmDeleteBtn?.addEventListener('click', () => {
