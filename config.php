@@ -302,6 +302,7 @@ try {
             birth_date DATE NULL,
             birth_year INT NULL,
             player_image_path VARCHAR(255) NULL,
+            card_request_submitted_at TIMESTAMP NULL DEFAULT NULL,
             subscription_start_date DATE NOT NULL,
             subscription_end_date DATE NOT NULL,
             subscription_name VARCHAR(150) NULL,
@@ -851,7 +852,8 @@ try {
         'guardian_phone' => "ALTER TABLE academy_players ADD COLUMN guardian_phone VARCHAR(25) NOT NULL AFTER phone",
         'birth_date' => "ALTER TABLE academy_players ADD COLUMN birth_date DATE NULL AFTER guardian_phone",
         'player_image_path' => "ALTER TABLE academy_players ADD COLUMN player_image_path VARCHAR(255) NULL AFTER birth_date",
-        'subscription_start_date' => "ALTER TABLE academy_players ADD COLUMN subscription_start_date DATE NOT NULL AFTER player_image_path",
+        'card_request_submitted_at' => "ALTER TABLE academy_players ADD COLUMN card_request_submitted_at TIMESTAMP NULL DEFAULT NULL AFTER player_image_path",
+        'subscription_start_date' => "ALTER TABLE academy_players ADD COLUMN subscription_start_date DATE NOT NULL AFTER card_request_submitted_at",
         'subscription_end_date' => "ALTER TABLE academy_players ADD COLUMN subscription_end_date DATE NOT NULL AFTER subscription_start_date",
         'subscription_name' => "ALTER TABLE academy_players ADD COLUMN subscription_name VARCHAR(150) NULL AFTER subscription_end_date",
         'subscription_branch' => "ALTER TABLE academy_players ADD COLUMN subscription_branch VARCHAR(150) NULL AFTER subscription_name",
@@ -1093,6 +1095,44 @@ try {
                 error_log('تعذر إنشاء فهرس طلبات الكارنية: ' . $exception->getMessage());
             }
         }
+    }
+
+    $startedCardRequestBackfillTransaction = false;
+    try {
+        $needsCardRequestBackfillStmt = $pdo->query("
+            SELECT 1
+            FROM academy_players ap
+            INNER JOIN swimmer_card_requests requests ON requests.player_id = ap.id
+            WHERE ap.card_request_submitted_at IS NULL
+            LIMIT 1
+        ");
+
+        if ($needsCardRequestBackfillStmt && $needsCardRequestBackfillStmt->fetchColumn()) {
+            if (!$pdo->inTransaction()) {
+                $pdo->beginTransaction();
+                $startedCardRequestBackfillTransaction = true;
+            }
+
+            $pdo->exec("
+                UPDATE academy_players ap
+                INNER JOIN (
+                    SELECT player_id, MIN(created_at) AS first_request_at
+                    FROM swimmer_card_requests
+                    GROUP BY player_id
+                ) requests ON requests.player_id = ap.id
+                SET ap.card_request_submitted_at = requests.first_request_at
+                WHERE ap.card_request_submitted_at IS NULL
+            ");
+
+            if ($startedCardRequestBackfillTransaction && $pdo->inTransaction()) {
+                $pdo->commit();
+            }
+        }
+    } catch (PDOException $exception) {
+        if ($startedCardRequestBackfillTransaction && $pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        error_log('تعذر تحديث حالة إرسال طلبات الكارنية للاعبين أثناء مزامنة الطلبات السابقة: ' . $exception->getMessage());
     }
 
     $swimmerNotificationsTableExistsStmt = $pdo->query("SHOW TABLES LIKE 'swimmer_notifications'");
