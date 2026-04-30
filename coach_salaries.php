@@ -855,7 +855,7 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
             </div>
         </article>
 
-        <article class="stat-card salary-total-card salary-stat-card">
+        <article class="stat-card salary-total-card">
             <div class="stat-icon">🧾</div>
             <div>
                 <h2><?php echo htmlspecialchars(number_format($totalPayableSalariesAfterAdvances, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
