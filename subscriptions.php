@@ -25,6 +25,7 @@ if (!userCanAccess($currentUser, 'subscriptions')) {
 const SUBSCRIPTIONS_PAGE_FILE = 'subscriptions.php';
 const SUBSCRIPTIONS_DUPLICATE_KEY_ERROR = 1062;
 const SUBSCRIPTIONS_MAX_TRAINING_DAYS = 7;
+const SUBSCRIPTION_EMPTY_DISPLAY_PLACEHOLDER = '—';
 const SUBSCRIPTION_CATEGORIES = [
     'مدارس سباحة',
     'تجهيزي فرق جديد',
@@ -410,7 +411,8 @@ function isSubscriptionPlaceholderText(string $value): bool
     }
 
     $placeholderCandidate = preg_replace('/[\s\p{Pd}•.,،:\/\\\\()]+/u', '', $normalizedValue);
-    if ($placeholderCandidate === null || $placeholderCandidate === '') {
+    if ($placeholderCandidate === null) {
+        error_log('تعذر التحقق من وجود رموز غير مفهومة في بيانات المجموعة.');
         return false;
     }
 
@@ -438,6 +440,8 @@ function pickSubscriptionDisplayText(array $values): string
 
 function resolveSubscriptionKnownValue(array $values, array $allowedValues): string
 {
+    $supportsMbString = function_exists('mb_strpos');
+
     foreach ($values as $value) {
         $normalizedValue = sanitizeSubscriptionText((string) $value);
         if ($normalizedValue === '') {
@@ -458,11 +462,10 @@ function resolveSubscriptionKnownValue(array $values, array $allowedValues): str
         }
 
         foreach ($allowedValues as $allowedValue) {
-            if (function_exists('mb_strpos')) {
-                if (mb_strpos($normalizedValue, $allowedValue) !== false) {
-                    return $allowedValue;
-                }
-            } elseif (strpos($normalizedValue, $allowedValue) !== false) {
+            $containsAllowedValue = $supportsMbString
+                ? mb_strpos($normalizedValue, $allowedValue) !== false
+                : strpos($normalizedValue, $allowedValue) !== false;
+            if ($containsAllowedValue) {
                 return $allowedValue;
             }
         }
@@ -503,8 +506,8 @@ function normalizeSubscriptionRecordForDisplay(array $subscription, array $coach
     $subscription['coach_name'] = $coachName;
     $subscription['subscription_branch'] = $resolvedBranch;
     $subscription['subscription_category'] = $resolvedCategory;
-    $subscription['subscription_branch_display'] = $resolvedBranch !== '' ? $resolvedBranch : '—';
-    $subscription['subscription_category_display'] = $resolvedCategory !== '' ? $resolvedCategory : '—';
+    $subscription['subscription_branch_display'] = $resolvedBranch !== '' ? $resolvedBranch : SUBSCRIPTION_EMPTY_DISPLAY_PLACEHOLDER;
+    $subscription['subscription_category_display'] = $resolvedCategory !== '' ? $resolvedCategory : SUBSCRIPTION_EMPTY_DISPLAY_PLACEHOLDER;
     $subscription['subscription_name'] = buildAcademySubscriptionName(
         $resolvedCategory,
         $coachName,
@@ -1075,8 +1078,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                         </div>
                                     </div>
                                 </td>
-                                <td data-label="الفرع"><span class="soft-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_branch_display'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="المستوى"><span class="metric-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_category_display'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="الفرع"><span class="soft-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_branch_display'] ?? SUBSCRIPTION_EMPTY_DISPLAY_PLACEHOLDER), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="المستوى"><span class="metric-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_category_display'] ?? SUBSCRIPTION_EMPTY_DISPLAY_PLACEHOLDER), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="المدرب"><?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الأيام"><span class="days-count"><?php echo (int) ($subscription['training_days_count'] ?? 0); ?> يوم</span></td>
                                 <td data-label="التمارين المتاحة"><span class="soft-badge"><?php echo (int) ($subscription['available_exercises_count'] ?? 0); ?> تمرين</span></td>
