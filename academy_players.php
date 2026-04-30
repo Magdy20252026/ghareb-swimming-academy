@@ -927,10 +927,10 @@ function academyPlayersBuildFetchPlayersSql(
 
 function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params, ?int $limit = null, int $offset = 0): array
 {
-    $queryParams = $params;
+    $statementParams = $params;
     if ($limit !== null) {
-        $queryParams[] = $limit;
-        $queryParams[] = $offset;
+        $statementParams[] = $limit;
+        $statementParams[] = $offset;
     }
 
     $queryAttempts = [
@@ -963,7 +963,7 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
                 $attempt['order_by']
             );
             $stmt = $pdo->prepare($sql);
-            $stmt->execute($queryParams);
+            $stmt->execute($statementParams);
             $players = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
             break;
         } catch (PDOException $exception) {
