@@ -417,6 +417,14 @@ function isSubscriptionPlaceholderText(string $value): bool
         return false;
     }
 
+    $containsReplacementCharacter = function_exists('mb_strpos')
+        ? mb_strpos($placeholderCandidate, '�') !== false
+        : strpos($placeholderCandidate, '�') !== false;
+    if ($containsReplacementCharacter) {
+        $loggedValue = json_encode($normalizedValue, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        error_log('تم اكتشاف محرف الاستبدال في بيانات المجموعة أثناء فحص الرموز غير المفهومة: ' . ($loggedValue !== false ? $loggedValue : $normalizedValue));
+    }
+
     return preg_match('/^[\?؟�]+$/u', $placeholderCandidate) === 1;
 }
 
@@ -441,10 +449,7 @@ function pickSubscriptionDisplayText(array $values): string
 
 function resolveSubscriptionKnownValue(array $values, array $allowedValues): string
 {
-    static $supportsMbString = null;
-    if ($supportsMbString === null) {
-        $supportsMbString = function_exists('mb_strpos');
-    }
+    $supportsMbString = function_exists('mb_strpos');
 
     foreach ($values as $value) {
         $normalizedValue = sanitizeSubscriptionText((string) $value);
@@ -1082,8 +1087,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                         </div>
                                     </div>
                                 </td>
-                                <td data-label="الفرع"><span class="soft-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_branch_display'] ?? SUBSCRIPTION_DEFAULT_DISPLAY_VALUE), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="المستوى"><span class="metric-badge"><?php echo htmlspecialchars((string) ($subscription['subscription_category_display'] ?? SUBSCRIPTION_DEFAULT_DISPLAY_VALUE), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="الفرع"><span class="soft-badge"><?php echo htmlspecialchars((string) $subscription['subscription_branch_display'], ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="المستوى"><span class="metric-badge"><?php echo htmlspecialchars((string) $subscription['subscription_category_display'], ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="المدرب"><?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الأيام"><span class="days-count"><?php echo (int) ($subscription['training_days_count'] ?? 0); ?> يوم</span></td>
                                 <td data-label="التمارين المتاحة"><span class="soft-badge"><?php echo (int) ($subscription['available_exercises_count'] ?? 0); ?> تمرين</span></td>
