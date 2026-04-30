@@ -410,8 +410,9 @@ function isSubscriptionPlaceholderText(string $value): bool
         return false;
     }
 
-    // نحذف الفواصل والمسافات والشرطات وحتى الشرط المائل لأن القيم التالفة تظهر عادة كسلسلة من علامات الاستفهام فقط.
-    $placeholderCandidate = preg_replace('/[\s\p{Pd}•.,،:\/\\\\()]+/u', '', $normalizedValue);
+    // النمط التالي يحذف الفواصل والشرطات وأرقام الوقت الغربية/العربية ورموز AM/PM حتى لا تُحتسب عند اكتشاف النصوص التالفة.
+    $timeAndPunctuationNoisePattern = '/[\s\p{Pd}•.,،:\/\\\\()0-9٠-٩۰-۹AaPpMmصم]+/u';
+    $placeholderCandidate = preg_replace($timeAndPunctuationNoisePattern, '', $normalizedValue);
     if ($placeholderCandidate === null) {
         error_log('تعذر تنفيذ preg_replace بسبب خطأ في محرك PCRE أثناء فحص بيانات المجموعة: ' . formatSubscriptionLogValue($normalizedValue));
         return false;
