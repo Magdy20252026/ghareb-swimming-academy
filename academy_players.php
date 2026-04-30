@@ -976,8 +976,12 @@ function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params
             break;
         } catch (PDOException $exception) {
             $lastException = $exception;
+            $logPrefix = $attemptIndex + 1 < $totalAttempts
+                ? 'Warning: academy players list query failed; trying fallback'
+                : 'Error: academy players list query failed';
             error_log(sprintf(
-                'Warning: retrying academy players list query with fallback (%s, attempt %d of %d) [code=%s]: %s',
+                '%s (%s, attempt %d of %d) [code=%s]: %s',
+                $logPrefix,
                 $attempt['label'],
                 $attemptIndex + 1,
                 $totalAttempts,
