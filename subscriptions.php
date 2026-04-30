@@ -412,18 +412,22 @@ function isSubscriptionPlaceholderText(string $value): bool
 
     $placeholderCandidate = preg_replace('/[\s\p{Pd}•.,،:\/\\\\()]+/u', '', $normalizedValue);
     if ($placeholderCandidate === null) {
-        $loggedValue = json_encode($normalizedValue, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        error_log('تعذر تنفيذ فحص regex على بيانات المجموعة أثناء التحقق من الرموز غير المفهومة: ' . ($loggedValue !== false ? $loggedValue : $normalizedValue));
+        error_log('تعذر تنفيذ فحص regex على بيانات المجموعة أثناء التحقق من الرموز غير المفهومة: ' . formatSubscriptionLogValue($normalizedValue));
         return false;
     }
 
     $containsReplacementCharacter = subscriptionTextContains($placeholderCandidate, '�');
     if ($containsReplacementCharacter) {
-        $loggedValue = json_encode($normalizedValue, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        error_log('تم اكتشاف محرف الاستبدال في بيانات المجموعة أثناء فحص الرموز غير المفهومة: ' . ($loggedValue !== false ? $loggedValue : $normalizedValue));
+        error_log('تم اكتشاف محرف الاستبدال في بيانات المجموعة أثناء فحص الرموز غير المفهومة: ' . formatSubscriptionLogValue($normalizedValue));
     }
 
     return preg_match('/^[\?؟�]+$/u', $placeholderCandidate) === 1;
+}
+
+function formatSubscriptionLogValue(string $value): string
+{
+    $encodedValue = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    return $encodedValue !== false ? $encodedValue : '[unencodable-subscription-value]';
 }
 
 function subscriptionTextContains(string $value, string $needle): bool
