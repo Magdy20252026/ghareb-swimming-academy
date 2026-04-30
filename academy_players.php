@@ -39,6 +39,7 @@ const ACADEMY_PLAYERS_CUSTOM_STARS_CATEGORY = 'فرق ستار 3-4';
 const ACADEMY_PLAYERS_CUSTOM_STARS_OPTIONS = [3, 4];
 const ACADEMY_PLAYERS_MANUAL_STARS_OPTIONS = [1, 2, 3, 4];
 const ACADEMY_PLAYERS_TABLE_COLUMNS_COUNT = 25;
+const ACADEMY_PLAYERS_PER_PAGE = 10;
 const ACADEMY_PLAYER_DEFAULT_PASSWORD = '123456';
 const ACADEMY_PLAYERS_WEEK_DAYS = [
     'saturday' => 'السبت',
@@ -322,6 +323,16 @@ function academyPlayersFilterParamsFromArray(array $source): array
         'status' => normalizeAcademyPlayersStatusFilter((string) ($source['current_status'] ?? $source['status'] ?? 'all')),
         'medical_report' => normalizeAcademyPlayersMedicalReportFilter((string) ($source['current_medical_report'] ?? $source['medical_report'] ?? 'all')),
     ];
+}
+
+function normalizeAcademyPlayersPageNumber($value): int
+{
+    $normalizedValue = trim(normalizeAcademyPlayersArabicNumbers((string) $value));
+    if ($normalizedValue === '' || !ctype_digit($normalizedValue)) {
+        return 1;
+    }
+
+    return max(1, (int) $normalizedValue);
 }
 
 function normalizeAcademyPlayersView(string $value): string
@@ -639,6 +650,12 @@ function fetchAcademyPlayerStatistics(PDO $pdo): array
 
 function fetchAcademyPlayersList(PDO $pdo, array $filters): array
 {
+    [$whereClauses, $params] = academyPlayersBuildFilteredQueryParts($filters);
+    return academyPlayersFetchPlayers($pdo, $whereClauses, $params);
+}
+
+function academyPlayersBuildFilteredQueryParts(array $filters): array
+{
     $whereClauses = [];
     $params = [];
 
@@ -680,6 +697,11 @@ function fetchAcademyPlayersList(PDO $pdo, array $filters): array
         $whereClauses[] = 'ap.medical_report_required = 1 AND ((ap.medical_report_path IS NULL OR ap.medical_report_path = "") AND (ap.medical_report_files IS NULL OR ap.medical_report_files = ""))';
     }
 
+    return [$whereClauses, $params];
+}
+
+function academyPlayersFetchPlayers(PDO $pdo, array $whereClauses, array $params, ?int $limit = null, int $offset = 0): array
+{
     $sql = 'SELECT
                 ap.*,
                 (
@@ -695,6 +717,12 @@ function fetchAcademyPlayersList(PDO $pdo, array $filters): array
         $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
     }
     $sql .= ' ORDER BY ap.subscription_end_date ASC, ap.updated_at DESC, ap.id DESC';
+
+    if ($limit !== null) {
+        $sql .= ' LIMIT ? OFFSET ?';
+        $params[] = $limit;
+        $params[] = $offset;
+    }
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -724,6 +752,73 @@ function fetchAcademyPlayersList(PDO $pdo, array $filters): array
     unset($player);
 
     return $players;
+}
+
+function fetchAcademyPlayersPage(PDO $pdo, array $filters, int $page, int $perPage): array
+{
+    [$whereClauses, $params] = academyPlayersBuildFilteredQueryParts($filters);
+    $resolvedPage = max(1, $page);
+    $resolvedPerPage = max(1, $perPage);
+    $offset = ($resolvedPage - 1) * $resolvedPerPage;
+    return academyPlayersFetchPlayers($pdo, $whereClauses, $params, $resolvedPerPage, $offset);
+}
+
+function countAcademyPlayers(PDO $pdo, array $filters): int
+{
+    [$whereClauses, $params] = academyPlayersBuildFilteredQueryParts($filters);
+    $sql = 'SELECT COUNT(*) FROM academy_players ap';
+
+    if ($whereClauses !== []) {
+        $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+    }
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return (int) ($stmt->fetchColumn() ?: 0);
+}
+
+function renderAcademyPlayersPagination(array $currentFilterParams, int $currentPage, int $totalPages): void
+{
+    if ($totalPages <= 1) {
+        return;
+    }
+
+    $pageNumbers = [];
+    $pageNumbers[] = 1;
+    for ($pageNumber = max(2, $currentPage - 2); $pageNumber <= min($totalPages - 1, $currentPage + 2); $pageNumber++) {
+        $pageNumbers[] = $pageNumber;
+    }
+    $pageNumbers[] = $totalPages;
+    $pageNumbers = array_values(array_unique($pageNumbers));
+    sort($pageNumbers);
+    ?>
+    <nav class="table-pagination" aria-label="صفحات جدول السباحين">
+        <div class="pagination-links">
+            <?php if ($currentPage > 1): ?>
+                <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $currentPage - 1])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link pagination-nav">السابق</a>
+            <?php endif; ?>
+
+            <?php $lastRenderedPage = 0; ?>
+            <?php foreach ($pageNumbers as $pageNumber): ?>
+                <?php if ($lastRenderedPage > 0 && $pageNumber - $lastRenderedPage > 1): ?>
+                    <span class="pagination-ellipsis">…</span>
+                <?php endif; ?>
+
+                <?php if ($pageNumber === $currentPage): ?>
+                    <span class="pagination-link is-active" aria-current="page"><?php echo $pageNumber; ?></span>
+                <?php else: ?>
+                    <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $pageNumber])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link"><?php echo $pageNumber; ?></a>
+                <?php endif; ?>
+
+                <?php $lastRenderedPage = $pageNumber; ?>
+            <?php endforeach; ?>
+
+            <?php if ($currentPage < $totalPages): ?>
+                <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $currentPage + 1])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link pagination-nav">التالي</a>
+            <?php endif; ?>
+        </div>
+    </nav>
+    <?php
 }
 
 function fetchAcademyPlayersCategories(PDO $pdo): array
@@ -798,7 +893,9 @@ function renderAcademyPlayersHorizontalToolbar(
     $categoryId = 'category_filter_' . $toolbarKey;
     $statusId = 'status_filter_' . $toolbarKey;
     $medicalReportId = 'medical_report_filter_' . $toolbarKey;
-    $exportUrl = buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['export' => 'xlsx']));
+    $exportParams = $currentFilterParams;
+    unset($exportParams['page']);
+    $exportUrl = buildAcademyPlayersPageUrl(array_merge($exportParams, ['export' => 'xlsx']));
     ?>
     <section class="toolbar-card">
         <div class="toolbar-row">
@@ -1441,6 +1538,7 @@ foreach ($subscriptions as $subscription) {
 
 $filters = academyPlayersFilterParamsFromArray($_GET);
 $currentView = normalizeAcademyPlayersView((string) ($_GET['view'] ?? ''));
+$requestedPlayersPage = normalizeAcademyPlayersPageNumber($_GET['page'] ?? 1);
 
 if (isset($_GET['export']) && $_GET['export'] === 'xlsx') {
     $playersForExport = fetchAcademyPlayersList($pdo, $filters);
@@ -1459,7 +1557,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = trim((string) ($_POST['action'] ?? ''));
     $redirectFilters = academyPlayersFilterParamsFromArray($_POST);
     $redirectView = normalizeAcademyPlayersView((string) ($_POST['current_view'] ?? ''));
+    $redirectPage = normalizeAcademyPlayersPageNumber($_POST['current_page'] ?? 1);
     $redirectPageParams = array_merge($redirectFilters, [
+        'page' => $redirectPage > 1 ? (string) $redirectPage : null,
         'view' => $redirectView === 'summary' ? 'summary' : '',
     ]);
 
@@ -2283,7 +2383,10 @@ if ($filesPlayer !== null) {
     $playerPayments = fetchAcademyPlayerPayments($pdo, (int) ($filesPlayer['id'] ?? 0));
 }
 
-$players = fetchAcademyPlayersList($pdo, $filters);
+$totalPlayersCount = countAcademyPlayers($pdo, $filters);
+$totalPlayersPages = max(1, (int) ceil($totalPlayersCount / ACADEMY_PLAYERS_PER_PAGE));
+$currentPlayersPage = min($requestedPlayersPage, $totalPlayersPages);
+$players = fetchAcademyPlayersPage($pdo, $filters, $currentPlayersPage, ACADEMY_PLAYERS_PER_PAGE);
 $overallStats = fetchAcademyPlayerStatistics($pdo);
 $categoryOptions = array_values(array_unique(array_merge(
     fetchAcademyPlayersCategories($pdo),
@@ -2312,6 +2415,7 @@ $currentFilterParams = [
     'subscription_id' => $filters['subscription_id'],
     'branch' => $filters['branch'],
     'category' => $filters['category'],
+    'page' => $currentPlayersPage > 1 ? (string) $currentPlayersPage : null,
     'summary_category' => $summaryCategory,
     'status' => $filters['status'] === 'all' ? '' : $filters['status'],
     'medical_report' => $filters['medical_report'] === 'all' ? '' : $filters['medical_report'],
@@ -2526,6 +2630,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
             <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
             <input type="hidden" name="current_view" value="<?php echo htmlspecialchars($currentView, ENT_QUOTES, 'UTF-8'); ?>">
 
             <div class="form-grid form-grid-compact">
@@ -2832,6 +2937,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                         <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                         <div class="form-group">
                             <label for="payment_amount">مبلغ السداد</label>
                             <input type="number" name="payment_amount" id="payment_amount" min="0.01" max="<?php echo htmlspecialchars(formatAcademyPlayerAmount($paymentPlayer['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>" step="0.01" required>
@@ -2912,6 +3018,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                                     <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                                     <input type="file" name="player_file<?php echo $fileField === 'medical_report_path' ? '[]' : ''; ?>" accept="image/*" <?php echo $fileField === 'medical_report_path' ? 'multiple' : ''; ?> required>
                                     <button type="submit" class="link-btn file-action-btn">رفع</button>
                                 </form>
@@ -2928,6 +3035,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                                         <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
                                         <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                                         <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                                         <button type="submit" class="delete-btn compact-delete-btn">حذف</button>
                                     </form>
                                 <?php endif; ?>
@@ -2973,6 +3081,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                         <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                         <div class="form-group">
                             <label for="new_password">كلمة السر الجديدة</label>
                             <input type="password" name="new_password" id="new_password" required>
@@ -3008,6 +3117,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                         <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                         <div class="form-group">
                             <label for="star_player_count">عدد النجوم</label>
                             <?php if (count($starsPlayerAllowedOptions) === 1): ?>
@@ -3043,7 +3153,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                 <div>
                     <h2>جدول السباحين</h2>
                 </div>
-                <span class="table-count"><?php echo count($players); ?> سباح</span>
+                <span class="table-count">صفحة <?php echo $currentPlayersPage; ?> من <?php echo $totalPlayersPages; ?> · <?php echo $totalPlayersCount; ?> سباح</span>
             </div>
             <div class="table-wrapper">
                 <table>
@@ -3165,6 +3275,7 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                                             <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
                                             <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                                             <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                                             <button type="submit" class="delete-btn">حذف</button>
                                         </form>
                                     </div>
@@ -3179,6 +3290,16 @@ $academyPlayersCsrfToken = getAcademyPlayersCsrfToken();
                     </tbody>
                 </table>
             </div>
+            <?php if ($totalPlayersCount > 0): ?>
+                <?php
+                $tablePageStart = (($currentPlayersPage - 1) * ACADEMY_PLAYERS_PER_PAGE) + 1;
+                $tablePageEnd = min($totalPlayersCount, $currentPlayersPage * ACADEMY_PLAYERS_PER_PAGE);
+                ?>
+                <div class="table-pagination-summary">
+                    عرض <?php echo $tablePageStart; ?> - <?php echo $tablePageEnd; ?> من <?php echo $totalPlayersCount; ?> سباح
+                </div>
+            <?php endif; ?>
+            <?php renderAcademyPlayersPagination($currentFilterParams, $currentPlayersPage, $totalPlayersPages); ?>
         </section>
 
         <?php renderAcademyPlayersHorizontalToolbar($filters, $subscriptions, $branchOptions, $categoryOptions, $summaryCategory, $currentFilterParams, 'bottom', $summaryPageUrl); ?>

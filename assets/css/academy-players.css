@@ -929,6 +929,62 @@ body.dark-mode .payments-history h4 {
     font-weight: 900;
 }
 
+.table-pagination-summary {
+    margin-top: 18px;
+    color: var(--text-soft);
+    font-weight: 700;
+    text-align: center;
+}
+
+.table-pagination {
+    margin-top: 14px;
+}
+
+.pagination-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pagination-link,
+.pagination-ellipsis {
+    min-width: 46px;
+    min-height: 46px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.pagination-link {
+    border: 1px solid var(--border);
+    background: var(--surface-soft);
+    color: var(--text-main);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.pagination-link:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary-light);
+}
+
+.pagination-link.is-active {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-main));
+    border-color: transparent;
+    color: var(--text-inverse);
+}
+
+.pagination-nav {
+    min-width: 88px;
+}
+
+.pagination-ellipsis {
+    color: var(--text-soft);
+}
+
 .table-wrapper {
     overflow-x: auto;
     padding-bottom: 6px;
