@@ -50,17 +50,20 @@ function normalizeSettleRemainingArabicNumbers(string $value): string
     ]);
 }
 
+function sanitizeSettleRemainingWhitespace(string $value): string
+{
+    $sanitizedValue = preg_replace('/\s+/u', ' ', trim($value));
+    return $sanitizedValue === null ? '' : $sanitizedValue;
+}
+
 function sanitizeSettleRemainingText(string $value): string
 {
-    $value = trim(normalizeSettleRemainingArabicNumbers($value));
-    $sanitizedValue = preg_replace('/\s+/u', ' ', $value);
-    return $sanitizedValue === null ? '' : $sanitizedValue;
+    return sanitizeSettleRemainingWhitespace(normalizeSettleRemainingArabicNumbers($value));
 }
 
 function sanitizeSettleRemainingBranch(string $value): string
 {
-    $sanitizedValue = preg_replace('/\s+/u', ' ', trim($value));
-    return $sanitizedValue === null ? '' : $sanitizedValue;
+    return sanitizeSettleRemainingWhitespace($value);
 }
 
 function normalizeSettleRemainingDecimal(string $value): string
@@ -175,7 +178,7 @@ function fetchSettleRemainingBranches(PDO $pdo): array
          WHERE academy_id = 0
            AND remaining_amount > 0
            AND subscription_branch IS NOT NULL
-           AND subscription_branch <> ""
+           AND CHAR_LENGTH(TRIM(subscription_branch)) > 0
          ORDER BY subscription_branch ASC'
     );
     $rawBranches = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
