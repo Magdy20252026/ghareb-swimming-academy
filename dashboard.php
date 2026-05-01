@@ -193,7 +193,7 @@ $enabledCapabilityCount = countEnabledCapabilities(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - <?php echo htmlspecialchars($academyName); ?></title>
+    <title>لوحة التحكم - <?php echo academyHtmlspecialchars($academyName); ?></title>
     <link rel="stylesheet" href="assets/css/dashboard.css">
 </head>
 <body class="light-mode">
@@ -210,21 +210,21 @@ $enabledCapabilityCount = countEnabledCapabilities(
             <div class="academy-box">
                 <div class="academy-logo">
                     <?php if ($academyLogoPath !== null): ?>
-                        <img src="<?php echo htmlspecialchars($academyLogoPath); ?>" alt="شعار الأكاديمية">
+                        <img src="<?php echo academyHtmlspecialchars($academyLogoPath); ?>" alt="شعار الأكاديمية">
                     <?php else: ?>
-                        <span><?php echo htmlspecialchars($academyLogoInitial); ?></span>
+                        <span><?php echo academyHtmlspecialchars($academyLogoInitial); ?></span>
                     <?php endif; ?>
                 </div>
-                <h2 class="academy-name"><?php echo htmlspecialchars($academyName); ?></h2>
+                <h2 class="academy-name"><?php echo academyHtmlspecialchars($academyName); ?></h2>
 
                 <div class="user-info">
                     <div class="user-item">
                         <span class="label">اسم المستخدم</span>
-                        <strong><?php echo htmlspecialchars($username); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars($username); ?></strong>
                     </div>
                     <div class="user-item">
                         <span class="label">الصلاحية</span>
-                        <strong><?php echo htmlspecialchars($userRole); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars($userRole); ?></strong>
                     </div>
                 </div>
             </div>
@@ -239,7 +239,7 @@ $enabledCapabilityCount = countEnabledCapabilities(
                         if ($item["key"] === $activeMenuKey) {
                             $buttonClasses[] = "active";
                         }
-                        $buttonStyle = htmlspecialchars(
+                        $buttonStyle = academyHtmlspecialchars(
                             "--menu-accent-start: " . $item["accent_start"] . "; --menu-accent-end: " . $item["accent_end"] . ";",
                             ENT_QUOTES,
                             "UTF-8"
@@ -293,7 +293,7 @@ $enabledCapabilityCount = countEnabledCapabilities(
         <section class="welcome-panel">
             <div>
                 <span class="welcome-badge"><?php echo $userRole === "مدير" ? "👑 مدير النظام" : "🧭 مشرف مخصص"; ?></span>
-                <h2>مرحبًا <?php echo htmlspecialchars($username); ?> 👋</h2>
+                <h2>مرحبًا <?php echo academyHtmlspecialchars($username); ?> 👋</h2>
             </div>
             <div class="welcome-summary">
                 <span class="summary-chip">🎯 <?php echo $userRole === "مدير" ? "وصول كامل" : permissionCountLabel($enabledCapabilityCount); ?></span>
@@ -308,7 +308,7 @@ $enabledCapabilityCount = countEnabledCapabilities(
                     $detailUrl = null;
                     ?>
                     <?php if ($detailUrl !== null): ?>
-                        <a href="<?php echo htmlspecialchars($detailUrl, ENT_QUOTES, "UTF-8"); ?>" class="stat-card stat-card-link <?php echo htmlspecialchars($item["card_class"]); ?>">
+                        <a href="<?php echo academyHtmlspecialchars($detailUrl, ENT_QUOTES, "UTF-8"); ?>" class="stat-card stat-card-link <?php echo academyHtmlspecialchars($item["card_class"]); ?>">
                             <div class="stat-icon"><?php echo $item["icon"]; ?></div>
                             <div class="stat-details">
                                 <h3><?php echo $item["title"]; ?></h3>
@@ -316,7 +316,7 @@ $enabledCapabilityCount = countEnabledCapabilities(
                             </div>
                         </a>
                     <?php else: ?>
-                        <div class="stat-card <?php echo htmlspecialchars($item["card_class"]); ?>">
+                        <div class="stat-card <?php echo academyHtmlspecialchars($item["card_class"]); ?>">
                             <div class="stat-icon"><?php echo $item["icon"]; ?></div>
                             <div class="stat-details">
                                 <h3><?php echo $item["title"]; ?></h3>

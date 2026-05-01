@@ -411,7 +411,7 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
 </head>
 <body
     class="light-mode"
-    data-reset-url="<?php echo htmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8'); ?>"
+    data-reset-url="<?php echo academyHtmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8'); ?>"
     data-can-view-compensation="<?php echo $canViewCompensation ? '1' : '0'; ?>"
 >
 
@@ -437,8 +437,8 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -483,13 +483,13 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
 
         <form method="GET" class="date-filter-form">
             <label for="attendance_date" class="date-label">اليوم</label>
-            <input type="date" id="attendance_date" name="date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>" required>
+            <input type="date" id="attendance_date" name="date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>" required>
             <button type="submit" class="filter-btn">عرض البيانات</button>
         </form>
 
         <div class="date-highlight">
-            <span class="date-chip"><?php echo htmlspecialchars($selectedDateLabel, ENT_QUOTES, 'UTF-8'); ?></span>
-            <strong><?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?></strong>
+            <span class="date-chip"><?php echo academyHtmlspecialchars($selectedDateLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+            <strong><?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?></strong>
         </div>
     </section>
 
@@ -501,10 +501,10 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
 
             <form method="POST" class="attendance-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="attendance_id" value="<?php echo htmlspecialchars($editAttendance['id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="attendance_date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="coach_id" id="coach_id" value="<?php echo htmlspecialchars($selectedCoachId, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="attendance_id" value="<?php echo academyHtmlspecialchars($editAttendance['id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="attendance_date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="coach_id" id="coach_id" value="<?php echo academyHtmlspecialchars($selectedCoachId, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="form-row form-row-single">
                     <div class="form-group">
@@ -512,7 +512,7 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
                         <div class="professional-select" id="coachSelect" data-placeholder="اختر المدرب من القائمة">
                             <button type="button" class="select-trigger" id="coachSelectTrigger" aria-expanded="false">
                                 <span class="select-trigger-text" id="coachSelectText">
-                                    <?php echo $selectedCoachMeta ? htmlspecialchars($selectedCoachMeta['full_name'], ENT_QUOTES, 'UTF-8') : 'اختر المدرب من القائمة'; ?>
+                                    <?php echo $selectedCoachMeta ? academyHtmlspecialchars($selectedCoachMeta['full_name'], ENT_QUOTES, 'UTF-8') : 'اختر المدرب من القائمة'; ?>
                                 </span>
                                 <span class="select-trigger-icon">▾</span>
                             </button>
@@ -527,18 +527,18 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
                                         <button
                                             type="button"
                                             class="select-option<?php echo (string) $availableCoach['id'] === $selectedCoachId ? ' is-selected' : ''; ?>"
-                                            data-value="<?php echo htmlspecialchars((string) $availableCoach['id'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-name="<?php echo htmlspecialchars($availableCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-phone="<?php echo htmlspecialchars($availableCoach['phone'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-value="<?php echo academyHtmlspecialchars((string) $availableCoach['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-name="<?php echo academyHtmlspecialchars($availableCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-phone="<?php echo academyHtmlspecialchars($availableCoach['phone'], ENT_QUOTES, 'UTF-8'); ?>"
                                             <?php if ($canViewCompensation): ?>
-                                                data-rate="<?php echo htmlspecialchars(number_format((float) $availableCoach['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?>"
+                                                data-rate="<?php echo academyHtmlspecialchars(number_format((float) $availableCoach['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?>"
                                             <?php endif; ?>
                                         >
-                                            <span class="option-name"><?php echo htmlspecialchars($availableCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <span class="option-name"><?php echo academyHtmlspecialchars($availableCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                                             <span class="option-meta">
-                                                📞 <?php echo htmlspecialchars($availableCoach['phone'], ENT_QUOTES, 'UTF-8'); ?>
+                                                📞 <?php echo academyHtmlspecialchars($availableCoach['phone'], ENT_QUOTES, 'UTF-8'); ?>
                                                 <?php if ($canViewCompensation): ?>
-                                                    • 💵 <?php echo htmlspecialchars(number_format((float) $availableCoach['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?>
+                                                    • 💵 <?php echo academyHtmlspecialchars(number_format((float) $availableCoach['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?>
                                                 <?php endif; ?>
                                             </span>
                                         </button>
@@ -551,9 +551,9 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
 
                         <div class="selected-coach-meta" id="selectedCoachMeta">
                             <?php if ($selectedCoachMeta): ?>
-                                <span>📞 <?php echo htmlspecialchars($selectedCoachMeta['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>📞 <?php echo academyHtmlspecialchars($selectedCoachMeta['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
                                 <?php if ($canViewCompensation): ?>
-                                    <span>💵 سعر الساعة: <?php echo htmlspecialchars(number_format((float) $selectedCoachMeta['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <span>💵 سعر الساعة: <?php echo academyHtmlspecialchars(number_format((float) $selectedCoachMeta['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </div>
@@ -567,7 +567,7 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
                             type="text"
                             id="work_hours"
                             name="work_hours"
-                            value="<?php echo htmlspecialchars($workHoursFieldValue, ENT_QUOTES, 'UTF-8'); ?>"
+                            value="<?php echo academyHtmlspecialchars($workHoursFieldValue, ENT_QUOTES, 'UTF-8'); ?>"
                             placeholder="مثال: 6 أو 7.5"
                             inputmode="decimal"
                             maxlength="5"
@@ -586,7 +586,7 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
 
                 <div class="form-actions">
                     <button type="submit" class="save-btn"<?php echo (!$hasAvailableCoaches && !$editAttendance) ? ' disabled' : ''; ?>>💾 حفظ السجل</button>
-                    <a href="<?php echo htmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn" id="clearBtn">🧹 سجل جديد</a>
+                    <a href="<?php echo academyHtmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn" id="clearBtn">🧹 سجل جديد</a>
                 </div>
             </form>
         </article>
@@ -600,10 +600,10 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
                 <div class="absence-list">
                     <?php foreach ($absentCoaches as $absentCoach): ?>
                         <div class="absence-item">
-                            <div class="absence-avatar"><?php echo htmlspecialchars(mb_substr($absentCoach['full_name'], 0, 1), ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="absence-avatar"><?php echo academyHtmlspecialchars(mb_substr($absentCoach['full_name'], 0, 1), ENT_QUOTES, 'UTF-8'); ?></div>
                             <div class="absence-content">
-                                <strong><?php echo htmlspecialchars($absentCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <span>📞 <?php echo htmlspecialchars($absentCoach['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <strong><?php echo academyHtmlspecialchars($absentCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <span>📞 <?php echo academyHtmlspecialchars($absentCoach['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </div>
                             <span class="status-badge absent-badge">غياب</span>
                         </div>
@@ -623,7 +623,7 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
                 <h2>📋 جدول المدربين الحاضرين</h2>
             </div>
             <?php if ($canViewCompensation): ?>
-                <div class="table-summary-chip">💵 إجمالي الأجر المتوقع: <?php echo htmlspecialchars(number_format($totalEstimatedAmount, 2), ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="table-summary-chip">💵 إجمالي الأجر المتوقع: <?php echo academyHtmlspecialchars(number_format($totalEstimatedAmount, 2), ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
         </div>
 
@@ -650,25 +650,25 @@ $workHoursFieldValue = $formWorkHoursValue !== ''
                                 <td><?php echo $index + 1; ?></td>
                                 <td>
                                     <div class="coach-cell">
-                                        <span class="coach-avatar"><?php echo htmlspecialchars(mb_substr($presentCoach['full_name'], 0, 1), ENT_QUOTES, 'UTF-8'); ?></span>
-                                        <span><?php echo htmlspecialchars($presentCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span class="coach-avatar"><?php echo academyHtmlspecialchars(mb_substr($presentCoach['full_name'], 0, 1), ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span><?php echo academyHtmlspecialchars($presentCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                                     </div>
                                 </td>
-                                <td><?php echo htmlspecialchars($presentCoach['phone'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $presentCoach['work_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars($presentCoach['phone'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $presentCoach['work_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php if ($canViewCompensation): ?>
-                                    <td><?php echo htmlspecialchars(number_format((float) $presentCoach['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars(number_format((float) $presentCoach['estimated_total'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars(number_format((float) $presentCoach['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars(number_format((float) $presentCoach['estimated_total'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php endif; ?>
                                 <td><span class="status-badge present-badge">حاضر</span></td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="<?php echo htmlspecialchars(buildCoachAttendancePageUrl(['date' => $selectedDate, 'edit' => $presentCoach['id']]), ENT_QUOTES, 'UTF-8'); ?>" class="edit-btn">✏️ تعديل</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildCoachAttendancePageUrl(['date' => $selectedDate, 'edit' => $presentCoach['id']]), ENT_QUOTES, 'UTF-8'); ?>" class="edit-btn">✏️ تعديل</a>
                                         <form method="POST" class="inline-form js-confirm-submit" data-confirm-message="هل تريد حذف سجل حضور هذا المدرب؟">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="attendance_id" value="<?php echo htmlspecialchars((string) $presentCoach['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="attendance_date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="attendance_id" value="<?php echo academyHtmlspecialchars((string) $presentCoach['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="attendance_date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                             <button type="submit" class="delete-btn">🗑️ حذف</button>
                                         </form>
                                     </div>

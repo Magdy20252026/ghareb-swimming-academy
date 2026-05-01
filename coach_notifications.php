@@ -127,7 +127,7 @@ $notifications = $notificationsStmt ? ($notificationsStmt->fetchAll(PDO::FETCH_A
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <?php endif; ?>
 
     <section class="admin-content-grid notifications-layout">
@@ -136,10 +136,10 @@ $notifications = $notificationsStmt ? ($notificationsStmt->fetchAll(PDO::FETCH_A
             <form method="POST" class="stack-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
                 <input type="hidden" name="notification_id" value="<?php echo (int) ($editNotification['id'] ?? 0); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(coachNotificationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(coachNotificationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="form-group">
                     <label for="notification_message">الإشعار</label>
-                    <textarea name="notification_message" id="notification_message" rows="6" required><?php echo htmlspecialchars((string) ($editNotification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    <textarea name="notification_message" id="notification_message" rows="6" required><?php echo academyHtmlspecialchars((string) ($editNotification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="primary-btn"><?php echo $editNotification === null ? 'حفظ' : 'تحديث'; ?></button>
@@ -155,15 +155,15 @@ $notifications = $notificationsStmt ? ($notificationsStmt->fetchAll(PDO::FETCH_A
                     <?php foreach ($notifications as $notification): ?>
                         <article class="item-card notification-card">
                             <div class="item-card-body">
-                                <strong class="notification-audience"><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) ($notification['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <p class="notification-message"><?php echo nl2br(htmlspecialchars((string) ($notification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
+                                <strong class="notification-audience"><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) ($notification['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <p class="notification-message"><?php echo nl2br(academyHtmlspecialchars((string) ($notification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
                             </div>
                             <div class="card-actions">
                                 <a href="coach_notifications.php?edit=<?php echo (int) ($notification['id'] ?? 0); ?>" class="primary-btn secondary-btn">تعديل</a>
                                 <form method="POST" class="inline-form">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="notification_id" value="<?php echo (int) ($notification['id'] ?? 0); ?>">
-                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(coachNotificationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(coachNotificationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
                                     <button type="submit" class="primary-btn danger-btn">حذف</button>
                                 </form>
                             </div>

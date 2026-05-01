@@ -1087,10 +1087,10 @@ $pageTitle = 'حضور السباحين - ' . $academyName;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
+    <title><?php echo academyHtmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
     <link rel="stylesheet" href="assets/css/player-attendance.css">
 </head>
-<body class="light-mode" data-page-url="<?php echo htmlspecialchars(PLAYER_ATTENDANCE_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>">
+<body class="light-mode" data-page-url="<?php echo academyHtmlspecialchars(PLAYER_ATTENDANCE_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>">
 <div class="player-attendance-page">
     <header class="page-header">
         <div class="header-stack">
@@ -1110,13 +1110,13 @@ $pageTitle = 'حضور السباحين - ' . $academyName;
     </header>
 
     <?php if ($message !== '' && $messageType !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <?php endif; ?>
 
     <section class="stats-grid">
         <div class="stat-card">
             <span>التاريخ</span>
-            <strong><?php echo htmlspecialchars(formatPlayerAttendanceDate($today), ENT_QUOTES, 'UTF-8'); ?></strong>
+            <strong><?php echo academyHtmlspecialchars(formatPlayerAttendanceDate($today), ENT_QUOTES, 'UTF-8'); ?></strong>
         </div>
         <div class="stat-card">
             <span>الحاضرون اليوم</span>
@@ -1128,17 +1128,17 @@ $pageTitle = 'حضور السباحين - ' . $academyName;
         </div>
         <div class="stat-card">
             <span>آخر تحضير</span>
-            <strong><?php echo htmlspecialchars($latestMarkedAt, ENT_QUOTES, 'UTF-8'); ?></strong>
+            <strong><?php echo academyHtmlspecialchars($latestMarkedAt, ENT_QUOTES, 'UTF-8'); ?></strong>
         </div>
     </section>
 
     <section class="scan-card">
         <div class="card-head card-head-inline">
             <h2>تحضير السباحين</h2>
-            <span class="meta-chip"><?php echo htmlspecialchars(formatPlayerAttendanceDate($today), ENT_QUOTES, 'UTF-8'); ?></span>
+            <span class="meta-chip"><?php echo academyHtmlspecialchars(formatPlayerAttendanceDate($today), ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
         <form method="POST" id="barcodeForm" class="scan-form" autocomplete="off">
-            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="action" value="scan_barcode">
             <div class="field-group grow barcode-field">
                 <label for="barcode">الباركود</label>
@@ -1155,7 +1155,7 @@ $pageTitle = 'حضور السباحين - ' . $academyName;
             <div class="card-head-actions">
                 <span class="meta-chip"><?php echo count($presentRecords); ?> سباح</span>
                 <form method="POST">
-                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                     <input type="hidden" name="action" value="export_xlsx">
                     <button type="submit" class="secondary-btn">استخراج كشف إكسل</button>
                 </form>
@@ -1202,43 +1202,43 @@ $pageTitle = 'حضور السباحين - ' . $academyName;
                                 <td class="attendance-avatar-cell">
                                     <div class="attendance-avatar-shell">
                                         <?php if ($playerImagePath !== null): ?>
-                                            <img class="attendance-avatar-image" src="<?php echo htmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('صورة ' . (string) ($record['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                                            <img class="attendance-avatar-image" src="<?php echo academyHtmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars('صورة ' . (string) ($record['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                                         <?php else: ?>
                                             <span class="attendance-avatar-placeholder">🏊</span>
                                         <?php endif; ?>
                                     </div>
                                 </td>
-                                <td><?php echo htmlspecialchars((string) ($record['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['player_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceDateTime((string) ($record['marked_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['guardian_phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceDate((string) ($record['birth_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['player_age'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['subscription_category'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['subscription_coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatAcademyTrainingSchedule((string) ($record['subscription_training_schedule'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['player_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceDateTime((string) ($record['marked_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['guardian_phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceDate((string) ($record['birth_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['player_age'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['subscription_category'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['subscription_coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatAcademyTrainingSchedule((string) ($record['subscription_training_schedule'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td><?php echo (int) ($record['available_exercises_count'] ?? 0); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceDate((string) ($record['subscription_start_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceDate((string) ($record['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceMoney($record['subscription_base_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceMoney($record['additional_discount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceMoney($record['subscription_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceMoney($record['paid_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceMoney($record['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($record['receipt_number'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(playerAttendanceBoolLabel($record['medical_report_required'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(playerAttendanceBoolLabel($record['federation_card_required'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) (($record['stars_count'] ?? '') !== '' ? $record['stars_count'] : '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatPlayerAttendanceDate((string) ($record['last_star_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceDate((string) ($record['subscription_start_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceDate((string) ($record['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceMoney($record['subscription_base_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceMoney($record['additional_discount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceMoney($record['subscription_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceMoney($record['paid_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceMoney($record['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($record['receipt_number'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(playerAttendanceBoolLabel($record['medical_report_required'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(playerAttendanceBoolLabel($record['federation_card_required'] ?? 0), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) (($record['stars_count'] ?? '') !== '' ? $record['stars_count'] : '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatPlayerAttendanceDate((string) ($record['last_star_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td>
                                     <form method="POST" class="note-form">
-                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($attendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                         <input type="hidden" name="action" value="save_note">
                                         <input type="hidden" name="record_id" value="<?php echo (int) ($record['id'] ?? 0); ?>">
-                                        <textarea name="note" rows="2"><?php echo htmlspecialchars((string) ($record['note'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <textarea name="note" rows="2"><?php echo academyHtmlspecialchars((string) ($record['note'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
                                         <button type="submit" class="tiny-btn">حفظ</button>
                                     </form>
                                 </td>

@@ -362,8 +362,8 @@ $expensesCsrfToken = getExpensesCsrfToken();
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -378,11 +378,11 @@ $expensesCsrfToken = getExpensesCsrfToken();
         </article>
         <article class="hero-card">
             <span>التاريخ</span>
-            <strong><?php echo htmlspecialchars(formatExpenseDateLabel($selectedDate), ENT_QUOTES, 'UTF-8'); ?></strong>
+            <strong><?php echo academyHtmlspecialchars(formatExpenseDateLabel($selectedDate), ENT_QUOTES, 'UTF-8'); ?></strong>
         </article>
         <article class="hero-card">
             <span>المستخدم</span>
-            <strong><?php echo htmlspecialchars($currentUsername, ENT_QUOTES, 'UTF-8'); ?></strong>
+            <strong><?php echo academyHtmlspecialchars($currentUsername, ENT_QUOTES, 'UTF-8'); ?></strong>
         </article>
     </section>
 
@@ -392,12 +392,12 @@ $expensesCsrfToken = getExpensesCsrfToken();
                 <h2>التاريخ</h2>
             </div>
             <div class="date-controls">
-                <a href="<?php echo htmlspecialchars(buildExpensesPageUrl(['date' => $previousDate]), ENT_QUOTES, 'UTF-8'); ?>" class="nav-btn">اليوم السابق</a>
+                <a href="<?php echo academyHtmlspecialchars(buildExpensesPageUrl(['date' => $previousDate]), ENT_QUOTES, 'UTF-8'); ?>" class="nav-btn">اليوم السابق</a>
                 <form method="GET" class="date-form">
-                    <input type="date" name="date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>" max="9999-12-31" required>
+                    <input type="date" name="date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>" max="9999-12-31" required>
                     <button type="submit" class="primary-btn">عرض</button>
                 </form>
-                <a href="<?php echo htmlspecialchars(buildExpensesPageUrl(['date' => $nextDate]), ENT_QUOTES, 'UTF-8'); ?>" class="nav-btn">اليوم التالي</a>
+                <a href="<?php echo academyHtmlspecialchars(buildExpensesPageUrl(['date' => $nextDate]), ENT_QUOTES, 'UTF-8'); ?>" class="nav-btn">اليوم التالي</a>
             </div>
         </div>
 
@@ -421,8 +421,8 @@ $expensesCsrfToken = getExpensesCsrfToken();
 
             <form method="POST" class="expense-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($expensesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="expense_date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($expensesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="expense_date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="field-group">
                     <label for="expenseDescription">البيان</label>
@@ -431,7 +431,7 @@ $expensesCsrfToken = getExpensesCsrfToken();
                         id="expenseDescription"
                         name="description"
                         maxlength="<?php echo MAX_EXPENSE_DESCRIPTION_LENGTH; ?>"
-                        value="<?php echo htmlspecialchars($formDescription, ENT_QUOTES, 'UTF-8'); ?>"
+                        value="<?php echo academyHtmlspecialchars($formDescription, ENT_QUOTES, 'UTF-8'); ?>"
                         required
                     >
                 </div>
@@ -443,7 +443,7 @@ $expensesCsrfToken = getExpensesCsrfToken();
                         id="expenseAmount"
                         name="amount"
                         inputmode="decimal"
-                        value="<?php echo htmlspecialchars($formAmount, ENT_QUOTES, 'UTF-8'); ?>"
+                        value="<?php echo academyHtmlspecialchars($formAmount, ENT_QUOTES, 'UTF-8'); ?>"
                         required
                     >
                 </div>
@@ -476,15 +476,15 @@ $expensesCsrfToken = getExpensesCsrfToken();
                             <?php foreach ($expenseRecords as $index => $expense): ?>
                                 <tr>
                                     <td data-label="#"><?php echo $index + 1; ?></td>
-                                    <td data-label="البيان"><?php echo htmlspecialchars((string) ($expense['description'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td data-label="البيان"><?php echo academyHtmlspecialchars((string) ($expense['description'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td data-label="المبلغ" class="amount-cell"><?php echo formatExpenseAmount((float) ($expense['amount'] ?? 0)); ?> ج.م</td>
-                                    <td data-label="المستخدم"><?php echo htmlspecialchars((string) ($expense['created_by'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td data-label="الوقت"><?php echo htmlspecialchars((string) ($expense['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td data-label="المستخدم"><?php echo academyHtmlspecialchars((string) ($expense['created_by'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td data-label="الوقت"><?php echo academyHtmlspecialchars((string) ($expense['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td data-label="حذف">
                                         <form method="POST" class="inline-form">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($expensesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="expense_date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($expensesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="expense_date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
                                             <input type="hidden" name="expense_id" value="<?php echo (int) ($expense['id'] ?? 0); ?>">
                                             <button type="submit" class="delete-btn">حذف</button>
                                         </form>
@@ -526,11 +526,11 @@ $expensesCsrfToken = getExpensesCsrfToken();
                             <?php $dayDate = (string) ($dayTotal['expense_date'] ?? ''); ?>
                             <tr>
                                 <td data-label="#"><?php echo $index + 1; ?></td>
-                                <td data-label="التاريخ"><?php echo htmlspecialchars(formatExpenseDateLabel($dayDate), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="التاريخ"><?php echo academyHtmlspecialchars(formatExpenseDateLabel($dayDate), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="عدد المصروفات"><?php echo (int) ($dayTotal['total_records'] ?? 0); ?></td>
                                 <td data-label="الإجمالي" class="amount-cell"><?php echo formatExpenseAmount((float) ($dayTotal['total_amount'] ?? 0)); ?> ج.م</td>
                                 <td data-label="عرض">
-                                    <a href="<?php echo htmlspecialchars(buildExpensesPageUrl(['date' => $dayDate]), ENT_QUOTES, 'UTF-8'); ?>" class="table-link">عرض</a>
+                                    <a href="<?php echo academyHtmlspecialchars(buildExpensesPageUrl(['date' => $dayDate]), ENT_QUOTES, 'UTF-8'); ?>" class="table-link">عرض</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

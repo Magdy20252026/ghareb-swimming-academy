@@ -159,7 +159,7 @@ function swimmerPortalBarcodeImageSrc(string $value): ?string
     }
 
     $totalWidth = (int) (($x + $quietZone) * $moduleWidth);
-    $label = htmlspecialchars($barcode, ENT_QUOTES, 'UTF-8');
+    $label = academyHtmlspecialchars($barcode, ENT_QUOTES, 'UTF-8');
     $background = sprintf('<rect width="%d" height="%d" fill="#ffffff"></rect>', $totalWidth, (int) $height);
     $barsMarkup = implode('', $bars);
 
@@ -1092,7 +1092,7 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة السباحين - <?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></title>
+    <title>بوابة السباحين - <?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></title>
     <link rel="stylesheet" href="assets/css/swimmer-portal.css?v=<?php echo $swimmerPortalCssVersion; ?>">
 </head>
 <body class="light-mode" data-theme-key="swimmer-portal-theme">
@@ -1103,14 +1103,14 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                 <div class="brand-block">
                     <div class="brand-logo">
                         <?php if ($academyLogoPath !== null): ?>
-                            <img src="<?php echo htmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
+                            <img src="<?php echo academyHtmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
                         <?php else: ?>
-                            <span><?php echo htmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span><?php echo academyHtmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
                     <div>
                         <span class="page-badge">🏊 بوابة السباحين</span>
-                        <h1><?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></h1>
+                        <h1><?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></h1>
                     </div>
                 </div>
                 <div class="theme-switch-box">
@@ -1124,14 +1124,14 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
             </div>
 
             <?php if ($message !== ''): ?>
-                <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
 
             <form method="POST" class="portal-login-form" autocomplete="off">
                 <input type="hidden" name="action" value="login">
                 <div class="form-group">
                     <label for="barcode">باركود السباح</label>
-                    <input type="text" name="barcode" id="barcode" value="<?php echo htmlspecialchars($submittedBarcode, ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="text" name="barcode" id="barcode" value="<?php echo academyHtmlspecialchars($submittedBarcode, ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="password">كلمة السر</label>
@@ -1156,15 +1156,15 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                 <div class="sidebar-top-block">
                     <div class="player-profile-avatar <?php echo $playerImagePath === null ? 'player-profile-avatar-logo' : ''; ?>">
                         <?php if ($playerImagePath !== null): ?>
-                            <img src="<?php echo htmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('صورة ' . (string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                            <img src="<?php echo academyHtmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars('صورة ' . (string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                         <?php elseif ($academyLogoPath !== null): ?>
-                            <img src="<?php echo htmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
+                            <img src="<?php echo academyHtmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
                         <?php else: ?>
-                            <span><?php echo htmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span><?php echo academyHtmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
                         <?php endif; ?>
                     </div>
-                    <h2><?php echo htmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></h2>
-                    <span class="sidebar-subtitle"><?php echo htmlspecialchars((string) ($player['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span>
+                    <h2><?php echo academyHtmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></h2>
+                    <span class="sidebar-subtitle"><?php echo academyHtmlspecialchars((string) ($player['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </div>
                 <nav class="sidebar-nav">
                     <?php foreach ($menuItems as $sectionKey => $sectionItem): ?>
@@ -1174,11 +1174,11 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                         $sectionAccent = (string) ($sectionItem['accent'] ?? 'cyan');
                         ?>
                         <a
-                            href="swimmer_portal.php?section=<?php echo htmlspecialchars($sectionKey, ENT_QUOTES, 'UTF-8'); ?>"
-                            class="sidebar-link sidebar-accent-<?php echo htmlspecialchars($sectionAccent, ENT_QUOTES, 'UTF-8'); ?> <?php echo $activeSection === $sectionKey ? 'active' : ''; ?>"
+                            href="swimmer_portal.php?section=<?php echo academyHtmlspecialchars($sectionKey, ENT_QUOTES, 'UTF-8'); ?>"
+                            class="sidebar-link sidebar-accent-<?php echo academyHtmlspecialchars($sectionAccent, ENT_QUOTES, 'UTF-8'); ?> <?php echo $activeSection === $sectionKey ? 'active' : ''; ?>"
                         >
-                            <span class="sidebar-link-icon" aria-hidden="true"><?php echo htmlspecialchars($sectionIcon, ENT_QUOTES, 'UTF-8'); ?></span>
-                            <span class="sidebar-link-label"><?php echo htmlspecialchars($sectionLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span class="sidebar-link-icon" aria-hidden="true"><?php echo academyHtmlspecialchars($sectionIcon, ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span class="sidebar-link-label"><?php echo academyHtmlspecialchars($sectionLabel, ENT_QUOTES, 'UTF-8'); ?></span>
                         </a>
                     <?php endforeach; ?>
                 </nav>
@@ -1191,7 +1191,7 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
             <main class="portal-main">
                 <header class="portal-main-header">
                     <div>
-                        <span class="page-badge"><?php echo htmlspecialchars($activeMenuLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span class="page-badge"><?php echo academyHtmlspecialchars($activeMenuLabel, ENT_QUOTES, 'UTF-8'); ?></span>
                         <h1>لوحة تحكم حساب السباح</h1>
                     </div>
                     <div class="theme-switch-box">
@@ -1205,7 +1205,7 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                 </header>
 
                 <?php if ($message !== ''): ?>
-                    <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
                 <?php endif; ?>
 
                 <?php if ($activeSection === 'info'): ?>
@@ -1213,17 +1213,17 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                         <div class="info-hero-card">
                             <div class="player-profile-avatar info-hero-avatar <?php echo $playerImagePath === null ? 'player-profile-avatar-logo' : ''; ?>">
                                 <?php if ($playerImagePath !== null): ?>
-                                    <img src="<?php echo htmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('صورة ' . (string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <img src="<?php echo academyHtmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars('صورة ' . (string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                                 <?php elseif ($academyLogoPath !== null): ?>
-                                    <img src="<?php echo htmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
+                                    <img src="<?php echo academyHtmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
                                 <?php else: ?>
-                                    <span><?php echo htmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <span><?php echo academyHtmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
                                 <?php endif; ?>
                             </div>
                             <div class="info-hero-content">
                                 <span class="page-badge">👤 معلومات السباح</span>
-                                <h2><?php echo htmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></h2>
-                                <p><?php echo htmlspecialchars((string) (($player['subscription_name'] ?? '') !== '' ? $player['subscription_name'] : 'لا توجد مجموعة مضافة حالياً'), ENT_QUOTES, 'UTF-8'); ?></p>
+                                <h2><?php echo academyHtmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></h2>
+                                <p><?php echo academyHtmlspecialchars((string) (($player['subscription_name'] ?? '') !== '' ? $player['subscription_name'] : 'لا توجد مجموعة مضافة حالياً'), ENT_QUOTES, 'UTF-8'); ?></p>
                             </div>
                         </div>
                         <div class="overview-grid">
@@ -1234,16 +1234,16 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                                 $rowValue = (string) ($infoRow['value'] ?? '—');
                                 ?>
                                 <article class="overview-card <?php echo $rowKey === SWIMMER_PORTAL_INFO_ROW_BARCODE ? 'barcode-card' : ''; ?>">
-                                    <span><?php echo htmlspecialchars($rowLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <span><?php echo academyHtmlspecialchars($rowLabel, ENT_QUOTES, 'UTF-8'); ?></span>
                                     <?php if ($rowKey === SWIMMER_PORTAL_INFO_ROW_BARCODE && $playerBarcodeImageSrc !== null): ?>
                                         <div class="barcode-display">
                                             <div class="barcode-graphic">
-                                                <img class="barcode-svg" src="<?php echo htmlspecialchars($playerBarcodeImageSrc, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($playerBarcodeValue, ENT_QUOTES, 'UTF-8'); ?>">
+                                                <img class="barcode-svg" src="<?php echo academyHtmlspecialchars($playerBarcodeImageSrc, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars($playerBarcodeValue, ENT_QUOTES, 'UTF-8'); ?>">
                                             </div>
-                                            <strong class="barcode-value"><?php echo htmlspecialchars($rowValue, ENT_QUOTES, 'UTF-8'); ?></strong>
+                                            <strong class="barcode-value"><?php echo academyHtmlspecialchars($rowValue, ENT_QUOTES, 'UTF-8'); ?></strong>
                                         </div>
                                     <?php else: ?>
-                                        <strong><?php echo htmlspecialchars($rowValue, ENT_QUOTES, 'UTF-8'); ?></strong>
+                                        <strong><?php echo academyHtmlspecialchars($rowValue, ENT_QUOTES, 'UTF-8'); ?></strong>
                                     <?php endif; ?>
                                 </article>
                             <?php endforeach; ?>
@@ -1262,7 +1262,7 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                             </article>
                             <article class="overview-card">
                                 <span>آخر تحديث</span>
-                                <strong><?php echo htmlspecialchars(swimmerPortalAttendanceLastUpdated($attendanceRecords), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <strong><?php echo academyHtmlspecialchars(swimmerPortalAttendanceLastUpdated($attendanceRecords), ENT_QUOTES, 'UTF-8'); ?></strong>
                             </article>
                         </div>
                     </section>
@@ -1273,36 +1273,36 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                                     <article class="attendance-history-card">
                                         <div class="attendance-card-head">
                                             <div>
-                                                <strong><?php echo htmlspecialchars(swimmerPortalFormatDate((string) ($attendanceRecord['attendance_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                <span><?php echo htmlspecialchars((string) ($attendanceRecord['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span>
+                                                <strong><?php echo academyHtmlspecialchars(swimmerPortalFormatDate((string) ($attendanceRecord['attendance_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                <span><?php echo academyHtmlspecialchars((string) ($attendanceRecord['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span>
                                             </div>
                                             <span class="attendance-status-badge present">حاضر</span>
                                         </div>
                                         <div class="attendance-details-grid">
                                             <div class="attendance-detail-item">
                                                 <span>المستوى</span>
-                                                <strong><?php echo htmlspecialchars((string) ($attendanceRecord['subscription_category'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                <strong><?php echo academyHtmlspecialchars((string) ($attendanceRecord['subscription_category'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
                                             </div>
                                             <div class="attendance-detail-item">
                                                 <span>الفرع</span>
-                                                <strong><?php echo htmlspecialchars((string) ($attendanceRecord['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                <strong><?php echo academyHtmlspecialchars((string) ($attendanceRecord['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
                                             </div>
                                             <div class="attendance-detail-item">
                                                 <span>المدرب</span>
-                                                <strong><?php echo htmlspecialchars((string) ($attendanceRecord['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                <strong><?php echo academyHtmlspecialchars((string) ($attendanceRecord['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
                                             </div>
                                             <div class="attendance-detail-item">
                                                 <span>الأيام والساعة</span>
-                                                <strong><?php echo htmlspecialchars(formatAcademyTrainingSchedule((string) ($attendanceRecord['training_schedule'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                <strong><?php echo academyHtmlspecialchars(formatAcademyTrainingSchedule((string) ($attendanceRecord['training_schedule'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
                                             </div>
                                             <div class="attendance-detail-item">
                                                 <span>وقت التسجيل</span>
-                                                <strong><?php echo htmlspecialchars(swimmerPortalFormatDateTime((string) ($attendanceRecord['marked_at'] ?? $attendanceRecord['attendance_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                <strong><?php echo academyHtmlspecialchars(swimmerPortalFormatDateTime((string) ($attendanceRecord['marked_at'] ?? $attendanceRecord['attendance_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
                                             </div>
                                         </div>
                                         <div class="attendance-note-box">
                                             <span>الملاحظة</span>
-                                            <p><?php echo htmlspecialchars((string) (($attendanceRecord['note'] ?? '') !== '' ? $attendanceRecord['note'] : 'لا توجد ملاحظات على هذا اليوم.'), ENT_QUOTES, 'UTF-8'); ?></p>
+                                            <p><?php echo academyHtmlspecialchars((string) (($attendanceRecord['note'] ?? '') !== '' ? $attendanceRecord['note'] : 'لا توجد ملاحظات على هذا اليوم.'), ENT_QUOTES, 'UTF-8'); ?></p>
                                         </div>
                                     </article>
                                 <?php endforeach; ?>
@@ -1317,14 +1317,14 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                             <h2>دكتور التغذية</h2>
                             <div class="chat-history">
                                 <?php foreach ($nutritionHistory as $chatItem): ?>
-                                    <div class="chat-bubble swimmer-bubble"><?php echo htmlspecialchars((string) ($chatItem['prompt'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></div>
-                                    <div class="chat-bubble ai-bubble"><?php echo nl2br(htmlspecialchars((string) ($chatItem['response'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></div>
+                                    <div class="chat-bubble swimmer-bubble"><?php echo academyHtmlspecialchars((string) ($chatItem['prompt'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></div>
+                                    <div class="chat-bubble ai-bubble"><?php echo nl2br(academyHtmlspecialchars((string) ($chatItem['response'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></div>
                                 <?php endforeach; ?>
                             </div>
                         </div>
                         <form method="POST" class="portal-form-card stack-form" autocomplete="off">
                             <input type="hidden" name="action" value="nutrition_chat">
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
                             <input type="hidden" name="redirect_section" value="nutrition">
                             <div class="form-group">
                                 <label for="age">السن</label>
@@ -1349,12 +1349,12 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                                 <article class="store-card">
                                     <div class="store-image-wrap">
                                         <?php if ($productImagePath !== null): ?>
-                                            <img src="<?php echo htmlspecialchars($productImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars((string) ($product['product_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                                            <img src="<?php echo academyHtmlspecialchars($productImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars((string) ($product['product_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                                         <?php else: ?>
                                             <div class="item-image-placeholder">🛍️</div>
                                         <?php endif; ?>
                                     </div>
-                                    <strong><?php echo htmlspecialchars((string) ($product['product_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                    <strong><?php echo academyHtmlspecialchars((string) ($product['product_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
                                     <span><?php echo number_format((float) ($product['product_price'] ?? 0), 2); ?> ج.م</span>
                                 </article>
                             <?php endforeach; ?>
@@ -1406,16 +1406,16 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                         <?php foreach ($requiredFiles as $requiredFile): ?>
                             <article class="file-box">
                                 <div class="file-box-head">
-                                    <strong><?php echo htmlspecialchars($requiredFile['title'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                    <strong><?php echo academyHtmlspecialchars($requiredFile['title'], ENT_QUOTES, 'UTF-8'); ?></strong>
                                     <?php if ($requiredFile['single_path'] !== null): ?>
-                                        <a href="<?php echo htmlspecialchars($requiredFile['single_path'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="secondary-link">عرض</a>
+                                        <a href="<?php echo academyHtmlspecialchars($requiredFile['single_path'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="secondary-link">عرض</a>
                                     <?php endif; ?>
                                 </div>
                                 <?php if (!empty($requiredFile['multiple'])): ?>
                                     <div class="file-gallery">
                                         <?php foreach ($requiredFile['paths'] as $filePath): ?>
-                                            <a href="<?php echo htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="gallery-item">
-                                                <img src="<?php echo htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($requiredFile['title'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <a href="<?php echo academyHtmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="gallery-item">
+                                                <img src="<?php echo academyHtmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars($requiredFile['title'], ENT_QUOTES, 'UTF-8'); ?>">
                                             </a>
                                         <?php endforeach; ?>
                                         <?php if ($requiredFile['paths'] === []): ?>
@@ -1425,7 +1425,7 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                                 <?php else: ?>
                                     <div class="single-file-preview">
                                         <?php if ($requiredFile['single_path'] !== null): ?>
-                                            <img src="<?php echo htmlspecialchars($requiredFile['single_path'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($requiredFile['title'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <img src="<?php echo academyHtmlspecialchars($requiredFile['single_path'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars($requiredFile['title'], ENT_QUOTES, 'UTF-8'); ?>">
                                         <?php else: ?>
                                             <div class="empty-state">غير مرفوع</div>
                                         <?php endif; ?>
@@ -1433,18 +1433,18 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                                 <?php endif; ?>
                                 <form method="POST" enctype="multipart/form-data" class="stack-form" autocomplete="off">
                                     <input type="hidden" name="action" value="upload_file">
-                                    <input type="hidden" name="file_type" value="<?php echo htmlspecialchars($requiredFile['type'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="file_type" value="<?php echo academyHtmlspecialchars($requiredFile['type'], ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="redirect_section" value="files">
-                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
-                                    <input type="file" name="<?php echo htmlspecialchars($requiredFile['input_name'], ENT_QUOTES, 'UTF-8'); ?>" accept="image/*" <?php echo !empty($requiredFile['multiple']) ? 'multiple' : ''; ?> required>
+                                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="file" name="<?php echo academyHtmlspecialchars($requiredFile['input_name'], ENT_QUOTES, 'UTF-8'); ?>" accept="image/*" <?php echo !empty($requiredFile['multiple']) ? 'multiple' : ''; ?> required>
                                     <button type="submit" class="primary-btn">رفع</button>
                                 </form>
                                 <?php if ($requiredFile['paths'] !== []): ?>
                                     <form method="POST" class="inline-form" autocomplete="off">
                                         <input type="hidden" name="action" value="delete_file">
-                                        <input type="hidden" name="file_type" value="<?php echo htmlspecialchars($requiredFile['type'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="file_type" value="<?php echo academyHtmlspecialchars($requiredFile['type'], ENT_QUOTES, 'UTF-8'); ?>">
                                         <input type="hidden" name="redirect_section" value="files">
-                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
                                         <button type="submit" class="primary-btn danger-btn">حذف</button>
                                     </form>
                                 <?php endif; ?>
@@ -1457,7 +1457,7 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                             <form method="POST" enctype="multipart/form-data" class="portal-form-card stack-form" autocomplete="off">
                                 <input type="hidden" name="action" value="card_request">
                                 <input type="hidden" name="redirect_section" value="card-request">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <div class="form-group">
                                     <label for="card_request_image">صورة السباح</label>
                                     <input type="file" name="card_request_image" id="card_request_image" accept="image/*" required>
@@ -1476,12 +1476,12 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                                 <article class="store-card">
                                     <div class="store-image-wrap">
                                         <?php if ($requestImagePath !== null): ?>
-                                            <img src="<?php echo htmlspecialchars($requestImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="طلب الكارنية">
+                                            <img src="<?php echo academyHtmlspecialchars($requestImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="طلب الكارنية">
                                         <?php else: ?>
                                             <div class="item-image-placeholder">🪪</div>
                                         <?php endif; ?>
                                     </div>
-                                    <strong><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) ($request['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                    <strong><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) ($request['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></strong>
                                     <span class="status-chip <?php echo !empty($request['approved_exported_at']) ? 'success-chip' : 'warning-chip'; ?>">
                                         <?php echo !empty($request['approved_exported_at']) ? 'تمت الموافقة' : 'قيد المراجعة'; ?>
                                     </span>
@@ -1493,8 +1493,8 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                     <section class="portal-section-card notifications-grid">
                         <?php foreach ($notifications as $notification): ?>
                             <article class="notification-card">
-                                <strong><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) ($notification['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <p><?php echo nl2br(htmlspecialchars((string) ($notification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
+                                <strong><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) ($notification['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <p><?php echo nl2br(academyHtmlspecialchars((string) ($notification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
                             </article>
                         <?php endforeach; ?>
                     </section>
@@ -1504,13 +1504,13 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                             <?php foreach ($offers as $offer): ?>
                                 <article class="notification-card offer-card">
                                     <div class="split-meta">
-                                        <strong><?php echo htmlspecialchars((string) ($offer['offer_title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                        <strong><?php echo academyHtmlspecialchars((string) ($offer['offer_title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
                                         <span class="status-chip success-chip">عرض متاح</span>
                                     </div>
-                                    <p><?php echo nl2br(htmlspecialchars((string) ($offer['offer_description'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
+                                    <p><?php echo nl2br(academyHtmlspecialchars((string) ($offer['offer_description'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
                                     <div class="details-grid compact-details-grid">
-                                        <div><span>من</span><strong><?php echo htmlspecialchars(swimmerPortalFormatDate((string) ($offer['valid_from'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                                        <div><span>إلى</span><strong><?php echo htmlspecialchars(swimmerPortalFormatDate((string) ($offer['valid_until'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                                        <div><span>من</span><strong><?php echo academyHtmlspecialchars(swimmerPortalFormatDate((string) ($offer['valid_from'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                                        <div><span>إلى</span><strong><?php echo academyHtmlspecialchars(swimmerPortalFormatDate((string) ($offer['valid_until'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                                     </div>
                                 </article>
                             <?php endforeach; ?>
@@ -1523,25 +1523,25 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                         <div class="overview-grid attendance-summary-grid">
                             <article class="overview-card">
                                 <span>تقييم هذا الشهر</span>
-                                <strong><?php echo htmlspecialchars(swimmerPortalEvaluationStars((int) ($currentGroupEvaluation['evaluation_score'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <strong><?php echo academyHtmlspecialchars(swimmerPortalEvaluationStars((int) ($currentGroupEvaluation['evaluation_score'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></strong>
                             </article>
                             <article class="overview-card">
                                 <span>تقييم الشهر السابق</span>
-                                <strong><?php echo htmlspecialchars(swimmerPortalEvaluationStars((int) ($previousGroupEvaluation['evaluation_score'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <strong><?php echo academyHtmlspecialchars(swimmerPortalEvaluationStars((int) ($previousGroupEvaluation['evaluation_score'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></strong>
                             </article>
                             <article class="overview-card">
                                 <span>المجموعة</span>
-                                <strong><?php echo htmlspecialchars((string) ($player['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <strong><?php echo academyHtmlspecialchars((string) ($player['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
                             </article>
                         </div>
                         <div class="notifications-grid">
                             <article class="notification-card">
-                                <strong><?php echo htmlspecialchars($currentEvaluationMonth, ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <p><?php echo nl2br(htmlspecialchars((string) (($currentGroupEvaluation['evaluation_notes'] ?? '') !== '' ? $currentGroupEvaluation['evaluation_notes'] : 'لا توجد ملاحظات مضافة لهذا الشهر.'), ENT_QUOTES, 'UTF-8')); ?></p>
+                                <strong><?php echo academyHtmlspecialchars($currentEvaluationMonth, ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <p><?php echo nl2br(academyHtmlspecialchars((string) (($currentGroupEvaluation['evaluation_notes'] ?? '') !== '' ? $currentGroupEvaluation['evaluation_notes'] : 'لا توجد ملاحظات مضافة لهذا الشهر.'), ENT_QUOTES, 'UTF-8')); ?></p>
                             </article>
                             <article class="notification-card">
-                                <strong><?php echo htmlspecialchars($previousEvaluationMonth, ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <p><?php echo nl2br(htmlspecialchars((string) (($previousGroupEvaluation['evaluation_notes'] ?? '') !== '' ? $previousGroupEvaluation['evaluation_notes'] : 'لا توجد ملاحظات مضافة للشهر السابق.'), ENT_QUOTES, 'UTF-8')); ?></p>
+                                <strong><?php echo academyHtmlspecialchars($previousEvaluationMonth, ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <p><?php echo nl2br(academyHtmlspecialchars((string) (($previousGroupEvaluation['evaluation_notes'] ?? '') !== '' ? $previousGroupEvaluation['evaluation_notes'] : 'لا توجد ملاحظات مضافة للشهر السابق.'), ENT_QUOTES, 'UTF-8')); ?></p>
                             </article>
                         </div>
                     </section>
@@ -1552,14 +1552,14 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                                 <section class="journey-path-card">
                                     <header class="journey-path-head">
                                         <span>المشوار</span>
-                                        <strong><?php echo htmlspecialchars((string) ($journeyPath['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                        <strong><?php echo academyHtmlspecialchars((string) ($journeyPath['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
                                     </header>
                                     <div class="journey-grid">
                                         <?php foreach (($journeyPath['levels'] ?? []) as $journeyLevel): ?>
                                             <?php $isCurrentLevel = (string) ($player['subscription_category'] ?? '') === (string) $journeyLevel; ?>
                                             <article class="journey-card <?php echo $isCurrentLevel ? 'journey-card-active' : ''; ?>">
                                                 <span><?php echo $isCurrentLevel ? 'المستوى الحالي' : 'مستوى'; ?></span>
-                                                <strong><?php echo htmlspecialchars((string) $journeyLevel, ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                <strong><?php echo academyHtmlspecialchars((string) $journeyLevel, ENT_QUOTES, 'UTF-8'); ?></strong>
                                             </article>
                                         <?php endforeach; ?>
                                     </div>
@@ -1572,7 +1572,7 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
                         <form method="POST" class="portal-form-card stack-form" autocomplete="off">
                             <input type="hidden" name="action" value="change_password">
                             <input type="hidden" name="redirect_section" value="password">
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerPortalToken(), ENT_QUOTES, 'UTF-8'); ?>">
                             <div class="form-group">
                                 <label for="current_password">كلمة السر الحالية</label>
                                 <input type="password" name="current_password" id="current_password" required>
@@ -1595,12 +1595,12 @@ $swimmerPortalJsVersion = is_file($swimmerPortalJsPath) ? substr(sha1((string) f
 
     <?php if ($socialLinks !== []): ?>
         <footer class="portal-footer">
-            <strong>تابع <?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></strong>
+            <strong>تابع <?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></strong>
             <div class="portal-footer-socials">
                 <?php foreach ($socialLinks as $platformKey => $socialLink): ?>
-                    <a href="<?php echo htmlspecialchars($socialLink['url'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="portal-social-link portal-social-link-<?php echo htmlspecialchars($platformKey, ENT_QUOTES, 'UTF-8'); ?>" aria-label="<?php echo htmlspecialchars($socialLink['label'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <span class="portal-social-mark"><?php echo htmlspecialchars($socialLink['mark'], ENT_QUOTES, 'UTF-8'); ?></span>
-                        <span><?php echo htmlspecialchars($socialLink['label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                    <a href="<?php echo academyHtmlspecialchars($socialLink['url'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="portal-social-link portal-social-link-<?php echo academyHtmlspecialchars($platformKey, ENT_QUOTES, 'UTF-8'); ?>" aria-label="<?php echo academyHtmlspecialchars($socialLink['label'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <span class="portal-social-mark"><?php echo academyHtmlspecialchars($socialLink['mark'], ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span><?php echo academyHtmlspecialchars($socialLink['label'], ENT_QUOTES, 'UTF-8'); ?></span>
                     </a>
                 <?php endforeach; ?>
             </div>

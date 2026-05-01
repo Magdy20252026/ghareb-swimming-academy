@@ -176,7 +176,7 @@ $offers = $offersStmt ? ($offersStmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <?php endif; ?>
 
     <section class="admin-content-grid notifications-layout">
@@ -185,23 +185,23 @@ $offers = $offersStmt ? ($offersStmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
             <form method="POST" class="stack-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
                 <input type="hidden" name="offer_id" value="<?php echo (int) ($editOffer['id'] ?? 0); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(offersToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(offersToken(), ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="form-group">
                     <label for="offer_title">عنوان العرض</label>
-                    <input type="text" name="offer_title" id="offer_title" value="<?php echo htmlspecialchars((string) ($editOffer['offer_title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="text" name="offer_title" id="offer_title" value="<?php echo academyHtmlspecialchars((string) ($editOffer['offer_title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="offer_description">تفاصيل العرض</label>
-                    <textarea name="offer_description" id="offer_description" rows="6" required><?php echo htmlspecialchars((string) ($editOffer['offer_description'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    <textarea name="offer_description" id="offer_description" rows="6" required><?php echo academyHtmlspecialchars((string) ($editOffer['offer_description'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
                 </div>
                 <div class="split-grid">
                     <div class="form-group">
                         <label for="valid_from">يبدأ من</label>
-                        <input type="date" name="valid_from" id="valid_from" value="<?php echo htmlspecialchars((string) ($editOffer['valid_from'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="date" name="valid_from" id="valid_from" value="<?php echo academyHtmlspecialchars((string) ($editOffer['valid_from'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                     <div class="form-group">
                         <label for="valid_until">ينتهي في</label>
-                        <input type="date" name="valid_until" id="valid_until" value="<?php echo htmlspecialchars((string) ($editOffer['valid_until'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="date" name="valid_until" id="valid_until" value="<?php echo academyHtmlspecialchars((string) ($editOffer['valid_until'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                 </div>
                 <label class="toggle-line">
@@ -222,24 +222,24 @@ $offers = $offersStmt ? ($offersStmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
                     <article class="item-card notification-card">
                         <div class="item-card-body">
                             <div class="split-meta">
-                                <strong><?php echo htmlspecialchars((string) ($offer['offer_title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <strong><?php echo academyHtmlspecialchars((string) ($offer['offer_title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
                                 <span class="status-chip <?php echo !empty($offer['is_active']) ? 'success-chip' : 'muted-chip'; ?>">
                                     <?php echo !empty($offer['is_active']) ? 'مفعل' : 'غير مفعل'; ?>
                                 </span>
                             </div>
-                            <p class="notification-message"><?php echo nl2br(htmlspecialchars((string) ($offer['offer_description'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
+                            <p class="notification-message"><?php echo nl2br(academyHtmlspecialchars((string) ($offer['offer_description'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
                             <div class="details-grid compact-details-grid">
-                                <div><span>من</span><strong><?php echo htmlspecialchars(offersFormatDate($offer['valid_from'] ?? null), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                                <div><span>إلى</span><strong><?php echo htmlspecialchars(offersFormatDate($offer['valid_until'] ?? null), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                                <div><span>من</span><strong><?php echo academyHtmlspecialchars(offersFormatDate($offer['valid_from'] ?? null), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                                <div><span>إلى</span><strong><?php echo academyHtmlspecialchars(offersFormatDate($offer['valid_until'] ?? null), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                             </div>
-                            <span class="notification-date"><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) ($offer['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span class="notification-date"><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) ($offer['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></span>
                         </div>
                         <div class="card-actions">
                             <a href="offers.php?edit=<?php echo (int) ($offer['id'] ?? 0); ?>" class="primary-btn secondary-btn">تعديل</a>
                             <form method="POST" class="inline-form">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="offer_id" value="<?php echo (int) ($offer['id'] ?? 0); ?>">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(offersToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(offersToken(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <button type="submit" class="primary-btn danger-btn">حذف</button>
                             </form>
                         </div>

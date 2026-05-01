@@ -851,7 +851,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
 </head>
 <body
     class="light-mode"
-    data-administrator-images-base-path="<?php echo htmlspecialchars($administratorImagesPublicDirectory); ?>"
+    data-administrator-images-base-path="<?php echo academyHtmlspecialchars($administratorImagesPublicDirectory); ?>"
     data-default-confirm-message="هل أنت متأكد؟"
 >
 
@@ -878,11 +878,11 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
 
     <?php if (!empty($message)): ?>
         <div
-            class="message-box <?php echo htmlspecialchars($messageType); ?>"
-            data-message-context="<?php echo htmlspecialchars($messageContext); ?>"
+            class="message-box <?php echo academyHtmlspecialchars($messageType); ?>"
+            data-message-context="<?php echo academyHtmlspecialchars($messageContext); ?>"
             data-should-reset-form="<?php echo $shouldResetForm ? 'true' : 'false'; ?>"
         >
-            <?php echo htmlspecialchars($message); ?>
+            <?php echo academyHtmlspecialchars($message); ?>
         </div>
     <?php endif; ?>
 
@@ -917,8 +917,8 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
 
         <form method="POST" id="administratorForm" class="coach-form" autocomplete="off" enctype="multipart/form-data">
             <input type="hidden" name="action" value="save">
-            <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($editAdministrator["id"] ?? ''); ?>">
-            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($administratorCsrfToken); ?>">
+            <input type="hidden" name="id" id="id" value="<?php echo academyHtmlspecialchars($editAdministrator["id"] ?? ''); ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($administratorCsrfToken); ?>">
 
             <div class="form-row">
                 <div class="form-group">
@@ -927,7 +927,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                         type="text"
                         name="full_name"
                         id="full_name"
-                        value="<?php echo htmlspecialchars($editAdministrator["full_name"] ?? ''); ?>"
+                        value="<?php echo academyHtmlspecialchars($editAdministrator["full_name"] ?? ''); ?>"
                         placeholder="أدخل اسم الإداري بالكامل"
                         required
                     >
@@ -939,7 +939,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                         type="text"
                         name="phone"
                         id="phone"
-                        value="<?php echo htmlspecialchars($editAdministrator["phone"] ?? ''); ?>"
+                        value="<?php echo academyHtmlspecialchars($editAdministrator["phone"] ?? ''); ?>"
                         placeholder="مثال: 01000000000"
                         inputmode="tel"
                         maxlength="20"
@@ -968,7 +968,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                         type="text"
                         name="barcode"
                         id="barcode"
-                        value="<?php echo htmlspecialchars($editAdministrator["barcode"] ?? ''); ?>"
+                        value="<?php echo academyHtmlspecialchars($editAdministrator["barcode"] ?? ''); ?>"
                         placeholder="أدخل باركود الإداري"
                         maxlength="100"
                         dir="ltr"
@@ -984,15 +984,15 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                         </div>
                         <div class="checkbox-grid leave-days-grid">
                         <?php foreach ($administratorLeaveDayOptions as $leaveDayValue => $leaveDayLabel): ?>
-                            <label class="checkbox-card leave-day-card<?php echo in_array($leaveDayValue, $editAdministratorLeaveDays, true) ? ' is-selected' : ''; ?>" for="leave_day_<?php echo htmlspecialchars($leaveDayValue); ?>">
+                            <label class="checkbox-card leave-day-card<?php echo in_array($leaveDayValue, $editAdministratorLeaveDays, true) ? ' is-selected' : ''; ?>" for="leave_day_<?php echo academyHtmlspecialchars($leaveDayValue); ?>">
                                 <input
                                     type="checkbox"
                                     name="leave_days[]"
-                                    id="leave_day_<?php echo htmlspecialchars($leaveDayValue); ?>"
-                                    value="<?php echo htmlspecialchars($leaveDayValue); ?>"
+                                    id="leave_day_<?php echo academyHtmlspecialchars($leaveDayValue); ?>"
+                                    value="<?php echo academyHtmlspecialchars($leaveDayValue); ?>"
                                     <?php echo in_array($leaveDayValue, $editAdministratorLeaveDays, true) ? 'checked' : ''; ?>
                                 >
-                                <span class="leave-day-label"><?php echo htmlspecialchars($leaveDayLabel); ?></span>
+                                <span class="leave-day-label"><?php echo academyHtmlspecialchars($leaveDayLabel); ?></span>
                             </label>
                         <?php endforeach; ?>
                         </div>
@@ -1010,7 +1010,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
     <?php if ($filesAdministrator): ?>
         <section class="files-modal" id="administratorFilesModal">
             <a
-                href="<?php echo htmlspecialchars(buildAdministratorPageUrl(['edit' => $activeEditAdministratorId])); ?>"
+                href="<?php echo academyHtmlspecialchars(buildAdministratorPageUrl(['edit' => $activeEditAdministratorId])); ?>"
                 class="files-modal-backdrop"
                 aria-label="إغلاق ملفات الإداري"
             ></a>
@@ -1018,11 +1018,11 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
             <div class="files-modal-dialog">
                 <div class="files-modal-header">
                     <div>
-                        <h2>📁 ملفات الإداري: <?php echo htmlspecialchars($filesAdministrator["full_name"]); ?></h2>
+                        <h2>📁 ملفات الإداري: <?php echo academyHtmlspecialchars($filesAdministrator["full_name"]); ?></h2>
                     </div>
 
                     <a
-                        href="<?php echo htmlspecialchars(buildAdministratorPageUrl(['edit' => $activeEditAdministratorId])); ?>"
+                        href="<?php echo academyHtmlspecialchars(buildAdministratorPageUrl(['edit' => $activeEditAdministratorId])); ?>"
                         class="files-modal-close"
                         aria-label="إغلاق ملفات الإداري"
                     >✕</a>
@@ -1030,8 +1030,8 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
 
                 <form method="POST" class="coach-files-form" enctype="multipart/form-data" autocomplete="off">
                     <input type="hidden" name="action" value="upload_images">
-                    <input type="hidden" name="administrator_id" value="<?php echo htmlspecialchars((string) $filesAdministrator["id"]); ?>">
-                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($administratorCsrfToken); ?>">
+                    <input type="hidden" name="administrator_id" value="<?php echo academyHtmlspecialchars((string) $filesAdministrator["id"]); ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($administratorCsrfToken); ?>">
 
                     <div class="form-group form-group-full">
                         <label for="administrator_images">🖼️ إضافة صور جديدة</label>
@@ -1059,20 +1059,20 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                                     <button
                                         type="button"
                                         class="gallery-image-button"
-                                        data-full-image="<?php echo htmlspecialchars($imagePath); ?>"
-                                        data-image-title="<?php echo htmlspecialchars($filesAdministrator["full_name"] . ' - صورة ' . ($imageIndex + 1)); ?>"
+                                        data-full-image="<?php echo academyHtmlspecialchars($imagePath); ?>"
+                                        data-image-title="<?php echo academyHtmlspecialchars($filesAdministrator["full_name"] . ' - صورة ' . ($imageIndex + 1)); ?>"
                                     >
-                                        <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="صورة الإداري" class="coach-preview-image">
+                                        <img src="<?php echo academyHtmlspecialchars($imagePath); ?>" alt="صورة الإداري" class="coach-preview-image">
                                     </button>
 
                                     <div class="gallery-image-actions">
-                                        <span class="gallery-image-label"><?php echo htmlspecialchars('صورة ' . ($imageIndex + 1)); ?></span>
+                                        <span class="gallery-image-label"><?php echo academyHtmlspecialchars('صورة ' . ($imageIndex + 1)); ?></span>
 
                                         <form method="POST" class="inline-form js-confirm-submit" data-confirm-message="هل أنت متأكد من حذف هذه الصورة؟">
                                             <input type="hidden" name="action" value="delete_image">
-                                            <input type="hidden" name="administrator_id" value="<?php echo htmlspecialchars((string) $filesAdministrator["id"]); ?>">
-                                            <input type="hidden" name="image_path" value="<?php echo htmlspecialchars($imagePath); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($administratorCsrfToken); ?>">
+                                            <input type="hidden" name="administrator_id" value="<?php echo academyHtmlspecialchars((string) $filesAdministrator["id"]); ?>">
+                                            <input type="hidden" name="image_path" value="<?php echo academyHtmlspecialchars($imagePath); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($administratorCsrfToken); ?>">
                                             <button type="submit" class="delete-image-btn">🗑️ حذف الصورة</button>
                                         </form>
                                     </div>
@@ -1115,12 +1115,12 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                                 <td>
                                     <div class="coach-cell">
                                         <span class="coach-avatar">👨‍💼</span>
-                                        <span><?php echo htmlspecialchars($administrator["full_name"]); ?></span>
+                                        <span><?php echo academyHtmlspecialchars($administrator["full_name"]); ?></span>
                                     </div>
                                  </td>
-                                 <td dir="ltr"><?php echo htmlspecialchars($administrator["phone"]); ?></td>
-                                 <td dir="ltr"><?php echo htmlspecialchars($administrator["barcode"] ?? '—'); ?></td>
-                                 <td><?php echo htmlspecialchars($administrator["leave_days_text"]); ?></td>
+                                 <td dir="ltr"><?php echo academyHtmlspecialchars($administrator["phone"]); ?></td>
+                                 <td dir="ltr"><?php echo academyHtmlspecialchars($administrator["barcode"] ?? '—'); ?></td>
+                                 <td><?php echo academyHtmlspecialchars($administrator["leave_days_text"]); ?></td>
                                  <td>
                                      <span class="login-status-badge <?php echo !empty($administrator['has_password']) ? 'enabled' : 'disabled'; ?>">
                                          <?php echo !empty($administrator['has_password']) ? '🔐 مفعلة' : '⚠️ غير مضبوطة'; ?>
@@ -1128,22 +1128,22 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                                  </td>
                                 <td>
                                     <a
-                                        href="<?php echo htmlspecialchars(buildAdministratorPageUrl(['files' => $administrator["id"], 'edit' => $activeEditAdministratorId])); ?>"
+                                        href="<?php echo academyHtmlspecialchars(buildAdministratorPageUrl(['files' => $administrator["id"], 'edit' => $activeEditAdministratorId])); ?>"
                                         class="files-btn"
                                     >
                                         <span>📁 ملفات الإداري</span>
                                         <span class="files-count"><?php echo count($administrator['image_paths']); ?> صورة</span>
                                     </a>
                                 </td>
-                                <td><?php echo htmlspecialchars($administrator["created_at"]); ?></td>
+                                <td><?php echo academyHtmlspecialchars($administrator["created_at"]); ?></td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="<?php echo htmlspecialchars(buildAdministratorPageUrl(['edit' => $administrator["id"]])); ?>" class="edit-btn">✏️ تعديل</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildAdministratorPageUrl(['edit' => $administrator["id"]])); ?>" class="edit-btn">✏️ تعديل</a>
 
                                         <form method="POST" class="inline-form js-confirm-submit" data-confirm-message="هل أنت متأكد من حذف الإداري؟">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="<?php echo htmlspecialchars((string) $administrator["id"]); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($administratorCsrfToken); ?>">
+                                            <input type="hidden" name="id" value="<?php echo academyHtmlspecialchars((string) $administrator["id"]); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($administratorCsrfToken); ?>">
                                             <button type="submit" class="delete-btn">🗑️ حذف</button>
                                         </form>
                                     </div>

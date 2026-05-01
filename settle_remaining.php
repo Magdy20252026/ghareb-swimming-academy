@@ -405,8 +405,8 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -433,22 +433,22 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
         <form method="GET" class="filter-form-horizontal" autocomplete="off">
             <div class="form-group toolbar-field-wide toolbar-field-search">
                 <label for="search">بحث بالباركود أو الاسم</label>
-                <input type="search" id="search" name="search" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>" placeholder="الباركود أو الاسم">
+                <input type="search" id="search" name="search" value="<?php echo academyHtmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>" placeholder="الباركود أو الاسم">
             </div>
             <div class="form-group">
                 <label for="branch">الفرع</label>
                 <select id="branch" name="branch">
                     <option value="">كل الفروع</option>
                     <?php foreach ($branchOptions as $branchOption): ?>
-                        <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $branch === $branchOption ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
+                        <option value="<?php echo academyHtmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $branch === $branchOption ? 'selected' : ''; ?>>
+                            <?php echo academyHtmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="toolbar-form-actions header-actions">
                 <button type="submit" class="save-btn">بحث</button>
-                <a href="<?php echo htmlspecialchars(SETTLE_REMAINING_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">مسح</a>
+                <a href="<?php echo academyHtmlspecialchars(SETTLE_REMAINING_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">مسح</a>
             </div>
         </form>
     </section>
@@ -476,12 +476,12 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
                         <?php foreach ($players as $index => $player): ?>
                             <tr>
                                 <td data-label="#"><?php echo $index + 1; ?></td>
-                                <td data-label="الباركود"><span class="table-cell-text"><?php echo htmlspecialchars((string) (($player['barcode'] ?? '') !== '' ? $player['barcode'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="اسم السباح"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['player_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="الباركود"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) (($player['barcode'] ?? '') !== '' ? $player['barcode'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="اسم السباح"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['player_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="المجموعة">
                                     <div class="stacked-cell">
-                                        <strong><?php echo htmlspecialchars((string) (($player['subscription_name'] ?? '') !== '' ? $player['subscription_name'] : '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
-                                        <span><?php echo htmlspecialchars((string) (($player['subscription_branch'] ?? '') !== '' ? $player['subscription_branch'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <strong><?php echo academyHtmlspecialchars((string) (($player['subscription_name'] ?? '') !== '' ? $player['subscription_name'] : '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                        <span><?php echo academyHtmlspecialchars((string) (($player['subscription_branch'] ?? '') !== '' ? $player['subscription_branch'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span>
                                     </div>
                                 </td>
                                 <td data-label="المدفوع"><span class="amount-badge collected"><?php echo formatSettleRemainingMoney($player['paid_amount'] ?? 0); ?> ج.م</span></td>
@@ -490,9 +490,9 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
                                     <form method="POST" class="settlement-form" autocomplete="off">
                                         <input type="hidden" name="action" value="collect_payment">
                                         <input type="hidden" name="player_id" value="<?php echo (int) ($player['id'] ?? 0); ?>">
-                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($settleRemainingCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($settleRemainingCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_branch" value="<?php echo academyHtmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>">
                                         <div class="form-group">
                                             <label for="payment_amount_<?php echo (int) ($player['id'] ?? 0); ?>">المبلغ</label>
                                             <input
@@ -500,9 +500,9 @@ $settleRemainingCsrfToken = getSettleRemainingCsrfToken();
                                                 name="payment_amount"
                                                 id="payment_amount_<?php echo (int) ($player['id'] ?? 0); ?>"
                                                 min="0.01"
-                                                max="<?php echo htmlspecialchars(formatSettleRemainingAmount($player['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
+                                                max="<?php echo academyHtmlspecialchars(formatSettleRemainingAmount($player['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
                                                 step="0.01"
-                                                value="<?php echo htmlspecialchars(formatSettleRemainingAmount($player['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
+                                                value="<?php echo academyHtmlspecialchars(formatSettleRemainingAmount($player['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
                                                 required
                                             >
                                         </div>

@@ -737,7 +737,7 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
     <title>لاعبين الأكاديميات</title>
     <link rel="stylesheet" href="assets/css/academies-players.css">
 </head>
-<body class="light-mode" data-page-url="<?php echo htmlspecialchars(ACADEMY_PLAYERS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>">
+<body class="light-mode" data-page-url="<?php echo academyHtmlspecialchars(ACADEMY_PLAYERS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>">
 <div class="academy-players-page">
     <header class="page-header">
         <div class="header-text">
@@ -759,8 +759,8 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -794,10 +794,10 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
             </div>
             <form method="POST" class="player-form" id="playerForm" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_academy_id" value="<?php echo htmlspecialchars($filters['academy_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="current_academy_id" value="<?php echo academyHtmlspecialchars($filters['academy_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="form-grid">
                     <div class="form-group">
@@ -817,8 +817,8 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                         <select name="academy_id" id="academy_id" required>
                             <option value="">اختر الأكاديمية</option>
                             <?php foreach ($academies as $academy): ?>
-                                <option value="<?php echo (int) ($academy['id'] ?? 0); ?>" data-price="<?php echo htmlspecialchars(formatAcademyPlayerAmount($academy['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>">
-                                    <?php echo htmlspecialchars((string) ($academy['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                <option value="<?php echo (int) ($academy['id'] ?? 0); ?>" data-price="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($academy['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>">
+                                    <?php echo academyHtmlspecialchars((string) ($academy['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -866,7 +866,7 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                 <form method="GET" class="stack-form" autocomplete="off">
                     <div class="form-group">
                         <label for="search">اسم اللاعب</label>
-                        <input type="text" name="search" id="search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="text" name="search" id="search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                     <div class="form-group">
                         <label for="academy_filter">الأكاديمية</label>
@@ -874,7 +874,7 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                             <option value="">كل الأكاديميات</option>
                             <?php foreach ($academies as $academy): ?>
                                 <option value="<?php echo (int) ($academy['id'] ?? 0); ?>" <?php echo (string) ($academy['id'] ?? '') === $filters['academy_id'] ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars((string) ($academy['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                    <?php echo academyHtmlspecialchars((string) ($academy['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -883,8 +883,8 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                         <label for="status">الحالة</label>
                         <select name="status" id="status">
                             <?php foreach (ACADEMY_PLAYER_STATUS_FILTERS as $statusKey => $statusLabel): ?>
-                                <option value="<?php echo htmlspecialchars($statusKey === 'all' ? '' : $statusKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['status'] === $statusKey ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($statusLabel, ENT_QUOTES, 'UTF-8'); ?>
+                                <option value="<?php echo academyHtmlspecialchars($statusKey === 'all' ? '' : $statusKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['status'] === $statusKey ? 'selected' : ''; ?>>
+                                    <?php echo academyHtmlspecialchars($statusLabel, ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -900,20 +900,20 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                 <div class="side-card action-card" id="collect-payment-card">
                     <h3>سداد المتبقي</h3>
                     <div class="info-list">
-                        <div><span>اللاعب</span><strong><?php echo htmlspecialchars((string) ($paymentPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>الأكاديمية</span><strong><?php echo htmlspecialchars((string) ($paymentPlayer['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>اللاعب</span><strong><?php echo academyHtmlspecialchars((string) ($paymentPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>الأكاديمية</span><strong><?php echo academyHtmlspecialchars((string) ($paymentPlayer['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <div><span>المتبقي</span><strong><?php echo formatAcademyPlayerMoney($paymentPlayer['remaining_amount'] ?? 0); ?> ج.م</strong></div>
                     </div>
                     <form method="POST" class="stack-form" autocomplete="off">
                         <input type="hidden" name="action" value="collect_payment">
                         <input type="hidden" name="player_id" value="<?php echo (int) ($paymentPlayer['id'] ?? 0); ?>">
-                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_academy_id" value="<?php echo htmlspecialchars($filters['academy_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_academy_id" value="<?php echo academyHtmlspecialchars($filters['academy_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                         <div class="form-group">
                             <label for="payment_amount">المبلغ</label>
-                            <input type="number" name="payment_amount" id="payment_amount" min="0.01" max="<?php echo htmlspecialchars(formatAcademyPlayerAmount($paymentPlayer['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>" step="0.01" required>
+                            <input type="number" name="payment_amount" id="payment_amount" min="0.01" max="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($paymentPlayer['remaining_amount'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>" step="0.01" required>
                         </div>
                         <div class="form-group">
                             <label for="payment_receipt_number">رقم الإيصال</label>
@@ -921,59 +921,59 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                         </div>
                         <div class="form-actions compact-actions">
                             <button type="submit" class="save-btn">تسجيل السداد</button>
-                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
+                            <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
                         </div>
                     </form>
                 </div>
             <?php endif; ?>
 
             <?php if ($renewPlayerIsExpired): ?>
-                <div class="side-card action-card" id="renew-card" data-old-remaining="<?php echo htmlspecialchars(formatAcademyPlayerAmount($renewOldRemaining), ENT_QUOTES, 'UTF-8'); ?>" data-new-price="<?php echo htmlspecialchars(formatAcademyPlayerAmount($renewPrice), ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="side-card action-card" id="renew-card" data-old-remaining="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($renewOldRemaining), ENT_QUOTES, 'UTF-8'); ?>" data-new-price="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($renewPrice), ENT_QUOTES, 'UTF-8'); ?>">
                     <h3>تجديد الاشتراك</h3>
                     <div class="info-list">
-                        <div><span>اللاعب</span><strong><?php echo htmlspecialchars((string) ($renewPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>الأكاديمية</span><strong><?php echo htmlspecialchars((string) ($renewPlayer['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>حالة الاشتراك</span><strong><?php echo htmlspecialchars((string) ($renewPlayer['subscription_status_label'] ?? 'منتهي'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>اللاعب</span><strong><?php echo academyHtmlspecialchars((string) ($renewPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>الأكاديمية</span><strong><?php echo academyHtmlspecialchars((string) ($renewPlayer['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>حالة الاشتراك</span><strong><?php echo academyHtmlspecialchars((string) ($renewPlayer['subscription_status_label'] ?? 'منتهي'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                     </div>
                     <form method="POST" class="stack-form" autocomplete="off">
                         <input type="hidden" name="action" value="renew_subscription">
                         <input type="hidden" name="player_id" value="<?php echo (int) ($renewPlayer['id'] ?? 0); ?>">
-                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_academy_id" value="<?php echo htmlspecialchars($filters['academy_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_academy_id" value="<?php echo academyHtmlspecialchars($filters['academy_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="renew_start_date">تاريخ بداية الاشتراك الجديد</label>
-                                <input type="date" name="renew_start_date" id="renew_start_date" value="<?php echo htmlspecialchars((string) $renewFormData['renew_start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                                <input type="date" name="renew_start_date" id="renew_start_date" value="<?php echo academyHtmlspecialchars((string) $renewFormData['renew_start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
                             </div>
                             <div class="form-group">
                                 <label for="renew_end_date">تاريخ نهاية الاشتراك الجديد</label>
-                                <input type="date" name="renew_end_date" id="renew_end_date" value="<?php echo htmlspecialchars((string) $renewFormData['renew_end_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                                <input type="date" name="renew_end_date" id="renew_end_date" value="<?php echo academyHtmlspecialchars((string) $renewFormData['renew_end_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
                             </div>
                             <div class="form-group">
                                 <label for="renew_base_price_display">مبلغ الاشتراك</label>
-                                <input type="text" id="renew_base_price_display" value="<?php echo htmlspecialchars(formatAcademyPlayerAmount($renewPrice), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                <input type="text" id="renew_base_price_display" value="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($renewPrice), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="renew_old_remaining_display">المتبقي القديم</label>
-                                <input type="text" id="renew_old_remaining_display" value="<?php echo htmlspecialchars(formatAcademyPlayerAmount($renewOldRemaining), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                <input type="text" id="renew_old_remaining_display" value="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($renewOldRemaining), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="renew_total_amount">الإجمالي</label>
-                                <input type="text" id="renew_total_amount" value="<?php echo htmlspecialchars(formatAcademyPlayerAmount($renewTotalValue), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                <input type="text" id="renew_total_amount" value="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($renewTotalValue), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="renew_paid_amount">المدفوع</label>
-                                <input type="number" name="renew_paid_amount" id="renew_paid_amount" min="0" step="0.01" max="<?php echo htmlspecialchars(formatAcademyPlayerAmount($renewTotalValue), ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars((string) $renewFormData['renew_paid_amount'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                                <input type="number" name="renew_paid_amount" id="renew_paid_amount" min="0" step="0.01" max="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($renewTotalValue), ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo academyHtmlspecialchars((string) $renewFormData['renew_paid_amount'], ENT_QUOTES, 'UTF-8'); ?>" required>
                             </div>
                             <div class="form-group">
                                 <label for="renew_remaining_amount">المتبقي</label>
-                                <input type="text" id="renew_remaining_amount" value="<?php echo htmlspecialchars(formatAcademyPlayerAmount($renewRemainingValue), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                <input type="text" id="renew_remaining_amount" value="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($renewRemainingValue), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="renew_receipt_number">رقم الإيصال</label>
-                                <input type="text" name="renew_receipt_number" id="renew_receipt_number" value="<?php echo htmlspecialchars((string) $renewFormData['renew_receipt_number'], ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="text" name="renew_receipt_number" id="renew_receipt_number" value="<?php echo academyHtmlspecialchars((string) $renewFormData['renew_receipt_number'], ENT_QUOTES, 'UTF-8'); ?>">
                             </div>
                         </div>
                         <div class="info-list">
@@ -982,7 +982,7 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                         </div>
                         <div class="form-actions compact-actions">
                             <button type="submit" class="save-btn">تجديد الاشتراك</button>
-                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
+                            <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
                         </div>
                     </form>
                 </div>
@@ -992,8 +992,8 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                 <div class="side-card action-card" id="details-card">
                     <h3>سجل اللاعب</h3>
                     <div class="info-list">
-                        <div><span>اللاعب</span><strong><?php echo htmlspecialchars((string) ($detailsPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>الأكاديمية</span><strong><?php echo htmlspecialchars((string) ($detailsPlayer['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>اللاعب</span><strong><?php echo academyHtmlspecialchars((string) ($detailsPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>الأكاديمية</span><strong><?php echo academyHtmlspecialchars((string) ($detailsPlayer['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <div><span>مرات التجديد</span><strong><?php echo (int) ($detailsPlayer['renewal_count'] ?? 0); ?></strong></div>
                     </div>
                     <div class="payments-history">
@@ -1001,9 +1001,9 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                             <?php foreach ($paymentHistory as $paymentItem): ?>
                                 <div class="payment-history-item">
                                     <strong><?php echo formatAcademyPlayerMoney($paymentItem['amount'] ?? 0); ?> ج.م</strong>
-                                    <span><?php echo htmlspecialchars((string) ($paymentItem['payment_type'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span>
-                                    <span><?php echo htmlspecialchars((string) ($paymentItem['receipt_number'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span>
-                                    <span><?php echo htmlspecialchars(formatAcademyPlayerDate((string) ($paymentItem['created_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <span><?php echo academyHtmlspecialchars((string) ($paymentItem['payment_type'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <span><?php echo academyHtmlspecialchars((string) ($paymentItem['receipt_number'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <span><?php echo academyHtmlspecialchars(formatAcademyPlayerDate((string) ($paymentItem['created_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -1011,7 +1011,7 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                         <?php endif; ?>
                     </div>
                     <div class="form-actions compact-actions">
-                        <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
+                        <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -1041,7 +1041,7 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                     <?php if ($academySummaries !== []): ?>
                         <?php foreach ($academySummaries as $academySummary): ?>
                             <tr>
-                                <td data-label="الأكاديمية"><?php echo htmlspecialchars((string) ($academySummary['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="الأكاديمية"><?php echo academyHtmlspecialchars((string) ($academySummary['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="سعر الاشتراك"><?php echo formatAcademyPlayerMoney($academySummary['subscription_price'] ?? 0); ?> ج.م</td>
                                 <td data-label="عدد اللاعبين"><?php echo (int) ($academySummary['total_players'] ?? 0); ?></td>
                                 <td data-label="الاشتراكات المنتهية"><?php echo (int) ($academySummary['expired_players'] ?? 0); ?></td>
@@ -1090,41 +1090,41 @@ $renewRemainingValue = max($renewTotalValue - $renewPaidValue, 0);
                     <?php if ($players !== []): ?>
                         <?php foreach ($players as $player): ?>
                             <tr>
-                                <td data-label="اسم اللاعب"><strong><?php echo htmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></td>
-                                <td data-label="رقم الهاتف"><?php echo htmlspecialchars((string) ($player['phone'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td data-label="رقم ولي الأمر"><?php echo htmlspecialchars((string) ($player['guardian_phone'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td data-label="الأكاديمية"><?php echo htmlspecialchars((string) ($player['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td data-label="بداية الاشتراك"><?php echo htmlspecialchars(formatAcademyPlayerDate((string) ($player['subscription_start_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td data-label="نهاية الاشتراك"><?php echo htmlspecialchars(formatAcademyPlayerDate((string) ($player['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="اسم اللاعب"><strong><?php echo academyHtmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></td>
+                                <td data-label="رقم الهاتف"><?php echo academyHtmlspecialchars((string) ($player['phone'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="رقم ولي الأمر"><?php echo academyHtmlspecialchars((string) ($player['guardian_phone'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="الأكاديمية"><?php echo academyHtmlspecialchars((string) ($player['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="بداية الاشتراك"><?php echo academyHtmlspecialchars(formatAcademyPlayerDate((string) ($player['subscription_start_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="نهاية الاشتراك"><?php echo academyHtmlspecialchars(formatAcademyPlayerDate((string) ($player['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="مبلغ الاشتراك"><span class="amount-badge"><?php echo formatAcademyPlayerMoney($player['subscription_base_price'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="الإجمالي"><span class="amount-badge total"><?php echo formatAcademyPlayerMoney($player['subscription_amount'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="المدفوع"><span class="amount-badge collected"><?php echo formatAcademyPlayerMoney($player['paid_amount'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="المتبقي"><span class="amount-badge remaining <?php echo !empty($player['has_balance']) ? 'has-value' : ''; ?>"><?php echo formatAcademyPlayerMoney($player['remaining_amount'] ?? 0); ?> ج.م</span></td>
-                                <td data-label="إيصال التسجيل"><?php echo htmlspecialchars((string) (($player['receipt_number'] ?? '') !== '' ? $player['receipt_number'] : '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td data-label="إيصالات التحصيل"><?php echo htmlspecialchars((string) (($player['collection_receipts'] ?? '') !== '' ? $player['collection_receipts'] : '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="إيصال التسجيل"><?php echo academyHtmlspecialchars((string) (($player['receipt_number'] ?? '') !== '' ? $player['receipt_number'] : '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="إيصالات التحصيل"><?php echo academyHtmlspecialchars((string) (($player['collection_receipts'] ?? '') !== '' ? $player['collection_receipts'] : '—'), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الحالة">
                                     <span class="status-badge <?php echo !empty($player['is_expired']) ? 'expired' : 'active'; ?>">
-                                        <?php echo htmlspecialchars((string) ($player['subscription_status_label'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php echo academyHtmlspecialchars((string) ($player['subscription_status_label'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                                     </span>
                                 </td>
                                 <td data-label="الإجراءات">
                                     <div class="action-buttons">
                                         <?php if ((float) ($player['remaining_amount'] ?? 0) > 0): ?>
-                                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['pay' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#collect-payment-card" class="pay-btn">سداد</a>
+                                            <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['pay' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#collect-payment-card" class="pay-btn">سداد</a>
                                         <?php else: ?>
                                             <span class="action-disabled">مسدد</span>
                                         <?php endif; ?>
                                         <?php if (!empty($player['is_expired'])): ?>
-                                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['renew' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#renew-card" class="edit-btn">تجديد</a>
+                                            <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['renew' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#renew-card" class="edit-btn">تجديد</a>
                                         <?php endif; ?>
-                                        <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['details' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#details-card" class="link-btn files-btn">السجل</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['details' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#details-card" class="link-btn files-btn">السجل</a>
                                         <form method="POST" class="inline-form delete-player-form">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="player_id" value="<?php echo (int) ($player['id'] ?? 0); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_academy_id" value="<?php echo htmlspecialchars($filters['academy_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_academy_id" value="<?php echo academyHtmlspecialchars($filters['academy_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
                                             <button type="submit" class="delete-btn">حذف</button>
                                         </form>
                                     </div>

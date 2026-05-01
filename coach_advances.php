@@ -391,7 +391,7 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
 </head>
 <body
     class="light-mode"
-    data-reset-url="<?php echo htmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8'); ?>"
+    data-reset-url="<?php echo academyHtmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8'); ?>"
     data-default-confirm-message="هل أنت متأكد من تنفيذ هذا الإجراء؟"
 >
 <div class="coach-attendance-page coach-advances-page">
@@ -416,8 +416,8 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -449,7 +449,7 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
         <article class="stat-card hours-card">
             <div class="stat-icon">💰</div>
             <div>
-                <h2><?php echo htmlspecialchars(number_format($totalAdvanceAmount, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
+                <h2><?php echo academyHtmlspecialchars(number_format($totalAdvanceAmount, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
                 <p>إجمالي سلف اليوم</p>
             </div>
         </article>
@@ -462,13 +462,13 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
 
         <form method="GET" class="date-filter-form">
             <label for="advance_date_filter" class="date-label">اليوم</label>
-            <input type="date" id="advance_date_filter" name="date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>" required>
+            <input type="date" id="advance_date_filter" name="date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>" required>
             <button type="submit" class="filter-btn">عرض البيانات</button>
         </form>
 
         <div class="date-highlight">
-            <span class="date-chip"><?php echo htmlspecialchars($selectedDateLabel, ENT_QUOTES, 'UTF-8'); ?></span>
-            <strong><?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?></strong>
+            <span class="date-chip"><?php echo academyHtmlspecialchars($selectedDateLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+            <strong><?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?></strong>
         </div>
     </section>
 
@@ -480,10 +480,10 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
 
             <form method="POST" class="attendance-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="advance_id" value="<?php echo htmlspecialchars($editAdvance['id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="advance_date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachAdvancesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="coach_id" id="coach_id" value="<?php echo htmlspecialchars($selectedCoachId, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="advance_id" value="<?php echo academyHtmlspecialchars($editAdvance['id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="advance_date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachAdvancesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="coach_id" id="coach_id" value="<?php echo academyHtmlspecialchars($selectedCoachId, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="form-row form-row-single">
                     <div class="form-group">
@@ -491,7 +491,7 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
                         <div class="professional-select" id="coachSelect" data-placeholder="اختر المدرب من القائمة">
                             <button type="button" class="select-trigger" id="coachSelectTrigger" aria-expanded="false">
                                 <span class="select-trigger-text" id="coachSelectText">
-                                    <?php echo $selectedCoachMeta ? htmlspecialchars($selectedCoachMeta['full_name'], ENT_QUOTES, 'UTF-8') : 'اختر المدرب من القائمة'; ?>
+                                    <?php echo $selectedCoachMeta ? academyHtmlspecialchars($selectedCoachMeta['full_name'], ENT_QUOTES, 'UTF-8') : 'اختر المدرب من القائمة'; ?>
                                 </span>
                                 <span class="select-trigger-icon">▾</span>
                             </button>
@@ -506,12 +506,12 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
                                         <button
                                             type="button"
                                             class="select-option<?php echo (string) $coach['id'] === $selectedCoachId ? ' is-selected' : ''; ?>"
-                                            data-value="<?php echo htmlspecialchars((string) $coach['id'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-name="<?php echo htmlspecialchars($coach['full_name'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-phone="<?php echo htmlspecialchars($coach['phone'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-value="<?php echo academyHtmlspecialchars((string) $coach['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-name="<?php echo academyHtmlspecialchars($coach['full_name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-phone="<?php echo academyHtmlspecialchars($coach['phone'], ENT_QUOTES, 'UTF-8'); ?>"
                                         >
-                                            <span class="option-name"><?php echo htmlspecialchars($coach['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                            <span class="option-meta">📞 <?php echo htmlspecialchars($coach['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <span class="option-name"><?php echo academyHtmlspecialchars($coach['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <span class="option-meta">📞 <?php echo academyHtmlspecialchars($coach['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
                                         </button>
                                     <?php endforeach; ?>
                                 </div>
@@ -522,7 +522,7 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
 
                         <div class="selected-coach-meta" id="selectedCoachMeta">
                             <?php if ($selectedCoachMeta): ?>
-                                <span>📞 <?php echo htmlspecialchars($selectedCoachMeta['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>📞 <?php echo academyHtmlspecialchars($selectedCoachMeta['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -535,7 +535,7 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
                             type="text"
                             id="amount"
                             name="amount"
-                            value="<?php echo htmlspecialchars($advanceAmountFieldValue, ENT_QUOTES, 'UTF-8'); ?>"
+                            value="<?php echo academyHtmlspecialchars($advanceAmountFieldValue, ENT_QUOTES, 'UTF-8'); ?>"
                             placeholder="مثال: 300 أو 450.75"
                             inputmode="decimal"
                             maxlength="10"
@@ -546,13 +546,13 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
 
                     <div class="form-group form-group-highlight">
                         <label>📌 إجمالي سلف اليوم</label>
-                        <div class="estimated-box advance-total-box"><?php echo htmlspecialchars(number_format($totalAdvanceAmount, 2), ENT_QUOTES, 'UTF-8'); ?></div>
+                        <div class="estimated-box advance-total-box"><?php echo academyHtmlspecialchars(number_format($totalAdvanceAmount, 2), ENT_QUOTES, 'UTF-8'); ?></div>
                     </div>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="save-btn"<?php echo !$hasCoaches ? ' disabled' : ''; ?>>💾 حفظ السلفة</button>
-                    <a href="<?php echo htmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn" id="clearBtn">🧹 سجل جديد</a>
+                    <a href="<?php echo academyHtmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn" id="clearBtn">🧹 سجل جديد</a>
                 </div>
             </form>
         </article>
@@ -566,14 +566,14 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
                 <div class="advance-summary-list">
                     <?php foreach ($coachAdvanceSummary as $summaryItem): ?>
                         <div class="advance-summary-item">
-                            <div class="absence-avatar"><?php echo htmlspecialchars(mb_substr($summaryItem['full_name'], 0, 1), ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="absence-avatar"><?php echo academyHtmlspecialchars(mb_substr($summaryItem['full_name'], 0, 1), ENT_QUOTES, 'UTF-8'); ?></div>
                             <div class="advance-summary-content">
-                                <strong><?php echo htmlspecialchars($summaryItem['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <span>📞 <?php echo htmlspecialchars($summaryItem['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <strong><?php echo academyHtmlspecialchars($summaryItem['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <span>📞 <?php echo academyHtmlspecialchars($summaryItem['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </div>
                             <div class="advance-summary-meta">
                                 <span class="status-badge present-badge"><?php echo (int) $summaryItem['records_count']; ?> سجل</span>
-                                <strong><?php echo htmlspecialchars(number_format((float) $summaryItem['total_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <strong><?php echo academyHtmlspecialchars(number_format((float) $summaryItem['total_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -591,7 +591,7 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
             <div>
                 <h2>📋 جدول سلف المدربين</h2>
             </div>
-            <div class="table-summary-chip">💵 إجمالي اليوم: <?php echo htmlspecialchars(number_format($totalAdvanceAmount, 2), ENT_QUOTES, 'UTF-8'); ?></div>
+            <div class="table-summary-chip">💵 إجمالي اليوم: <?php echo academyHtmlspecialchars(number_format($totalAdvanceAmount, 2), ENT_QUOTES, 'UTF-8'); ?></div>
         </div>
 
         <div class="table-wrapper">
@@ -613,21 +613,21 @@ $advanceAmountFieldValue = $formAdvanceAmount !== ''
                                 <td><?php echo $index + 1; ?></td>
                                 <td>
                                     <div class="coach-cell">
-                                        <span class="coach-avatar"><?php echo htmlspecialchars(mb_substr($advanceRecord['full_name'], 0, 1), ENT_QUOTES, 'UTF-8'); ?></span>
-                                        <span><?php echo htmlspecialchars($advanceRecord['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span class="coach-avatar"><?php echo academyHtmlspecialchars(mb_substr($advanceRecord['full_name'], 0, 1), ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span><?php echo academyHtmlspecialchars($advanceRecord['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                                     </div>
                                 </td>
-                                <td><?php echo htmlspecialchars($advanceRecord['phone'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $advanceRecord['amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(date('H:i', strtotime((string) $advanceRecord['created_at'])), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars($advanceRecord['phone'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $advanceRecord['amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(date('H:i', strtotime((string) $advanceRecord['created_at'])), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="<?php echo htmlspecialchars(buildCoachAdvancesPageUrl(['date' => $selectedDate, 'edit' => $advanceRecord['id']]), ENT_QUOTES, 'UTF-8'); ?>" class="edit-btn">✏️ تعديل</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildCoachAdvancesPageUrl(['date' => $selectedDate, 'edit' => $advanceRecord['id']]), ENT_QUOTES, 'UTF-8'); ?>" class="edit-btn">✏️ تعديل</a>
                                         <form method="POST" class="inline-form js-confirm-submit" data-confirm-message="هل تريد حذف سجل السلفة هذا؟">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="advance_id" value="<?php echo htmlspecialchars((string) $advanceRecord['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="advance_date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachAdvancesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="advance_id" value="<?php echo academyHtmlspecialchars((string) $advanceRecord['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="advance_date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachAdvancesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                             <button type="submit" class="delete-btn">🗑️ حذف</button>
                                         </form>
                                     </div>

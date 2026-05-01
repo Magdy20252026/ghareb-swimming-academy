@@ -752,7 +752,7 @@ $netTotal = $revenueTotal - $expenseTotal;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الإحصائيات - <?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></title>
+    <title>الإحصائيات - <?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></title>
     <link rel="stylesheet" href="assets/css/reports.css">
 </head>
 <body class="light-mode">
@@ -779,32 +779,32 @@ $netTotal = $revenueTotal - $expenseTotal;
         <div class="period-switcher">
             <?php foreach ($periodDefinitions as $periodKey => $periodDefinition): ?>
                 <a
-                    href="reports.php?period=<?php echo htmlspecialchars($periodKey, ENT_QUOTES, 'UTF-8'); ?>"
+                    href="reports.php?period=<?php echo academyHtmlspecialchars($periodKey, ENT_QUOTES, 'UTF-8'); ?>"
                     class="period-chip <?php echo $selectedPeriod === $periodKey ? 'active' : ''; ?>"
                 >
-                    <?php echo htmlspecialchars($periodDefinition['label'], ENT_QUOTES, 'UTF-8'); ?>
+                    <?php echo academyHtmlspecialchars($periodDefinition['label'], ENT_QUOTES, 'UTF-8'); ?>
                 </a>
             <?php endforeach; ?>
         </div>
-        <div class="period-range"><?php echo htmlspecialchars(formatReportsPeriodRange($periodStartValue, $periodEndValue), ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="period-range"><?php echo academyHtmlspecialchars(formatReportsPeriodRange($periodStartValue, $periodEndValue), ENT_QUOTES, 'UTF-8'); ?></div>
     </section>
 
     <section class="hero-grid">
         <article class="hero-card hero-card-main">
             <span>الإجمالي</span>
-            <strong><?php echo htmlspecialchars(formatReportsMoney($netTotal), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
+            <strong><?php echo academyHtmlspecialchars(formatReportsMoney($netTotal), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
         </article>
         <article class="hero-card">
             <span>الإيرادات</span>
-            <strong><?php echo htmlspecialchars(formatReportsMoney($revenueTotal), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
+            <strong><?php echo academyHtmlspecialchars(formatReportsMoney($revenueTotal), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
         </article>
         <article class="hero-card">
             <span>المصروفات</span>
-            <strong><?php echo htmlspecialchars(formatReportsMoney($expenseTotal), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
+            <strong><?php echo academyHtmlspecialchars(formatReportsMoney($expenseTotal), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
         </article>
         <article class="hero-card">
             <span>الفترة</span>
-            <strong><?php echo htmlspecialchars($periodDefinitions[$selectedPeriod]['label'], ENT_QUOTES, 'UTF-8'); ?></strong>
+            <strong><?php echo academyHtmlspecialchars($periodDefinitions[$selectedPeriod]['label'], ENT_QUOTES, 'UTF-8'); ?></strong>
         </article>
     </section>
 
@@ -817,24 +817,24 @@ $netTotal = $revenueTotal - $expenseTotal;
                 <article class="metric-card">
                     <div class="metric-head">
                         <div class="metric-icon"><?php echo $section['icon']; ?></div>
-                        <h3><?php echo htmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                        <h3><?php echo academyHtmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
                     </div>
                     <div class="metric-values">
                         <div class="value-box">
-                            <span><?php echo htmlspecialchars($section['count_label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span><?php echo academyHtmlspecialchars($section['count_label'], ENT_QUOTES, 'UTF-8'); ?></span>
                             <strong><?php echo (int) $section['count']; ?></strong>
                         </div>
                         <div class="value-box value-box-money">
-                            <span><?php echo htmlspecialchars($section['amount_label'], ENT_QUOTES, 'UTF-8'); ?></span>
-                            <strong><?php echo htmlspecialchars(formatReportsMoney((float) $section['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
+                            <span><?php echo academyHtmlspecialchars($section['amount_label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                            <strong><?php echo academyHtmlspecialchars(formatReportsMoney((float) $section['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
                         </div>
                     </div>
                     <?php if (!empty($section['secondary_money_summaries'])): ?>
                         <div class="money-breakdown-grid">
                             <?php foreach ($section['secondary_money_summaries'] as $summary): ?>
                                 <div class="money-breakdown-box">
-                                    <span><?php echo htmlspecialchars('إجمالي ' . $summary['label'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                    <strong><?php echo htmlspecialchars(formatReportsMoney((float) $summary['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
+                                    <span><?php echo academyHtmlspecialchars('إجمالي ' . $summary['label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <strong><?php echo academyHtmlspecialchars(formatReportsMoney((float) $summary['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -842,7 +842,7 @@ $netTotal = $revenueTotal - $expenseTotal;
                     <button
                         type="button"
                         class="details-btn"
-                        data-modal-target="modal-<?php echo htmlspecialchars($section['key'], ENT_QUOTES, 'UTF-8'); ?>"
+                        data-modal-target="modal-<?php echo academyHtmlspecialchars($section['key'], ENT_QUOTES, 'UTF-8'); ?>"
                         <?php echo empty($section['rows']) ? 'disabled' : ''; ?>
                     >
                         التفاصيل
@@ -861,24 +861,24 @@ $netTotal = $revenueTotal - $expenseTotal;
                 <article class="metric-card expense-card">
                     <div class="metric-head">
                         <div class="metric-icon"><?php echo $section['icon']; ?></div>
-                        <h3><?php echo htmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                        <h3><?php echo academyHtmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
                     </div>
                     <div class="metric-values">
                         <div class="value-box">
-                            <span><?php echo htmlspecialchars($section['count_label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span><?php echo academyHtmlspecialchars($section['count_label'], ENT_QUOTES, 'UTF-8'); ?></span>
                             <strong><?php echo (int) $section['count']; ?></strong>
                         </div>
                         <div class="value-box value-box-money">
-                            <span><?php echo htmlspecialchars($section['amount_label'], ENT_QUOTES, 'UTF-8'); ?></span>
-                            <strong><?php echo htmlspecialchars(formatReportsMoney((float) $section['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
+                            <span><?php echo academyHtmlspecialchars($section['amount_label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                            <strong><?php echo academyHtmlspecialchars(formatReportsMoney((float) $section['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
                         </div>
                     </div>
                     <?php if (!empty($section['secondary_money_summaries'])): ?>
                         <div class="money-breakdown-grid">
                             <?php foreach ($section['secondary_money_summaries'] as $summary): ?>
                                 <div class="money-breakdown-box">
-                                    <span><?php echo htmlspecialchars('إجمالي ' . $summary['label'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                    <strong><?php echo htmlspecialchars(formatReportsMoney((float) $summary['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
+                                    <span><?php echo academyHtmlspecialchars('إجمالي ' . $summary['label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <strong><?php echo academyHtmlspecialchars(formatReportsMoney((float) $summary['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -886,7 +886,7 @@ $netTotal = $revenueTotal - $expenseTotal;
                     <button
                         type="button"
                         class="details-btn expense-btn"
-                        data-modal-target="modal-<?php echo htmlspecialchars($section['key'], ENT_QUOTES, 'UTF-8'); ?>"
+                        data-modal-target="modal-<?php echo academyHtmlspecialchars($section['key'], ENT_QUOTES, 'UTF-8'); ?>"
                         <?php echo empty($section['rows']) ? 'disabled' : ''; ?>
                     >
                         التفاصيل
@@ -898,18 +898,18 @@ $netTotal = $revenueTotal - $expenseTotal;
 </div>
 
 <?php foreach ($sections as $section): ?>
-    <div class="details-modal" id="modal-<?php echo htmlspecialchars($section['key'], ENT_QUOTES, 'UTF-8'); ?>" aria-hidden="true">
+    <div class="details-modal" id="modal-<?php echo academyHtmlspecialchars($section['key'], ENT_QUOTES, 'UTF-8'); ?>" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-header">
-                <h2><?php echo htmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+                <h2><?php echo academyHtmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
                 <button type="button" class="modal-close" data-close-modal>✕</button>
             </div>
             <?php if (!empty($section['money_summaries'])): ?>
                 <div class="modal-summary-grid">
                     <?php foreach ($section['money_summaries'] as $summary): ?>
                         <div class="modal-summary-card">
-                            <span><?php echo htmlspecialchars('إجمالي ' . $summary['label'], ENT_QUOTES, 'UTF-8'); ?></span>
-                            <strong><?php echo htmlspecialchars(formatReportsMoney((float) $summary['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
+                            <span><?php echo academyHtmlspecialchars('إجمالي ' . $summary['label'], ENT_QUOTES, 'UTF-8'); ?></span>
+                            <strong><?php echo academyHtmlspecialchars(formatReportsMoney((float) $summary['total']), ENT_QUOTES, 'UTF-8'); ?> ج.م</strong>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -919,7 +919,7 @@ $netTotal = $revenueTotal - $expenseTotal;
                     <thead>
                     <tr>
                         <?php foreach ($section['columns'] as $column): ?>
-                            <th><?php echo htmlspecialchars($column['label'], ENT_QUOTES, 'UTF-8'); ?></th>
+                            <th><?php echo academyHtmlspecialchars($column['label'], ENT_QUOTES, 'UTF-8'); ?></th>
                         <?php endforeach; ?>
                     </tr>
                     </thead>
@@ -927,8 +927,8 @@ $netTotal = $revenueTotal - $expenseTotal;
                     <?php foreach ($section['rows'] as $row): ?>
                         <tr>
                             <?php foreach ($section['columns'] as $column): ?>
-                                <td data-label="<?php echo htmlspecialchars($column['label'], ENT_QUOTES, 'UTF-8'); ?>">
-                                    <?php echo htmlspecialchars(formatReportsCellValue($row, $column), ENT_QUOTES, 'UTF-8'); ?>
+                                <td data-label="<?php echo academyHtmlspecialchars($column['label'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <?php echo academyHtmlspecialchars(formatReportsCellValue($row, $column), ENT_QUOTES, 'UTF-8'); ?>
                                 </td>
                             <?php endforeach; ?>
                         </tr>

@@ -1074,7 +1074,7 @@ function renderAcademyPlayersPagination(array $currentFilterParams, int $current
     <nav class="table-pagination" aria-label="صفحات جدول السباحين">
         <div class="pagination-links">
             <?php if ($currentPage > 1): ?>
-                <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $currentPage - 1])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link pagination-nav">السابق</a>
+                <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $currentPage - 1])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link pagination-nav">السابق</a>
             <?php endif; ?>
 
             <?php $lastRenderedPage = 0; ?>
@@ -1086,14 +1086,14 @@ function renderAcademyPlayersPagination(array $currentFilterParams, int $current
                 <?php if ($pageNumber === $currentPage): ?>
                     <span class="pagination-link is-active" aria-current="page"><?php echo $pageNumber; ?></span>
                 <?php else: ?>
-                    <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $pageNumber])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link"><?php echo $pageNumber; ?></a>
+                    <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $pageNumber])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link"><?php echo $pageNumber; ?></a>
                 <?php endif; ?>
 
                 <?php $lastRenderedPage = $pageNumber; ?>
             <?php endforeach; ?>
 
             <?php if ($currentPage < $totalPages): ?>
-                <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $currentPage + 1])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link pagination-nav">التالي</a>
+                <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['page' => $currentPage + 1])), ENT_QUOTES, 'UTF-8'); ?>" class="pagination-link pagination-nav">التالي</a>
             <?php endif; ?>
         </div>
     </nav>
@@ -1200,65 +1200,65 @@ function renderAcademyPlayersHorizontalToolbar(
                 >
                     إضافة سباح
                 </button>
-                <a href="<?php echo htmlspecialchars($summaryPageUrl, ENT_QUOTES, 'UTF-8'); ?>" class="link-btn files-btn">ملخص المجموعات</a>
-                <a href="<?php echo htmlspecialchars($exportUrl, ENT_QUOTES, 'UTF-8'); ?>" class="link-btn export-btn">استخراج إكسل</a>
+                <a href="<?php echo academyHtmlspecialchars($summaryPageUrl, ENT_QUOTES, 'UTF-8'); ?>" class="link-btn files-btn">ملخص المجموعات</a>
+                <a href="<?php echo academyHtmlspecialchars($exportUrl, ENT_QUOTES, 'UTF-8'); ?>" class="link-btn export-btn">استخراج إكسل</a>
             </div>
             <form method="GET" class="filter-form filter-form-horizontal" autocomplete="off">
-                <input type="hidden" name="summary_category" value="<?php echo htmlspecialchars($summaryCategory, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="summary_category" value="<?php echo academyHtmlspecialchars($summaryCategory, ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="form-group toolbar-field-search">
-                    <label for="<?php echo htmlspecialchars($searchId, ENT_QUOTES, 'UTF-8'); ?>">البحث</label>
-                    <input type="text" name="search" id="<?php echo htmlspecialchars($searchId, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <label for="<?php echo academyHtmlspecialchars($searchId, ENT_QUOTES, 'UTF-8'); ?>">البحث</label>
+                    <input type="text" name="search" id="<?php echo academyHtmlspecialchars($searchId, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
                 <div class="form-group subscription-select-group toolbar-field-wide">
-                    <label for="<?php echo htmlspecialchars($subscriptionId, ENT_QUOTES, 'UTF-8'); ?>">المجموعة</label>
-                    <select name="subscription_id" id="<?php echo htmlspecialchars($subscriptionId, ENT_QUOTES, 'UTF-8'); ?>">
+                    <label for="<?php echo academyHtmlspecialchars($subscriptionId, ENT_QUOTES, 'UTF-8'); ?>">المجموعة</label>
+                    <select name="subscription_id" id="<?php echo academyHtmlspecialchars($subscriptionId, ENT_QUOTES, 'UTF-8'); ?>">
                         <option value="">كل المجموعات</option>
                         <?php foreach ($subscriptions as $subscription): ?>
                             <?php $subscriptionDisplayText = formatAcademyPlayerSubscriptionDisplay($subscription); ?>
                             <option value="<?php echo (int) ($subscription['id'] ?? 0); ?>" <?php echo (string) ($subscription['id'] ?? '') === $filters['subscription_id'] ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($subscriptionDisplayText, ENT_QUOTES, 'UTF-8'); ?>
+                                <?php echo academyHtmlspecialchars($subscriptionDisplayText, ENT_QUOTES, 'UTF-8'); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="<?php echo htmlspecialchars($branchId, ENT_QUOTES, 'UTF-8'); ?>">الفرع</label>
-                    <select name="branch" id="<?php echo htmlspecialchars($branchId, ENT_QUOTES, 'UTF-8'); ?>">
+                    <label for="<?php echo academyHtmlspecialchars($branchId, ENT_QUOTES, 'UTF-8'); ?>">الفرع</label>
+                    <select name="branch" id="<?php echo academyHtmlspecialchars($branchId, ENT_QUOTES, 'UTF-8'); ?>">
                         <option value="">كل الفروع</option>
                         <?php foreach ($branchOptions as $branchOption): ?>
-                            <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['branch'] === $branchOption ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
+                            <option value="<?php echo academyHtmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['branch'] === $branchOption ? 'selected' : ''; ?>>
+                                <?php echo academyHtmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="<?php echo htmlspecialchars($categoryId, ENT_QUOTES, 'UTF-8'); ?>">مستوى المجموعة</label>
-                    <select name="category" id="<?php echo htmlspecialchars($categoryId, ENT_QUOTES, 'UTF-8'); ?>">
+                    <label for="<?php echo academyHtmlspecialchars($categoryId, ENT_QUOTES, 'UTF-8'); ?>">مستوى المجموعة</label>
+                    <select name="category" id="<?php echo academyHtmlspecialchars($categoryId, ENT_QUOTES, 'UTF-8'); ?>">
                         <option value="">كل المستويات</option>
                         <?php foreach ($categoryOptions as $categoryOption): ?>
-                            <option value="<?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['category'] === $categoryOption ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>
+                            <option value="<?php echo academyHtmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['category'] === $categoryOption ? 'selected' : ''; ?>>
+                                <?php echo academyHtmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="<?php echo htmlspecialchars($statusId, ENT_QUOTES, 'UTF-8'); ?>">الحالة</label>
-                    <select name="status" id="<?php echo htmlspecialchars($statusId, ENT_QUOTES, 'UTF-8'); ?>">
+                    <label for="<?php echo academyHtmlspecialchars($statusId, ENT_QUOTES, 'UTF-8'); ?>">الحالة</label>
+                    <select name="status" id="<?php echo academyHtmlspecialchars($statusId, ENT_QUOTES, 'UTF-8'); ?>">
                         <?php foreach (ACADEMY_PLAYER_STATUS_FILTERS as $statusKey => $statusLabel): ?>
-                            <option value="<?php echo htmlspecialchars($statusKey === 'all' ? '' : $statusKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['status'] === $statusKey ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($statusLabel, ENT_QUOTES, 'UTF-8'); ?>
+                            <option value="<?php echo academyHtmlspecialchars($statusKey === 'all' ? '' : $statusKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['status'] === $statusKey ? 'selected' : ''; ?>>
+                                <?php echo academyHtmlspecialchars($statusLabel, ENT_QUOTES, 'UTF-8'); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="<?php echo htmlspecialchars($medicalReportId, ENT_QUOTES, 'UTF-8'); ?>">التقرير الطبي</label>
-                    <select name="medical_report" id="<?php echo htmlspecialchars($medicalReportId, ENT_QUOTES, 'UTF-8'); ?>">
+                    <label for="<?php echo academyHtmlspecialchars($medicalReportId, ENT_QUOTES, 'UTF-8'); ?>">التقرير الطبي</label>
+                    <select name="medical_report" id="<?php echo academyHtmlspecialchars($medicalReportId, ENT_QUOTES, 'UTF-8'); ?>">
                         <?php foreach (ACADEMY_PLAYER_MEDICAL_REPORT_FILTERS as $medicalReportKey => $medicalReportLabel): ?>
-                            <option value="<?php echo htmlspecialchars($medicalReportKey === 'all' ? '' : $medicalReportKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['medical_report'] === $medicalReportKey ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($medicalReportLabel, ENT_QUOTES, 'UTF-8'); ?>
+                            <option value="<?php echo academyHtmlspecialchars($medicalReportKey === 'all' ? '' : $medicalReportKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $filters['medical_report'] === $medicalReportKey ? 'selected' : ''; ?>>
+                                <?php echo academyHtmlspecialchars($medicalReportLabel, ENT_QUOTES, 'UTF-8'); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -1614,7 +1614,7 @@ function deleteAcademyPlayerImages(array $paths): void
 
 function academyPlayersXmlEscape(string $value): string
 {
-    return htmlspecialchars($value, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+    return academyHtmlspecialchars($value, ENT_XML1 | ENT_QUOTES, 'UTF-8');
 }
 
 function academyPlayersExcelColumnName(int $index): string
@@ -2765,12 +2765,12 @@ if (getAcademyPlayersReadFailure()) {
 </head>
 <body
     class="light-mode"
-    data-page-url="<?php echo htmlspecialchars(ACADEMY_PLAYERS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
+    data-page-url="<?php echo academyHtmlspecialchars(ACADEMY_PLAYERS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
     data-can-manage-discount="<?php echo $canManageDiscount ? '1' : '0'; ?>"
-    data-custom-stars-options="<?php echo htmlspecialchars(implode(',', ACADEMY_PLAYERS_CUSTOM_STARS_OPTIONS), ENT_QUOTES, 'UTF-8'); ?>"
+    data-custom-stars-options="<?php echo academyHtmlspecialchars(implode(',', ACADEMY_PLAYERS_CUSTOM_STARS_OPTIONS), ENT_QUOTES, 'UTF-8'); ?>"
     data-form-available-exercises-count="<?php echo (int) ($playerFormData['available_exercises_count'] === '' ? 0 : $playerFormData['available_exercises_count']); ?>"
     data-form-modal-open="<?php echo ($editPlayer || is_array($submittedPlayerFormData)) ? '1' : '0'; ?>"
-    data-form-close-url="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>"
+    data-form-close-url="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>"
 >
 <div class="academy-players-page">
     <header class="page-header">
@@ -2792,8 +2792,8 @@ if (getAcademyPlayersReadFailure()) {
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -2840,39 +2840,39 @@ if (getAcademyPlayersReadFailure()) {
         <div class="modal-shell">
             <div class="form-card modal-form-card">
                 <div class="card-head modal-card-head">
-                    <h2 id="playerFormModalTitle"><?php echo htmlspecialchars($playerFormModalHeading, ENT_QUOTES, 'UTF-8'); ?></h2>
+                    <h2 id="playerFormModalTitle"><?php echo academyHtmlspecialchars($playerFormModalHeading, ENT_QUOTES, 'UTF-8'); ?></h2>
                     <button type="button" class="modal-close-btn" data-close-player-modal>إغلاق</button>
                 </div>
 
         <form method="POST" enctype="multipart/form-data" class="player-form" id="playerForm" autocomplete="off">
             <input type="hidden" name="action" value="save">
-            <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($playerFormData['id'], ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-            <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="id" id="id" value="<?php echo academyHtmlspecialchars($playerFormData['id'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_subscription_id" value="<?php echo academyHtmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_branch" value="<?php echo academyHtmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_category" value="<?php echo academyHtmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_medical_report" value="<?php echo academyHtmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
             <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
-            <input type="hidden" name="current_view" value="<?php echo htmlspecialchars($currentView, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="current_view" value="<?php echo academyHtmlspecialchars($currentView, ENT_QUOTES, 'UTF-8'); ?>">
 
             <div class="form-grid form-grid-compact">
                 <div class="form-group">
                     <label for="barcode">باركود السباح</label>
-                    <input type="text" name="barcode" id="barcode" value="<?php echo htmlspecialchars($playerFormData['barcode'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="text" name="barcode" id="barcode" value="<?php echo academyHtmlspecialchars($playerFormData['barcode'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="player_name">اسم السباح</label>
-                    <input type="text" name="player_name" id="player_name" value="<?php echo htmlspecialchars($playerFormData['player_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="text" name="player_name" id="player_name" value="<?php echo academyHtmlspecialchars($playerFormData['player_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">رقم الأب</label>
-                    <input type="text" name="phone" id="phone" inputmode="tel" value="<?php echo htmlspecialchars($playerFormData['phone'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="text" name="phone" id="phone" inputmode="tel" value="<?php echo academyHtmlspecialchars($playerFormData['phone'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
                 <div class="form-group">
                     <label for="guardian_phone">رقم الأم</label>
-                    <input type="text" name="guardian_phone" id="guardian_phone" inputmode="tel" value="<?php echo htmlspecialchars($playerFormData['guardian_phone'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="text" name="guardian_phone" id="guardian_phone" inputmode="tel" value="<?php echo academyHtmlspecialchars($playerFormData['guardian_phone'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
                 <div class="form-group">
                     <label for="subscription_branch">الفرع</label>
@@ -2881,8 +2881,8 @@ if (getAcademyPlayersReadFailure()) {
                             <option value="">لا توجد فروع</option>
                         <?php else: ?>
                             <?php foreach ($playerFormBranchOptions as $branchOption): ?>
-                                <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $playerFormData['subscription_branch'] === $branchOption ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
+                                <option value="<?php echo academyHtmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $playerFormData['subscription_branch'] === $branchOption ? 'selected' : ''; ?>>
+                                    <?php echo academyHtmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -2890,15 +2890,15 @@ if (getAcademyPlayersReadFailure()) {
                 </div>
                 <div class="form-group">
                     <label for="birth_date">سنة الميلاد</label>
-                    <input type="number" name="birth_year" id="birth_date" value="<?php echo htmlspecialchars($playerFormData['birth_year'], ENT_QUOTES, 'UTF-8'); ?>" min="1950" max="<?php echo (int) date('Y'); ?>" placeholder="مثال: 2010" required>
+                    <input type="number" name="birth_year" id="birth_date" value="<?php echo academyHtmlspecialchars($playerFormData['birth_year'], ENT_QUOTES, 'UTF-8'); ?>" min="1950" max="<?php echo (int) date('Y'); ?>" placeholder="مثال: 2010" required>
                 </div>
                 <div class="form-group">
                     <label for="subscription_start_date">تاريخ بداية الاشتراك</label>
-                    <input type="date" name="subscription_start_date" id="subscription_start_date" value="<?php echo htmlspecialchars($playerFormData['subscription_start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="date" name="subscription_start_date" id="subscription_start_date" value="<?php echo academyHtmlspecialchars($playerFormData['subscription_start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="player_age">السن (مُحتسب)</label>
-                    <input type="text" id="player_age" value="<?php echo htmlspecialchars(calculateAcademyPlayerAgeFromYear($playerFormData['birth_year'] !== '' ? (int) $playerFormData['birth_year'] : null), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                    <input type="text" id="player_age" value="<?php echo academyHtmlspecialchars(calculateAcademyPlayerAgeFromYear($playerFormData['birth_year'] !== '' ? (int) $playerFormData['birth_year'] : null), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                 </div>
                 <div class="form-group file-group">
                     <label for="player_image">صورة السباح</label>
@@ -2915,19 +2915,19 @@ if (getAcademyPlayersReadFailure()) {
                                 <?php $subscriptionDisplayText = formatAcademyPlayerSubscriptionDisplay($subscription); ?>
                                 <option
                                     value="<?php echo $subscriptionId; ?>"
-                                    data-branch="<?php echo htmlspecialchars((string) ($subscription['subscription_branch'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-category="<?php echo htmlspecialchars((string) ($subscription['subscription_category'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-coach="<?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-schedule="<?php echo htmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                    data-schedule-days="<?php echo htmlspecialchars((string) ($subscription['schedule_days'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-branch="<?php echo academyHtmlspecialchars((string) ($subscription['subscription_branch'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-category="<?php echo academyHtmlspecialchars((string) ($subscription['subscription_category'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-coach="<?php echo academyHtmlspecialchars((string) ($subscription['coach_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-schedule="<?php echo academyHtmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-schedule-days="<?php echo academyHtmlspecialchars((string) ($subscription['schedule_days'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                                     data-exercises="<?php echo (int) ($subscription['available_exercises_count'] ?? 0); ?>"
                                     data-max-trainees="<?php echo (int) ($subscription['max_trainees'] ?? 0); ?>"
                                     data-current-count="<?php echo (int) ($subscription['active_players_count'] ?? 0); ?>"
-                                    data-price="<?php echo htmlspecialchars(formatAcademyPlayerAmount($subscription['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
+                                    data-price="<?php echo academyHtmlspecialchars(formatAcademyPlayerAmount($subscription['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
                                     data-stars-count="<?php echo academyPlayerCategoryStarsCount((string) ($subscription['subscription_category'] ?? '')); ?>"
                                     data-allows-custom-stars="<?php echo academyPlayerCategoryAllowsCustomStars((string) ($subscription['subscription_category'] ?? '')) ? '1' : '0'; ?>"
                                     <?php echo (string) $subscriptionId === $playerFormData['subscription_id'] ? 'selected' : ''; ?>
-                                ><?php echo htmlspecialchars($subscriptionDisplayText, ENT_QUOTES, 'UTF-8'); ?></option>
+                                ><?php echo academyHtmlspecialchars($subscriptionDisplayText, ENT_QUOTES, 'UTF-8'); ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
@@ -2937,56 +2937,56 @@ if (getAcademyPlayersReadFailure()) {
             <div class="subscription-overview-grid">
                 <div class="overview-item">
                     <span>مستوى المجموعة</span>
-                    <strong id="subscription_category_display"><?php echo htmlspecialchars($playerFormData['subscription_category'] !== '' ? $playerFormData['subscription_category'] : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong id="subscription_category_display"><?php echo academyHtmlspecialchars($playerFormData['subscription_category'] !== '' ? $playerFormData['subscription_category'] : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
                 <div class="overview-item">
                     <span>المدرب</span>
-                    <strong id="subscription_coach_display"><?php echo htmlspecialchars($playerFormData['subscription_coach_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong id="subscription_coach_display"><?php echo academyHtmlspecialchars($playerFormData['subscription_coach_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
                 <div class="overview-item">
                     <span>الأيام والساعة</span>
-                    <strong id="subscription_schedule_display"><?php echo htmlspecialchars($playerFormData['subscription_training_schedule'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong id="subscription_schedule_display"><?php echo academyHtmlspecialchars($playerFormData['subscription_training_schedule'], ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
                 <div class="overview-item">
                     <span>عدد التمارين المتاحة</span>
-                    <strong id="subscription_exercises_display"><?php echo htmlspecialchars($playerFormData['available_exercises_count'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong id="subscription_exercises_display"><?php echo academyHtmlspecialchars($playerFormData['available_exercises_count'], ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
                 <div class="overview-item">
                     <span>السباحين / الحد الأقصى</span>
-                    <strong id="subscription_capacity_display"><?php echo htmlspecialchars(($playerFormData['current_players_count'] === '' ? '0' : $playerFormData['current_players_count']) . ' / ' . ($playerFormData['max_trainees'] === '' ? '0' : $playerFormData['max_trainees']), ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong id="subscription_capacity_display"><?php echo academyHtmlspecialchars(($playerFormData['current_players_count'] === '' ? '0' : $playerFormData['current_players_count']) . ' / ' . ($playerFormData['max_trainees'] === '' ? '0' : $playerFormData['max_trainees']), ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
                 <div class="overview-item">
                     <span>تاريخ نهاية الاشتراك</span>
-                    <strong id="subscription_end_display"><?php echo htmlspecialchars($playerFormData['subscription_end_date'] !== '' ? $playerFormData['subscription_end_date'] : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong id="subscription_end_display"><?php echo academyHtmlspecialchars($playerFormData['subscription_end_date'] !== '' ? $playerFormData['subscription_end_date'] : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
             </div>
 
             <div class="form-grid form-grid-compact payment-grid">
                 <div class="form-group">
                     <label for="subscription_base_price">السعر</label>
-                    <input type="number" min="0" step="0.01" name="subscription_base_price" id="subscription_base_price" value="<?php echo htmlspecialchars($playerFormData['subscription_base_price'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="number" min="0" step="0.01" name="subscription_base_price" id="subscription_base_price" value="<?php echo academyHtmlspecialchars($playerFormData['subscription_base_price'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <?php if ($canManageDiscount): ?>
                     <div class="form-group" id="additionalDiscountGroup">
                         <label for="additional_discount">خصم الإدارة</label>
-                        <input type="number" min="0" step="0.01" name="additional_discount" id="additional_discount" value="<?php echo htmlspecialchars($playerFormData['additional_discount'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="number" min="0" step="0.01" name="additional_discount" id="additional_discount" value="<?php echo academyHtmlspecialchars($playerFormData['additional_discount'], ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                 <?php endif; ?>
                 <div class="form-group">
                     <label for="subscription_amount">الإجمالي</label>
-                    <input type="text" id="subscription_amount" value="<?php echo htmlspecialchars($playerFormData['subscription_amount'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                    <input type="text" id="subscription_amount" value="<?php echo academyHtmlspecialchars($playerFormData['subscription_amount'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="paid_amount">المدفوع</label>
-                    <input type="number" min="0" step="0.01" name="paid_amount" id="paid_amount" value="<?php echo htmlspecialchars($playerFormData['paid_amount'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="number" min="0" step="0.01" name="paid_amount" id="paid_amount" value="<?php echo academyHtmlspecialchars($playerFormData['paid_amount'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="remaining_amount">المتبقي</label>
-                    <input type="text" id="remaining_amount" value="<?php echo htmlspecialchars($playerFormData['remaining_amount'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                    <input type="text" id="remaining_amount" value="<?php echo academyHtmlspecialchars($playerFormData['remaining_amount'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="receipt_number">رقم الإيصال</label>
-                    <input type="text" name="receipt_number" id="receipt_number" value="<?php echo htmlspecialchars($playerFormData['receipt_number'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="text" name="receipt_number" id="receipt_number" value="<?php echo academyHtmlspecialchars($playerFormData['receipt_number'], ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
             </div>
 
@@ -3025,21 +3025,21 @@ if (getAcademyPlayersReadFailure()) {
                     </div>
                 </div>
                 <div class="toggle-card hidden" id="starsCard">
-                    <div class="stars-preview" id="starsPreview"><?php echo htmlspecialchars(academyPlayerStarsText((int) ($playerFormData['stars_count'] === '' ? 0 : $playerFormData['stars_count'])), ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="stars-preview" id="starsPreview"><?php echo academyHtmlspecialchars(academyPlayerStarsText((int) ($playerFormData['stars_count'] === '' ? 0 : $playerFormData['stars_count'])), ENT_QUOTES, 'UTF-8'); ?></div>
                     <div class="form-group compact-field hidden" id="starsCountGroup">
                         <label for="stars_count">عدد النجوم</label>
                         <select name="stars_count" id="stars_count">
                             <option value="">اختر عدد النجوم</option>
                             <?php foreach (ACADEMY_PLAYERS_CUSTOM_STARS_OPTIONS as $starsOption): ?>
                                 <option value="<?php echo $starsOption; ?>" <?php echo (string) $starsOption === $playerFormData['stars_count'] ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars(academyPlayerStarsOptionLabel((int) $starsOption), ENT_QUOTES, 'UTF-8'); ?>
+                                    <?php echo academyHtmlspecialchars(academyPlayerStarsOptionLabel((int) $starsOption), ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group compact-field">
                         <label for="last_star_date">تاريخ آخر نجمة (اختياري)</label>
-                        <input type="date" name="last_star_date" id="last_star_date" value="<?php echo htmlspecialchars($playerFormData['last_star_date'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="date" name="last_star_date" id="last_star_date" value="<?php echo academyHtmlspecialchars($playerFormData['last_star_date'], ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                 </div>
             </div>
@@ -3072,24 +3072,24 @@ if (getAcademyPlayersReadFailure()) {
                     >
                         إضافة سباح
                     </button>
-                    <a href="<?php echo htmlspecialchars($playersPageUrl, ENT_QUOTES, 'UTF-8'); ?>" class="back-btn">العودة لجدول السباحين</a>
+                    <a href="<?php echo academyHtmlspecialchars($playersPageUrl, ENT_QUOTES, 'UTF-8'); ?>" class="back-btn">العودة لجدول السباحين</a>
                 </div>
             </div>
             <form method="GET" class="filter-form filter-form-horizontal summary-page-form" autocomplete="off">
-                <input type="hidden" name="search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="status" value="<?php echo htmlspecialchars($filters['status'] === 'all' ? '' : $filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="medical_report" value="<?php echo htmlspecialchars($filters['medical_report'] === 'all' ? '' : $filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="subscription_id" value="<?php echo academyHtmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="branch" value="<?php echo academyHtmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="category" value="<?php echo academyHtmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="status" value="<?php echo academyHtmlspecialchars($filters['status'] === 'all' ? '' : $filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="medical_report" value="<?php echo academyHtmlspecialchars($filters['medical_report'] === 'all' ? '' : $filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
                 <input type="hidden" name="view" value="summary">
                 <div class="form-group">
                     <label for="summary_category">مستوى الملخص</label>
                     <select name="summary_category" id="summary_category">
                         <option value="">كل المستويات</option>
                         <?php foreach ($categoryOptions as $categoryOption): ?>
-                            <option value="<?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $summaryCategory === $categoryOption ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>
+                            <option value="<?php echo academyHtmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $summaryCategory === $categoryOption ? 'selected' : ''; ?>>
+                                <?php echo academyHtmlspecialchars($categoryOption, ENT_QUOTES, 'UTF-8'); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -3119,9 +3119,9 @@ if (getAcademyPlayersReadFailure()) {
                         <?php foreach ($subscriptionSummary['available_groups'] as $availableGroup): ?>
                             <div>
                                 <span>
-                                    <?php echo htmlspecialchars((string) ($availableGroup['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                    <?php echo academyHtmlspecialchars((string) ($availableGroup['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
                                     <?php if ((string) ($availableGroup['subscription_branch'] ?? '') !== ''): ?>
-                                        <small class="summary-inline-note"><?php echo htmlspecialchars((string) $availableGroup['subscription_branch'], ENT_QUOTES, 'UTF-8'); ?></small>
+                                        <small class="summary-inline-note"><?php echo academyHtmlspecialchars((string) $availableGroup['subscription_branch'], ENT_QUOTES, 'UTF-8'); ?></small>
                                     <?php endif; ?>
                                 </span>
                                 <strong>
@@ -3147,12 +3147,12 @@ if (getAcademyPlayersReadFailure()) {
                 <div class="side-card action-card" id="player-files-card">
                     <h3>ملفات السباح</h3>
                     <div class="info-list compact-list">
-                        <div><span>السباح</span><strong><?php echo htmlspecialchars((string) ($filesPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>المجموعة</span><strong><?php echo htmlspecialchars((string) ($filesPlayer['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>الفرع</span><strong><?php echo htmlspecialchars((string) ($filesPlayer['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>السباح</span><strong><?php echo academyHtmlspecialchars((string) ($filesPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>المجموعة</span><strong><?php echo academyHtmlspecialchars((string) ($filesPlayer['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>الفرع</span><strong><?php echo academyHtmlspecialchars((string) ($filesPlayer['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <?php if ($filesPlayerStarsCount > 0): ?>
-                            <div><span>النجوم</span><strong><?php echo htmlspecialchars(academyPlayerStarsText($filesPlayerStarsCount), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span>تاريخ آخر نجمة</span><strong><?php echo htmlspecialchars(formatAcademyPlayerDate((string) ($filesPlayer['last_star_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>النجوم</span><strong><?php echo academyHtmlspecialchars(academyPlayerStarsText($filesPlayerStarsCount), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>تاريخ آخر نجمة</span><strong><?php echo academyHtmlspecialchars(formatAcademyPlayerDate((string) ($filesPlayer['last_star_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         <?php endif; ?>
                     </div>
 
@@ -3173,22 +3173,22 @@ if (getAcademyPlayersReadFailure()) {
                             ?>
                             <article class="file-card">
                                 <div class="file-card-head">
-                                    <strong><?php echo htmlspecialchars($fileCard['title'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                    <strong><?php echo academyHtmlspecialchars($fileCard['title'], ENT_QUOTES, 'UTF-8'); ?></strong>
                                     <?php if ($filePath !== null): ?>
-                                        <a href="<?php echo htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="file-view-link">عرض</a>
+                                        <a href="<?php echo academyHtmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="file-view-link">عرض</a>
                                     <?php endif; ?>
                                 </div>
                                 <?php if ($fileField === 'medical_report_path' && $filesPlayerMedicalReportPaths !== []): ?>
                                     <div class="file-gallery">
                                         <?php foreach ($filesPlayerMedicalReportPaths as $medicalReportImagePath): ?>
-                                            <a href="<?php echo htmlspecialchars($medicalReportImagePath, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="file-preview">
-                                                <img src="<?php echo htmlspecialchars($medicalReportImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($fileCard['title'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <a href="<?php echo academyHtmlspecialchars($medicalReportImagePath, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="file-preview">
+                                                <img src="<?php echo academyHtmlspecialchars($medicalReportImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars($fileCard['title'], ENT_QUOTES, 'UTF-8'); ?>">
                                             </a>
                                         <?php endforeach; ?>
                                     </div>
                                 <?php elseif ($filePath !== null): ?>
                                     <div class="file-preview">
-                                        <img src="<?php echo htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($fileCard['title'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <img src="<?php echo academyHtmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars($fileCard['title'], ENT_QUOTES, 'UTF-8'); ?>">
                                     </div>
                                 <?php else: ?>
                                     <div class="empty-file">غير مرفوع</div>
@@ -3197,14 +3197,14 @@ if (getAcademyPlayersReadFailure()) {
                                 <form method="POST" enctype="multipart/form-data" class="stack-form compact-stack">
                                     <input type="hidden" name="action" value="upload_file">
                                     <input type="hidden" name="player_id" value="<?php echo (int) ($filesPlayer['id'] ?? 0); ?>">
-                                    <input type="hidden" name="file_field" value="<?php echo htmlspecialchars($fileField, ENT_QUOTES, 'UTF-8'); ?>">
-                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                                    <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                                    <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                    <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                                    <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                                    <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                                    <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="file_field" value="<?php echo academyHtmlspecialchars($fileField, ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="current_subscription_id" value="<?php echo academyHtmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="current_branch" value="<?php echo academyHtmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="current_category" value="<?php echo academyHtmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="current_medical_report" value="<?php echo academyHtmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
                                     <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                                     <input type="file" name="player_file<?php echo $fileField === 'medical_report_path' ? '[]' : ''; ?>" accept="image/*" <?php echo $fileField === 'medical_report_path' ? 'multiple' : ''; ?> required>
                                     <button type="submit" class="link-btn file-action-btn">رفع</button>
@@ -3214,14 +3214,14 @@ if (getAcademyPlayersReadFailure()) {
                                     <form method="POST" class="inline-form compact-inline-form">
                                         <input type="hidden" name="action" value="delete_file">
                                         <input type="hidden" name="player_id" value="<?php echo (int) ($filesPlayer['id'] ?? 0); ?>">
-                                        <input type="hidden" name="file_field" value="<?php echo htmlspecialchars($fileField, ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="file_field" value="<?php echo academyHtmlspecialchars($fileField, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_subscription_id" value="<?php echo academyHtmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_branch" value="<?php echo academyHtmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_category" value="<?php echo academyHtmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="current_medical_report" value="<?php echo academyHtmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
                                         <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                                         <button type="submit" class="delete-btn compact-delete-btn">حذف</button>
                                     </form>
@@ -3237,8 +3237,8 @@ if (getAcademyPlayersReadFailure()) {
                                 <?php foreach ($playerPayments as $paymentItem): ?>
                                     <div class="payment-history-item">
                                         <strong><?php echo formatAcademyPlayerMoney($paymentItem['amount'] ?? 0); ?> ج.م</strong>
-                                        <span><?php echo htmlspecialchars((string) ($paymentItem['receipt_number'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span>
-                                        <span><?php echo htmlspecialchars(formatAcademyPlayerDate((string) ($paymentItem['created_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span><?php echo academyHtmlspecialchars((string) ($paymentItem['receipt_number'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span><?php echo academyHtmlspecialchars(formatAcademyPlayerDate((string) ($paymentItem['created_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -3246,7 +3246,7 @@ if (getAcademyPlayersReadFailure()) {
                     <?php endif; ?>
 
                     <div class="form-actions compact-actions">
-                        <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
+                        <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -3255,19 +3255,19 @@ if (getAcademyPlayersReadFailure()) {
                 <div class="side-card action-card" id="player-password-card">
                     <h3>تغيير كلمة السر</h3>
                     <div class="info-list compact-list">
-                        <div><span>السباح</span><strong><?php echo htmlspecialchars((string) ($passwordPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>الباركود</span><strong><?php echo htmlspecialchars((string) ($passwordPlayer['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>السباح</span><strong><?php echo academyHtmlspecialchars((string) ($passwordPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>الباركود</span><strong><?php echo academyHtmlspecialchars((string) ($passwordPlayer['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                     </div>
                     <form method="POST" class="stack-form" autocomplete="off">
                         <input type="hidden" name="action" value="change_password">
                         <input type="hidden" name="player_id" value="<?php echo (int) ($passwordPlayer['id'] ?? 0); ?>">
-                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_subscription_id" value="<?php echo academyHtmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_branch" value="<?php echo academyHtmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_category" value="<?php echo academyHtmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_medical_report" value="<?php echo academyHtmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                         <div class="form-group">
                             <label for="new_password">كلمة السر الجديدة</label>
@@ -3279,7 +3279,7 @@ if (getAcademyPlayersReadFailure()) {
                         </div>
                         <div class="form-actions compact-actions">
                             <button type="submit" class="save-btn">حفظ</button>
-                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
+                            <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
                         </div>
                     </form>
                 </div>
@@ -3291,31 +3291,31 @@ if (getAcademyPlayersReadFailure()) {
                 <div class="side-card action-card" id="player-stars-card">
                     <h3>تحديث بيانات النجمة</h3>
                     <div class="info-list compact-list">
-                        <div><span>السباح</span><strong><?php echo htmlspecialchars((string) ($starsPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                        <div><span>المجموعة</span><strong><?php echo htmlspecialchars((string) ($starsPlayer['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>السباح</span><strong><?php echo academyHtmlspecialchars((string) ($starsPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                        <div><span>المجموعة</span><strong><?php echo academyHtmlspecialchars((string) ($starsPlayer['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                     </div>
                     <form method="POST" class="stack-form" autocomplete="off">
                         <input type="hidden" name="action" value="update_star">
                         <input type="hidden" name="player_id" value="<?php echo (int) ($starsPlayer['id'] ?? 0); ?>">
-                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_subscription_id" value="<?php echo academyHtmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_branch" value="<?php echo academyHtmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_category" value="<?php echo academyHtmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="current_medical_report" value="<?php echo academyHtmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                         <div class="form-group">
                             <label for="star_player_count">عدد النجوم</label>
                             <?php if (count($starsPlayerAllowedOptions) === 1): ?>
                                 <input type="hidden" name="stars_count" value="<?php echo (int) $starsPlayerAllowedOptions[0]; ?>">
-                                <input type="text" id="star_player_count" value="<?php echo htmlspecialchars(academyPlayerStarsOptionLabel((int) $starsPlayerAllowedOptions[0]), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                <input type="text" id="star_player_count" value="<?php echo academyHtmlspecialchars(academyPlayerStarsOptionLabel((int) $starsPlayerAllowedOptions[0]), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                             <?php else: ?>
                                 <select name="stars_count" id="star_player_count" required>
                                     <option value="">اختر عدد النجوم</option>
                                     <?php foreach ($starsPlayerAllowedOptions as $starsOption): ?>
                                         <option value="<?php echo $starsOption; ?>" <?php echo $starsPlayerResolvedCount === (int) $starsOption ? 'selected' : ''; ?>>
-                                            <?php echo htmlspecialchars(academyPlayerStarsOptionLabel((int) $starsOption), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars(academyPlayerStarsOptionLabel((int) $starsOption), ENT_QUOTES, 'UTF-8'); ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -3323,11 +3323,11 @@ if (getAcademyPlayersReadFailure()) {
                         </div>
                         <div class="form-group">
                             <label for="star_player_date">تاريخ الحصول على النجمة</label>
-                            <input type="date" name="last_star_date" id="star_player_date" value="<?php echo htmlspecialchars((string) ($starsPlayer['last_star_date'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
+                            <input type="date" name="last_star_date" id="star_player_date" value="<?php echo academyHtmlspecialchars((string) ($starsPlayer['last_star_date'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
                         </div>
                         <div class="form-actions compact-actions">
                             <button type="submit" class="save-btn">حفظ تاريخ النجمة</button>
-                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
+                            <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl($currentFilterParams), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إغلاق</a>
                         </div>
                     </form>
                 </div>
@@ -3391,7 +3391,7 @@ if (getAcademyPlayersReadFailure()) {
                                     <div class="table-avatar-box">
                                         <div class="player-avatar-shell">
                                             <?php if ($playerImagePath !== null): ?>
-                                                <img class="player-avatar-image" src="<?php echo htmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                                                <img class="player-avatar-image" src="<?php echo academyHtmlspecialchars($playerImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                                             <?php else: ?>
                                                 <span class="player-avatar">🏅</span>
                                             <?php endif; ?>
@@ -3400,63 +3400,63 @@ if (getAcademyPlayersReadFailure()) {
                                 </td>
                                 <td data-label="اسم السباح">
                                     <div class="stacked-cell">
-                                        <strong><?php echo htmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                        <strong><?php echo academyHtmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
                                     </div>
                                 </td>
-                                <td data-label="الباركود"><span class="table-cell-text"><?php echo htmlspecialchars((string) (($player['barcode'] ?? '') !== '' ? $player['barcode'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="رقم الأب"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="رقم الأم"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['guardian_phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="سنة الميلاد"><span class="birth-year-badge"><?php echo htmlspecialchars((string) ($player['birth_year_display'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="السن"><span class="age-badge"><?php echo htmlspecialchars((string) ($player['age_text'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="المجموعة"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="مستوى المجموعة"><span class="table-cell-text"><?php echo htmlspecialchars((string) (($player['subscription_category'] ?? '') !== '' ? $player['subscription_category'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="الفرع"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="الباركود"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) (($player['barcode'] ?? '') !== '' ? $player['barcode'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="رقم الأب"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="رقم الأم"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['guardian_phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="سنة الميلاد"><span class="birth-year-badge"><?php echo academyHtmlspecialchars((string) ($player['birth_year_display'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="السن"><span class="age-badge"><?php echo academyHtmlspecialchars((string) ($player['age_text'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="المجموعة"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="مستوى المجموعة"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) (($player['subscription_category'] ?? '') !== '' ? $player['subscription_category'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="الفرع"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="التقرير الطبي">
                                     <div class="stacked-cell">
-                                        <strong><?php echo htmlspecialchars($playerRequiresMedicalReport ? 'مطلوب' : 'غير مطلوب', ENT_QUOTES, 'UTF-8'); ?></strong>
-                                        <span class="status-badge <?php echo htmlspecialchars($playerMedicalReportStatusClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($playerMedicalReportStatusText, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <strong><?php echo academyHtmlspecialchars($playerRequiresMedicalReport ? 'مطلوب' : 'غير مطلوب', ENT_QUOTES, 'UTF-8'); ?></strong>
+                                        <span class="status-badge <?php echo academyHtmlspecialchars($playerMedicalReportStatusClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($playerMedicalReportStatusText, ENT_QUOTES, 'UTF-8'); ?></span>
                                     </div>
                                 </td>
                                 <td data-label="عدد النجوم">
                                     <div class="stacked-cell">
-                                        <strong><?php echo $playerHasStars ? htmlspecialchars((string) $playerStarsCount, ENT_QUOTES, 'UTF-8') : '—'; ?></strong>
-                                        <span><?php echo $playerHasStars ? htmlspecialchars((string) ($player['stars_text'] ?? '—'), ENT_QUOTES, 'UTF-8') : 'لا توجد نجوم'; ?></span>
+                                        <strong><?php echo $playerHasStars ? academyHtmlspecialchars((string) $playerStarsCount, ENT_QUOTES, 'UTF-8') : '—'; ?></strong>
+                                        <span><?php echo $playerHasStars ? academyHtmlspecialchars((string) ($player['stars_text'] ?? '—'), ENT_QUOTES, 'UTF-8') : 'لا توجد نجوم'; ?></span>
                                     </div>
                                 </td>
-                                <td data-label="تاريخ آخر نجمة"><span class="table-cell-text table-cell-date"><?php echo htmlspecialchars($playerHasStars ? $playerLastStarDate : '—', ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="بداية الاشتراك"><span class="table-cell-text table-cell-date"><?php echo htmlspecialchars(formatAcademyPlayerDate((string) ($player['subscription_start_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="نهاية الاشتراك"><span class="table-cell-text table-cell-date"><?php echo htmlspecialchars(formatAcademyPlayerDate((string) ($player['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="تاريخ آخر نجمة"><span class="table-cell-text table-cell-date"><?php echo academyHtmlspecialchars($playerHasStars ? $playerLastStarDate : '—', ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="بداية الاشتراك"><span class="table-cell-text table-cell-date"><?php echo academyHtmlspecialchars(formatAcademyPlayerDate((string) ($player['subscription_start_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="نهاية الاشتراك"><span class="table-cell-text table-cell-date"><?php echo academyHtmlspecialchars(formatAcademyPlayerDate((string) ($player['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="حالة الاشتراك">
                                     <span class="status-badge <?php echo !empty($player['is_expired']) ? 'expired' : 'active'; ?>">
-                                        <?php echo htmlspecialchars((string) ($player['subscription_status_label'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php echo academyHtmlspecialchars((string) ($player['subscription_status_label'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                                     </span>
                                 </td>
-                                <td data-label="المدرب"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['subscription_coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="أيام التمرين الوقت واليوم"><span class="table-cell-text table-cell-multiline"><?php echo htmlspecialchars(formatAcademyTrainingSchedule((string) ($player['subscription_training_schedule'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="المدرب"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['subscription_coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="أيام التمرين الوقت واليوم"><span class="table-cell-text table-cell-multiline"><?php echo academyHtmlspecialchars(formatAcademyTrainingSchedule((string) ($player['subscription_training_schedule'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="التمارين المتاحة"><span class="table-cell-text"><?php echo (int) ($player['available_exercises_count'] ?? 0); ?></span></td>
                                 <td data-label="الإجمالي"><span class="amount-badge total"><?php echo formatAcademyPlayerMoney($player['subscription_amount'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="المدفوع"><span class="amount-badge collected"><?php echo formatAcademyPlayerMoney($player['paid_amount'] ?? 0); ?> ج.م</span></td>
-                                <td data-label="رقم إيصال الدفع"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['receipt_number'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="رقم إيصال الدفع"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['receipt_number'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="المتبقي"><span class="amount-badge remaining <?php echo !empty($player['has_balance']) ? 'has-value' : ''; ?>"><?php echo formatAcademyPlayerMoney($player['remaining_amount'] ?? 0); ?> ج.م</span></td>
-                                <td data-label="رقم إيصال سداد المتبقي"><span class="table-cell-text table-cell-multiline"><?php echo htmlspecialchars((string) (($player['settlement_receipt_numbers'] ?? '') !== '' ? $player['settlement_receipt_numbers'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="رقم إيصال سداد المتبقي"><span class="table-cell-text table-cell-multiline"><?php echo academyHtmlspecialchars((string) (($player['settlement_receipt_numbers'] ?? '') !== '' ? $player['settlement_receipt_numbers'] : '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="الإجراءات">
                                     <div class="action-buttons">
-                                        <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['edit' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>" class="edit-btn">تعديل</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['edit' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>" class="edit-btn">تعديل</a>
                                         <?php if ($playerHasStarsCategory): ?>
-                                            <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['stars' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#player-stars-card" class="link-btn" aria-label="<?php echo htmlspecialchars('تحديث نجمة ' . (string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">النجمة</a>
+                                            <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['stars' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#player-stars-card" class="link-btn" aria-label="<?php echo academyHtmlspecialchars('تحديث نجمة ' . (string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">النجمة</a>
                                         <?php endif; ?>
-                                        <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['files' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#player-files-card" class="link-btn files-btn">ملفات السباح</a>
-                                        <a href="<?php echo htmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['password' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#player-password-card" class="link-btn">كلمة السر</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['files' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#player-files-card" class="link-btn files-btn">ملفات السباح</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildAcademyPlayersPageUrl(array_merge($currentFilterParams, ['password' => $player['id']])), ENT_QUOTES, 'UTF-8'); ?>#player-password-card" class="link-btn">كلمة السر</a>
                                         <form method="POST" class="inline-form delete-player-form">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="player_id" value="<?php echo (int) ($player['id'] ?? 0); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_subscription_id" value="<?php echo htmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_category" value="<?php echo htmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_status" value="<?php echo htmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="current_medical_report" value="<?php echo htmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academyPlayersCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($filters['search'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_subscription_id" value="<?php echo academyHtmlspecialchars($filters['subscription_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_branch" value="<?php echo academyHtmlspecialchars($filters['branch'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_category" value="<?php echo academyHtmlspecialchars($filters['category'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_status" value="<?php echo academyHtmlspecialchars($filters['status'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="current_medical_report" value="<?php echo academyHtmlspecialchars($filters['medical_report'], ENT_QUOTES, 'UTF-8'); ?>">
                                             <input type="hidden" name="current_page" value="<?php echo $currentPlayersPage; ?>">
                                             <button type="submit" class="delete-btn">حذف</button>
                                         </form>

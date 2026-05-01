@@ -398,26 +398,26 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الإداريين - <?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></title>
+    <title>بوابة الإداريين - <?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></title>
     <link rel="stylesheet" href="assets/css/coach-portal.css">
 </head>
-<body class="light-mode" data-reset-url="<?php echo htmlspecialchars($selectedAdministrator !== null ? 'admin_portal.php?logout=1' : 'admin_portal.php', ENT_QUOTES, 'UTF-8'); ?>">
+<body class="light-mode" data-reset-url="<?php echo academyHtmlspecialchars($selectedAdministrator !== null ? 'admin_portal.php?logout=1' : 'admin_portal.php', ENT_QUOTES, 'UTF-8'); ?>">
 <div class="portal-shell">
     <header class="hero-card">
         <div class="brand-block">
             <div class="brand-logo-wrap">
                 <div class="brand-logo">
                     <?php if ($academyLogoPath !== null): ?>
-                        <img src="<?php echo htmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="شعار <?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
+                        <img src="<?php echo academyHtmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="شعار <?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
                     <?php else: ?>
-                        <span><?php echo htmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span><?php echo academyHtmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
                     <?php endif; ?>
                 </div>
                 <span class="brand-wave">🌊</span>
             </div>
             <div class="brand-text">
                 <span class="page-badge">🗂️ بوابة الإداريين</span>
-                <h1><?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></h1>
+                <h1><?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></h1>
             </div>
         </div>
 
@@ -449,7 +449,7 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
                     inputmode="tel"
                     autocomplete="tel"
                     placeholder="مثال: 01000000000"
-                    value="<?php echo htmlspecialchars($submittedPhone, ENT_QUOTES, 'UTF-8'); ?>"
+                    value="<?php echo academyHtmlspecialchars($submittedPhone, ENT_QUOTES, 'UTF-8'); ?>"
                 >
             </div>
 
@@ -468,7 +468,7 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
 
             <div class="search-actions">
                 <button type="submit" class="primary-btn">🔓 دخول وعرض البيانات</button>
-                <a href="<?php echo htmlspecialchars($selectedAdministrator !== null ? 'admin_portal.php?logout=1' : 'admin_portal.php', ENT_QUOTES, 'UTF-8'); ?>" class="secondary-btn" id="clearBtn">
+                <a href="<?php echo academyHtmlspecialchars($selectedAdministrator !== null ? 'admin_portal.php?logout=1' : 'admin_portal.php', ENT_QUOTES, 'UTF-8'); ?>" class="secondary-btn" id="clearBtn">
                     <?php echo $selectedAdministrator !== null ? '🚪 تسجيل الخروج' : '🧹 مسح'; ?>
                 </a>
             </div>
@@ -476,8 +476,8 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
     </section>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -487,15 +487,15 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
                 <div class="coach-avatar">👨‍💼</div>
                 <div>
                     <span class="mini-badge">👤 بيانات الإداري</span>
-                    <h2><?php echo htmlspecialchars($selectedAdministrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></h2>
+                    <h2><?php echo academyHtmlspecialchars($selectedAdministrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></h2>
                     <div class="coach-meta">
-                        <span>📞 <?php echo htmlspecialchars($selectedAdministrator['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
-                        <span>🛌 أيام الإجازة: <?php echo htmlspecialchars(formatAdminPortalLeaveDays($selectedAdministrator['leave_days'] ?? null), ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span>📞 <?php echo academyHtmlspecialchars($selectedAdministrator['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span>🛌 أيام الإجازة: <?php echo academyHtmlspecialchars(formatAdminPortalLeaveDays($selectedAdministrator['leave_days'] ?? null), ENT_QUOTES, 'UTF-8'); ?></span>
                         <span>
                             🗓️ الفترة الحالية:
-                            <?php echo htmlspecialchars((string) ($administratorTotals['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                            <?php echo academyHtmlspecialchars((string) ($administratorTotals['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                             →
-                            <?php echo htmlspecialchars((string) ($administratorTotals['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                            <?php echo academyHtmlspecialchars((string) ($administratorTotals['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                         </span>
                     </div>
                 </div>
@@ -505,7 +505,7 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
                 <span>💳 آخر صافي قبض مسجل</span>
                 <strong>
                     <?php echo $latestPayment !== null
-                        ? htmlspecialchars(formatAdminPortalAmount((float) ($latestPayment['net_amount'] ?? 0)), ENT_QUOTES, 'UTF-8')
+                        ? academyHtmlspecialchars(formatAdminPortalAmount((float) ($latestPayment['net_amount'] ?? 0)), ENT_QUOTES, 'UTF-8')
                         : 'لا يوجد'; ?>
                 </strong>
             </div>
@@ -515,7 +515,7 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
             <article class="stat-card accent-orange">
                 <span class="stat-icon">⏱️</span>
                 <div>
-                    <strong><?php echo htmlspecialchars(formatAdminPortalAmount((float) $administratorTotals['total_hours']), ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong><?php echo academyHtmlspecialchars(formatAdminPortalAmount((float) $administratorTotals['total_hours']), ENT_QUOTES, 'UTF-8'); ?></strong>
                     <p>عدد الساعات الحالية</p>
                 </div>
             </article>
@@ -539,7 +539,7 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
             <article class="stat-card accent-blue">
                 <span class="stat-icon">🧾</span>
                 <div>
-                    <strong><?php echo htmlspecialchars(formatAdminPortalAmount((float) $administratorTotals['total_advances']), ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong><?php echo academyHtmlspecialchars(formatAdminPortalAmount((float) $administratorTotals['total_advances']), ENT_QUOTES, 'UTF-8'); ?></strong>
                     <p>إجمالي السلف الحالية</p>
                 </div>
             </article>
@@ -557,7 +557,7 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
                 <div>
                     <strong>
                         <?php echo $latestPayment !== null
-                            ? htmlspecialchars(formatAdminPortalAmount((float) ($latestPayment['salary_amount'] ?? 0)), ENT_QUOTES, 'UTF-8')
+                            ? academyHtmlspecialchars(formatAdminPortalAmount((float) ($latestPayment['salary_amount'] ?? 0)), ENT_QUOTES, 'UTF-8')
                             : '0.00'; ?>
                     </strong>
                     <p>آخر مرتب مسجل</p>
@@ -593,16 +593,16 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
                                         $statusLabel = $isPresent ? '✅ حاضر' : ($isLeaveDay ? '🛌 إجازة' : '❌ غائب');
                                     ?>
                                     <tr>
-                                        <td data-label="اليوم"><?php echo htmlspecialchars(formatAdminPortalDateLabel((string) $dailyRecord['date']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="اليوم"><?php echo academyHtmlspecialchars(formatAdminPortalDateLabel((string) $dailyRecord['date']), ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="الحالة">
                                             <span class="status-pill <?php echo $statusClass; ?>">
                                                 <?php echo $statusLabel; ?>
                                             </span>
                                         </td>
-                                        <td data-label="وقت الحضور"><?php echo htmlspecialchars(formatAdminPortalTime($dailyRecord['check_in_time'] ?? null), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="وقت الانصراف"><?php echo htmlspecialchars(formatAdminPortalTime($dailyRecord['check_out_time'] ?? null), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="الساعات"><?php echo htmlspecialchars(formatAdminPortalAmount((float) $dailyRecord['work_hours']), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="السلفة اليومية"><?php echo htmlspecialchars(formatAdminPortalAmount((float) $dailyRecord['advance_amount']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="وقت الحضور"><?php echo academyHtmlspecialchars(formatAdminPortalTime($dailyRecord['check_in_time'] ?? null), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="وقت الانصراف"><?php echo academyHtmlspecialchars(formatAdminPortalTime($dailyRecord['check_out_time'] ?? null), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الساعات"><?php echo academyHtmlspecialchars(formatAdminPortalAmount((float) $dailyRecord['work_hours']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="السلفة اليومية"><?php echo academyHtmlspecialchars(formatAdminPortalAmount((float) $dailyRecord['advance_amount']), ENT_QUOTES, 'UTF-8'); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -636,20 +636,20 @@ $latestPayment = $administratorPaymentHistory[0] ?? null;
                             <tbody>
                                 <?php foreach ($administratorPaymentHistory as $historyItem): ?>
                                     <tr>
-                                        <td data-label="نوع القبض"><?php echo htmlspecialchars(ADMIN_PORTAL_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="نوع القبض"><?php echo academyHtmlspecialchars(ADMIN_PORTAL_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="الفترة">
-                                            <?php echo htmlspecialchars((string) ($historyItem['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars((string) ($historyItem['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                                             →
-                                            <?php echo htmlspecialchars((string) ($historyItem['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars((string) ($historyItem['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                                         </td>
                                         <td data-label="أيام الحضور"><?php echo (int) ($historyItem['attendance_days'] ?? 0); ?></td>
-                                        <td data-label="الساعات"><?php echo htmlspecialchars(formatAdminPortalAmount((float) ($historyItem['total_hours'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="المرتب"><?php echo htmlspecialchars(formatAdminPortalAmount((float) ($historyItem['salary_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="السلف"><?php echo htmlspecialchars(formatAdminPortalAmount((float) ($historyItem['total_advances'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الساعات"><?php echo academyHtmlspecialchars(formatAdminPortalAmount((float) ($historyItem['total_hours'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="المرتب"><?php echo academyHtmlspecialchars(formatAdminPortalAmount((float) ($historyItem['salary_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="السلف"><?php echo academyHtmlspecialchars(formatAdminPortalAmount((float) ($historyItem['total_advances'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="الصافي" class="<?php echo (float) ($historyItem['net_amount'] ?? 0) >= 0 ? 'positive-text' : 'negative-text'; ?>">
-                                            <?php echo htmlspecialchars(formatAdminPortalAmount((float) ($historyItem['net_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars(formatAdminPortalAmount((float) ($historyItem['net_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?>
                                         </td>
-                                        <td data-label="تاريخ القبض"><?php echo htmlspecialchars((string) ($historyItem['paid_at'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="تاريخ القبض"><?php echo academyHtmlspecialchars((string) ($historyItem['paid_at'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
