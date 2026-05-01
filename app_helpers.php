@@ -160,7 +160,7 @@ function buildAcademySubscriptionName(
     $parts = [];
 
     foreach ([$category, $coachName, $scheduleSummary, $branch] as $part) {
-        $sanitizedPart = normalizeAcademyHelperText($part);
+        $sanitizedPart = normalizeAcademyHelperText(sanitizeAcademyDisplayValue($part));
         if ($sanitizedPart !== '' && $sanitizedPart !== '—') {
             $parts[] = $sanitizedPart;
         }
@@ -170,7 +170,7 @@ function buildAcademySubscriptionName(
         return implode(' ', $parts);
     }
 
-    return normalizeAcademyHelperText($fallbackName);
+    return normalizeAcademyHelperText(sanitizeAcademyDisplayValue($fallbackName));
 }
 
 function academyXlsxXmlEscape(string $value): string
