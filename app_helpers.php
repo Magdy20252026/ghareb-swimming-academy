@@ -22,7 +22,7 @@ function isAcademyPlaceholderText(string $value): bool
         return false;
     }
 
-    return preg_match('/^[\?؟�]+$/u', $placeholderCandidate) === 1;
+    return preg_match('/^[\?؟\x{FFFD}]+$/u', $placeholderCandidate) === 1;
 }
 
 function sanitizeAcademyDisplayValue(mixed $value): string
@@ -34,7 +34,7 @@ function sanitizeAcademyDisplayValue(mixed $value): string
 function academyHtmlspecialchars(
     mixed $string,
     int $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401,
-    ?string $encoding = null,
+    ?string $encoding = 'UTF-8',
     bool $doubleEncode = true
 ): string {
     return htmlspecialchars(
