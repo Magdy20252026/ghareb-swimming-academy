@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - <?php echo htmlspecialchars($academyName); ?></title>
+    <title>تسجيل الدخول - <?php echo academyHtmlspecialchars($academyName); ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="light-mode">
@@ -98,12 +98,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="academy-header">
                 <div class="academy-logo">
                     <?php if ($academyLogoPath !== null): ?>
-                        <img src="<?php echo htmlspecialchars($academyLogoPath); ?>" alt="شعار الأكاديمية">
+                        <img src="<?php echo academyHtmlspecialchars($academyLogoPath); ?>" alt="شعار الأكاديمية">
                     <?php else: ?>
-                        <span><?php echo htmlspecialchars($academyLogoInitial); ?></span>
+                        <span><?php echo academyHtmlspecialchars($academyLogoInitial); ?></span>
                     <?php endif; ?>
                 </div>
-                <h1><?php echo htmlspecialchars($academyName); ?></h1>
+                <h1><?php echo academyHtmlspecialchars($academyName); ?></h1>
             </div>
 
             <?php if (!empty($error)): ?>

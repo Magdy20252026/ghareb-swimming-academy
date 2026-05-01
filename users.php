@@ -181,7 +181,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-row">
                 <div class="form-group">
                     <label for="username">👤 اسم المستخدم</label>
-                    <input type="text" name="username" id="username" value="<?php echo htmlspecialchars($editUser["username"] ?? ''); ?>" placeholder="أدخل اسم المستخدم" required>
+                    <input type="text" name="username" id="username" value="<?php echo academyHtmlspecialchars($editUser["username"] ?? ''); ?>" placeholder="أدخل اسم المستخدم" required>
                 </div>
 
                 <div class="form-group">
@@ -230,15 +230,15 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td>
                                     <div class="user-cell">
                                         <span class="user-avatar">👤</span>
-                                        <span><?php echo htmlspecialchars($user["username"]); ?></span>
+                                        <span><?php echo academyHtmlspecialchars($user["username"]); ?></span>
                                     </div>
                                 </td>
                                 <td>
                                     <span class="role-badge <?php echo $user["role"] === "مدير" ? "admin-role" : "supervisor-role"; ?>">
-                                        <?php echo htmlspecialchars($user["role"]); ?>
+                                        <?php echo academyHtmlspecialchars($user["role"]); ?>
                                     </span>
                                 </td>
-                                <td><?php echo htmlspecialchars($user["created_at"]); ?></td>
+                                <td><?php echo academyHtmlspecialchars($user["created_at"]); ?></td>
                                 <td>
                                     <div class="action-buttons">
                                         <a href="users.php?edit=<?php echo $user["id"]; ?>" class="edit-btn">✏️ تعديل</a>

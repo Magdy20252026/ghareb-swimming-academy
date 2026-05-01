@@ -287,7 +287,7 @@ $approvedRequests = swimmerCardRequestsFetch($pdo, true);
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <?php endif; ?>
 
     <section class="panel-card full-width-panel">
@@ -296,12 +296,12 @@ $approvedRequests = swimmerCardRequestsFetch($pdo, true);
             <div class="card-actions">
                 <form method="POST" class="inline-form">
                     <input type="hidden" name="action" value="download_all">
-                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerCardRequestsToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerCardRequestsToken(), ENT_QUOTES, 'UTF-8'); ?>">
                     <button type="submit" class="primary-btn secondary-btn">تحميل كل الطلبات</button>
                 </form>
                 <form method="POST" class="inline-form">
                     <input type="hidden" name="action" value="export_all">
-                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerCardRequestsToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerCardRequestsToken(), ENT_QUOTES, 'UTF-8'); ?>">
                     <button type="submit" class="primary-btn">استخراج شيت إكسل</button>
                 </form>
             </div>
@@ -315,27 +315,27 @@ $approvedRequests = swimmerCardRequestsFetch($pdo, true);
                     <article class="item-card request-card">
                         <div class="item-image-wrap">
                             <?php if ($requestImagePath !== null): ?>
-                                <img src="<?php echo htmlspecialchars($requestImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars((string) ($request['player_name_snapshot'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                                <img src="<?php echo academyHtmlspecialchars($requestImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars((string) ($request['player_name_snapshot'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                             <?php else: ?>
                                 <div class="item-image-placeholder">🪪</div>
                             <?php endif; ?>
                         </div>
                         <div class="item-card-body details-grid">
-                            <div><span>اللاعب</span><strong><?php echo htmlspecialchars((string) ($request['player_name_snapshot'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span>الباركود</span><strong><?php echo htmlspecialchars((string) ($request['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span>الفرع</span><strong><?php echo htmlspecialchars((string) ($request['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span>المجموعة</span><strong><?php echo htmlspecialchars((string) ($request['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span>سنة الميلاد</span><strong><?php echo htmlspecialchars(swimmerCardRequestBirthYear($request['birth_date'] ?? null) ?: '—', ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span>تاريخ الطلب</span><strong><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) ($request['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>اللاعب</span><strong><?php echo academyHtmlspecialchars((string) ($request['player_name_snapshot'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>الباركود</span><strong><?php echo academyHtmlspecialchars((string) ($request['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>الفرع</span><strong><?php echo academyHtmlspecialchars((string) ($request['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>المجموعة</span><strong><?php echo academyHtmlspecialchars((string) ($request['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>سنة الميلاد</span><strong><?php echo academyHtmlspecialchars(swimmerCardRequestBirthYear($request['birth_date'] ?? null) ?: '—', ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>تاريخ الطلب</span><strong><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) ($request['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         </div>
                         <div class="card-actions">
                             <?php if ($requestImagePath !== null): ?>
-                                <a href="<?php echo htmlspecialchars($requestImagePath, ENT_QUOTES, 'UTF-8'); ?>" download="<?php echo htmlspecialchars(swimmerCardRequestsDownloadName((string) ($request['player_name_snapshot'] ?? 'player'), $requestImagePath), ENT_QUOTES, 'UTF-8'); ?>" class="primary-btn secondary-btn">تحميل</a>
+                                <a href="<?php echo academyHtmlspecialchars($requestImagePath, ENT_QUOTES, 'UTF-8'); ?>" download="<?php echo academyHtmlspecialchars(swimmerCardRequestsDownloadName((string) ($request['player_name_snapshot'] ?? 'player'), $requestImagePath), ENT_QUOTES, 'UTF-8'); ?>" class="primary-btn secondary-btn">تحميل</a>
                             <?php endif; ?>
                             <form method="POST" class="inline-form">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="request_id" value="<?php echo (int) ($request['id'] ?? 0); ?>">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerCardRequestsToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerCardRequestsToken(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <button type="submit" class="primary-btn danger-btn">حذف</button>
                             </form>
                         </div>
@@ -368,12 +368,12 @@ $approvedRequests = swimmerCardRequestsFetch($pdo, true);
                     <tbody>
                     <?php foreach ($approvedRequests as $request): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars((string) ($request['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td><?php echo htmlspecialchars((string) ($request['player_name_snapshot'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td><?php echo htmlspecialchars((string) ($request['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td><?php echo htmlspecialchars(swimmerCardRequestBirthYear($request['birth_date'] ?? null) ?: '—', ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td><?php echo htmlspecialchars((string) ($request['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) ($request['approved_exported_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo academyHtmlspecialchars((string) ($request['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo academyHtmlspecialchars((string) ($request['player_name_snapshot'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo academyHtmlspecialchars((string) ($request['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo academyHtmlspecialchars(swimmerCardRequestBirthYear($request['birth_date'] ?? null) ?: '—', ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo academyHtmlspecialchars((string) ($request['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) ($request['approved_exported_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

@@ -746,7 +746,7 @@ $renewCsrfToken = getRenewCsrfToken();
     <title>تجديد الاشتراك</title>
     <link rel="stylesheet" href="assets/css/renew-subscription.css">
 </head>
-<body class="light-mode" data-page-url="<?php echo htmlspecialchars(RENEW_SUBSCRIPTION_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>">
+<body class="light-mode" data-page-url="<?php echo academyHtmlspecialchars(RENEW_SUBSCRIPTION_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>">
 <div class="academy-players-page">
     <header class="page-header">
         <div class="header-text">
@@ -768,8 +768,8 @@ $renewCsrfToken = getRenewCsrfToken();
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -806,15 +806,15 @@ $renewCsrfToken = getRenewCsrfToken();
                 <div class="subscription-overview-grid">
                     <div class="overview-item">
                         <span>السباح</span>
-                        <strong><?php echo htmlspecialchars((string) ($renewPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars((string) ($renewPlayer['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </div>
                     <div class="overview-item">
                         <span>المجموعة الحالية</span>
-                        <strong><?php echo htmlspecialchars((string) ($renewPlayer['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars((string) ($renewPlayer['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </div>
                     <div class="overview-item">
                         <span>نهاية الاشتراك الحالي</span>
-                        <strong><?php echo htmlspecialchars(formatRenewDate((string) ($renewPlayer['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars(formatRenewDate((string) ($renewPlayer['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </div>
                     <div class="overview-item">
                         <span>المتبقي القديم</span>
@@ -825,9 +825,9 @@ $renewCsrfToken = getRenewCsrfToken();
                 <form method="POST" class="player-form" id="renewSubscriptionForm" autocomplete="off">
                     <input type="hidden" name="action" value="renew_subscription">
                     <input type="hidden" name="player_id" value="<?php echo (int) ($renewPlayer['id'] ?? 0); ?>">
-                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($renewCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="current_search" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="current_branch" value="<?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($renewCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="current_search" value="<?php echo academyHtmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="current_branch" value="<?php echo academyHtmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>">
 
                     <div class="form-grid form-grid-compact">
                         <div class="form-group form-group-full subscription-select-group">
@@ -840,15 +840,15 @@ $renewCsrfToken = getRenewCsrfToken();
                                         <?php $subscriptionId = (int) ($subscription['id'] ?? 0); ?>
                                         <option
                                             value="<?php echo $subscriptionId; ?>"
-                                            data-category="<?php echo htmlspecialchars((string) ($subscription['subscription_category'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-coach="<?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-schedule="<?php echo htmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-schedule-days="<?php echo htmlspecialchars((string) ($subscription['schedule_days'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-category="<?php echo academyHtmlspecialchars((string) ($subscription['subscription_category'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-coach="<?php echo academyHtmlspecialchars((string) ($subscription['coach_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-schedule="<?php echo academyHtmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-schedule-days="<?php echo academyHtmlspecialchars((string) ($subscription['schedule_days'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                                             data-exercises="<?php echo (int) ($subscription['available_exercises_count'] ?? 0); ?>"
                                             data-max-trainees="<?php echo (int) ($subscription['max_trainees'] ?? 0); ?>"
                                             data-current-count="<?php echo (int) ($subscription['active_players_count'] ?? 0); ?>"
                                             <?php echo (string) $subscriptionId === (string) $renewFormData['subscription_id'] ? 'selected' : ''; ?>
-                                        ><?php echo htmlspecialchars(formatRenewSubscriptionDisplay($subscription), ENT_QUOTES, 'UTF-8'); ?></option>
+                                        ><?php echo academyHtmlspecialchars(formatRenewSubscriptionDisplay($subscription), ENT_QUOTES, 'UTF-8'); ?></option>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </select>
@@ -858,64 +858,64 @@ $renewCsrfToken = getRenewCsrfToken();
                     <div class="subscription-overview-grid">
                         <div class="overview-item">
                             <span>مستوى المجموعة</span>
-                            <strong id="subscription_category_display"><?php echo htmlspecialchars((string) ($selectedSubscription['subscription_category'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong id="subscription_category_display"><?php echo academyHtmlspecialchars((string) ($selectedSubscription['subscription_category'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </div>
                         <div class="overview-item">
                             <span>المدرب</span>
-                            <strong id="subscription_coach_display"><?php echo htmlspecialchars((string) ($selectedSubscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong id="subscription_coach_display"><?php echo academyHtmlspecialchars((string) ($selectedSubscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </div>
                         <div class="overview-item">
                             <span>الأيام والساعة</span>
-                            <strong id="subscription_schedule_display"><?php echo htmlspecialchars((string) ($selectedSubscription['schedule_summary'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong id="subscription_schedule_display"><?php echo academyHtmlspecialchars((string) ($selectedSubscription['schedule_summary'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </div>
                         <div class="overview-item">
                             <span>عدد التمارين</span>
-                            <strong id="subscription_exercises_display"><?php echo htmlspecialchars((string) ($selectedSubscription['available_exercises_count'] ?? '0'), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong id="subscription_exercises_display"><?php echo academyHtmlspecialchars((string) ($selectedSubscription['available_exercises_count'] ?? '0'), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </div>
                         <div class="overview-item">
                             <span>السباحين / الحد الأقصى</span>
-                            <strong id="subscription_capacity_display"><?php echo htmlspecialchars(((string) ($selectedSubscription['active_players_count'] ?? '0')) . ' / ' . ((string) ($selectedSubscription['max_trainees'] ?? '0')), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong id="subscription_capacity_display"><?php echo academyHtmlspecialchars(((string) ($selectedSubscription['active_players_count'] ?? '0')) . ' / ' . ((string) ($selectedSubscription['max_trainees'] ?? '0')), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </div>
                         <div class="overview-item">
                             <span>تاريخ نهاية الاشتراك الجديد</span>
-                            <strong id="renew_end_display"><?php echo htmlspecialchars($renewComputedEndDate !== '' ? $renewComputedEndDate : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong id="renew_end_display"><?php echo academyHtmlspecialchars($renewComputedEndDate !== '' ? $renewComputedEndDate : '—', ENT_QUOTES, 'UTF-8'); ?></strong>
                         </div>
                     </div>
 
                     <div class="form-grid form-grid-compact payment-grid">
                         <div class="form-group">
                             <label for="renew_start_date">تاريخ بداية الاشتراك</label>
-                            <input type="date" name="renew_start_date" id="renew_start_date" value="<?php echo htmlspecialchars((string) $renewFormData['renew_start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                            <input type="date" name="renew_start_date" id="renew_start_date" value="<?php echo academyHtmlspecialchars((string) $renewFormData['renew_start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="renew_base_price">سعر الاشتراك</label>
-                            <input type="number" min="0" step="0.01" name="renew_base_price" id="renew_base_price" value="<?php echo htmlspecialchars((string) $renewFormData['renew_base_price'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                            <input type="number" min="0" step="0.01" name="renew_base_price" id="renew_base_price" value="<?php echo academyHtmlspecialchars((string) $renewFormData['renew_base_price'], ENT_QUOTES, 'UTF-8'); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="renew_old_remaining">المتبقي القديم</label>
-                            <input type="text" id="renew_old_remaining" value="<?php echo htmlspecialchars(formatRenewAmount($renewOldRemaining), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                            <input type="text" id="renew_old_remaining" value="<?php echo academyHtmlspecialchars(formatRenewAmount($renewOldRemaining), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="renew_total_amount">الإجمالي</label>
-                            <input type="text" id="renew_total_amount" value="<?php echo htmlspecialchars(formatRenewAmount($renewTotalValue), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                            <input type="text" id="renew_total_amount" value="<?php echo academyHtmlspecialchars(formatRenewAmount($renewTotalValue), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="renew_paid_amount">المدفوع</label>
-                            <input type="number" min="0" step="0.01" name="renew_paid_amount" id="renew_paid_amount" value="<?php echo htmlspecialchars((string) $renewFormData['renew_paid_amount'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                            <input type="number" min="0" step="0.01" name="renew_paid_amount" id="renew_paid_amount" value="<?php echo academyHtmlspecialchars((string) $renewFormData['renew_paid_amount'], ENT_QUOTES, 'UTF-8'); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="renew_remaining_amount">المتبقي</label>
-                            <input type="text" id="renew_remaining_amount" value="<?php echo htmlspecialchars(formatRenewAmount($renewRemainingValue), ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                            <input type="text" id="renew_remaining_amount" value="<?php echo academyHtmlspecialchars(formatRenewAmount($renewRemainingValue), ENT_QUOTES, 'UTF-8'); ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="renew_receipt_number">رقم الإيصال</label>
-                            <input type="text" name="renew_receipt_number" id="renew_receipt_number" value="<?php echo htmlspecialchars((string) $renewFormData['renew_receipt_number'], ENT_QUOTES, 'UTF-8'); ?>">
+                            <input type="text" name="renew_receipt_number" id="renew_receipt_number" value="<?php echo academyHtmlspecialchars((string) $renewFormData['renew_receipt_number'], ENT_QUOTES, 'UTF-8'); ?>">
                         </div>
                     </div>
 
                     <div class="form-actions">
                         <button type="submit" class="save-btn" <?php echo $subscriptions === [] ? 'disabled' : ''; ?>>تجديد الاشتراك</button>
-                        <a href="<?php echo htmlspecialchars(buildRenewPageUrl(['search' => $search, 'branch' => $branch]), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إلغاء</a>
+                        <a href="<?php echo academyHtmlspecialchars(buildRenewPageUrl(['search' => $search, 'branch' => $branch]), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn link-btn">إلغاء</a>
                     </div>
                 </form>
             <?php endif; ?>
@@ -927,15 +927,15 @@ $renewCsrfToken = getRenewCsrfToken();
                 <form method="GET" class="filter-form" autocomplete="off">
                     <div class="form-group">
                         <label for="search">ابحث بالكود أو اسم السباح أو رقم ولي الأمر</label>
-                        <input type="text" name="search" id="search" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="text" name="search" id="search" value="<?php echo academyHtmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                     <div class="form-group">
                         <label for="branch">الفرع</label>
                         <select name="branch" id="branch">
                             <option value="">كل الفروع</option>
                             <?php foreach ($branchOptions as $branchOption): ?>
-                                <option value="<?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $branch === $branchOption ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
+                                <option value="<?php echo academyHtmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $branch === $branchOption ? 'selected' : ''; ?>>
+                                    <?php echo academyHtmlspecialchars($branchOption, ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -975,18 +975,18 @@ $renewCsrfToken = getRenewCsrfToken();
                     <?php if ($expiredPlayers !== []): ?>
                         <?php foreach ($expiredPlayers as $player): ?>
                             <tr>
-                                <td data-label="كود السباح"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="اسم السباح"><strong><?php echo htmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></td>
-                                <td data-label="رقم السباح"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="رقم ولي الأمر"><span class="table-cell-text"><?php echo htmlspecialchars((string) ($player['guardian_phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="المجموعة الحالية"><span class="table-cell-text table-cell-multiline"><?php echo htmlspecialchars((string) ($player['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="نهاية الاشتراك"><span class="table-cell-text table-cell-date"><?php echo htmlspecialchars(formatRenewDate((string) ($player['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="كود السباح"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="اسم السباح"><strong><?php echo academyHtmlspecialchars((string) ($player['player_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong></td>
+                                <td data-label="رقم السباح"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="رقم ولي الأمر"><span class="table-cell-text"><?php echo academyHtmlspecialchars((string) ($player['guardian_phone'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="المجموعة الحالية"><span class="table-cell-text table-cell-multiline"><?php echo academyHtmlspecialchars((string) ($player['subscription_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="نهاية الاشتراك"><span class="table-cell-text table-cell-date"><?php echo academyHtmlspecialchars(formatRenewDate((string) ($player['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="المتبقي القديم"><span class="amount-badge remaining <?php echo (float) ($player['remaining_amount'] ?? 0) > 0 ? 'has-value' : ''; ?>"><?php echo formatRenewMoney($player['remaining_amount'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="مرات التجديد"><span class="table-cell-text"><?php echo (int) ($player['renewal_count'] ?? 0); ?></span></td>
                                 <td data-label="الإجراءات">
                                     <div class="action-buttons">
-                                        <a href="<?php echo htmlspecialchars(buildRenewPageUrl(['search' => $search, 'branch' => $branch, 'renew' => $player['id']]), ENT_QUOTES, 'UTF-8'); ?>#renewSubscriptionForm" class="pay-btn">تجديد</a>
-                                        <a href="<?php echo htmlspecialchars('academy_players.php?search=' . urlencode((string) ($player['barcode'] ?? '')), ENT_QUOTES, 'UTF-8'); ?>" class="link-btn files-btn">صفحة السباحين</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildRenewPageUrl(['search' => $search, 'branch' => $branch, 'renew' => $player['id']]), ENT_QUOTES, 'UTF-8'); ?>#renewSubscriptionForm" class="pay-btn">تجديد</a>
+                                        <a href="<?php echo academyHtmlspecialchars('academy_players.php?search=' . urlencode((string) ($player['barcode'] ?? '')), ENT_QUOTES, 'UTF-8'); ?>" class="link-btn files-btn">صفحة السباحين</a>
                                     </div>
                                 </td>
                             </tr>

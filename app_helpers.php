@@ -10,6 +10,41 @@ function normalizeAcademyHelperText(string $value): string
     return $sanitizedValue === null ? '' : $sanitizedValue;
 }
 
+function isAcademyPlaceholderText(string $value): bool
+{
+    $normalizedValue = normalizeAcademyHelperText($value);
+    if ($normalizedValue === '') {
+        return false;
+    }
+
+    $placeholderCandidate = preg_replace('/[\s\p{Pd}•.,،:\/\\\\()0-9٠-٩۰-۹AaPpMmصم]+/u', '', $normalizedValue);
+    if ($placeholderCandidate === null || $placeholderCandidate === '') {
+        return false;
+    }
+
+    return preg_match('/^[\?؟�]+$/u', $placeholderCandidate) === 1;
+}
+
+function sanitizeAcademyDisplayValue(mixed $value): string
+{
+    $stringValue = (string) $value;
+    return isAcademyPlaceholderText($stringValue) ? '' : $stringValue;
+}
+
+function academyHtmlspecialchars(
+    mixed $string,
+    int $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401,
+    ?string $encoding = null,
+    bool $doubleEncode = true
+): string {
+    return htmlspecialchars(
+        sanitizeAcademyDisplayValue($string),
+        $flags,
+        $encoding,
+        $doubleEncode
+    );
+}
+
 function normalizeAcademyHelperDigits(string $value): string
 {
     return strtr($value, [

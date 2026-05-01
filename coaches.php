@@ -786,7 +786,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
 </head>
 <body
     class="light-mode"
-    data-coach-images-base-path="<?php echo htmlspecialchars($coachImagesPublicDirectory); ?>"
+    data-coach-images-base-path="<?php echo academyHtmlspecialchars($coachImagesPublicDirectory); ?>"
     data-default-confirm-message="هل أنت متأكد؟"
     data-is-admin="<?php echo $isAdmin ? '1' : '0'; ?>"
 >
@@ -813,11 +813,11 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
 
     <?php if (!empty($message)): ?>
         <div
-            class="message-box <?php echo htmlspecialchars($messageType); ?>"
-            data-message-context="<?php echo htmlspecialchars($messageContext); ?>"
+            class="message-box <?php echo academyHtmlspecialchars($messageType); ?>"
+            data-message-context="<?php echo academyHtmlspecialchars($messageContext); ?>"
             data-should-reset-form="<?php echo $shouldResetForm ? 'true' : 'false'; ?>"
         >
-            <?php echo htmlspecialchars($message); ?>
+            <?php echo academyHtmlspecialchars($message); ?>
         </div>
     <?php endif; ?>
 
@@ -852,8 +852,8 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
 
         <form method="POST" id="coachForm" class="coach-form" autocomplete="off" enctype="multipart/form-data">
             <input type="hidden" name="action" value="save">
-            <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($editCoach["id"] ?? ''); ?>">
-            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachCsrfToken); ?>">
+            <input type="hidden" name="id" id="id" value="<?php echo academyHtmlspecialchars($editCoach["id"] ?? ''); ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachCsrfToken); ?>">
 
             <div class="form-row">
                 <div class="form-group">
@@ -862,7 +862,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                         type="text"
                         name="full_name"
                         id="full_name"
-                        value="<?php echo htmlspecialchars($editCoach["full_name"] ?? ''); ?>"
+                        value="<?php echo academyHtmlspecialchars($editCoach["full_name"] ?? ''); ?>"
                         placeholder="أدخل اسم المدرب بالكامل"
                         required
                     >
@@ -874,7 +874,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                         type="text"
                         name="phone"
                         id="phone"
-                        value="<?php echo htmlspecialchars($editCoach["phone"] ?? ''); ?>"
+                        value="<?php echo academyHtmlspecialchars($editCoach["phone"] ?? ''); ?>"
                         placeholder="مثال: 01000000000"
                         inputmode="tel"
                         maxlength="20"
@@ -901,7 +901,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                         type="text"
                         name="hourly_rate"
                         id="hourly_rate"
-                        value="<?php echo htmlspecialchars($editHourlyRateValue); ?>"
+                        value="<?php echo academyHtmlspecialchars($editHourlyRateValue); ?>"
                         placeholder="مثال: 150"
                         inputmode="decimal"
                         required
@@ -917,7 +917,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                             type="text"
                             name="transfer_number"
                             id="transfer_number"
-                            value="<?php echo htmlspecialchars($editCoach["transfer_number"] ?? ''); ?>"
+                            value="<?php echo academyHtmlspecialchars($editCoach["transfer_number"] ?? ''); ?>"
                             placeholder="رقم المحفظة أو رقم التحويل"
                         >
                     </div>
@@ -942,7 +942,7 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
     <?php if ($filesCoach): ?>
         <section class="files-modal" id="coachFilesModal">
             <a
-                href="<?php echo htmlspecialchars(buildCoachPageUrl(['edit' => $activeEditCoachId])); ?>"
+                href="<?php echo academyHtmlspecialchars(buildCoachPageUrl(['edit' => $activeEditCoachId])); ?>"
                 class="files-modal-backdrop"
                 aria-label="إغلاق ملفات المدرب"
             ></a>
@@ -950,11 +950,11 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
             <div class="files-modal-dialog">
                 <div class="files-modal-header">
                     <div>
-                        <h2>📁 ملفات المدرب: <?php echo htmlspecialchars($filesCoach["full_name"]); ?></h2>
+                        <h2>📁 ملفات المدرب: <?php echo academyHtmlspecialchars($filesCoach["full_name"]); ?></h2>
                     </div>
 
                     <a
-                        href="<?php echo htmlspecialchars(buildCoachPageUrl(['edit' => $activeEditCoachId])); ?>"
+                        href="<?php echo academyHtmlspecialchars(buildCoachPageUrl(['edit' => $activeEditCoachId])); ?>"
                         class="files-modal-close"
                         aria-label="إغلاق ملفات المدرب"
                     >✕</a>
@@ -962,8 +962,8 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
 
                 <form method="POST" class="coach-files-form" enctype="multipart/form-data" autocomplete="off">
                     <input type="hidden" name="action" value="upload_images">
-                    <input type="hidden" name="coach_id" value="<?php echo htmlspecialchars((string) $filesCoach["id"]); ?>">
-                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachCsrfToken); ?>">
+                    <input type="hidden" name="coach_id" value="<?php echo academyHtmlspecialchars((string) $filesCoach["id"]); ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachCsrfToken); ?>">
 
                     <div class="form-group form-group-full">
                         <label for="coach_images">🖼️ إضافة صور جديدة</label>
@@ -991,20 +991,20 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                                     <button
                                         type="button"
                                         class="gallery-image-button"
-                                        data-full-image="<?php echo htmlspecialchars($imagePath); ?>"
-                                        data-image-title="<?php echo htmlspecialchars($filesCoach["full_name"] . ' - صورة ' . ($imageIndex + 1)); ?>"
+                                        data-full-image="<?php echo academyHtmlspecialchars($imagePath); ?>"
+                                        data-image-title="<?php echo academyHtmlspecialchars($filesCoach["full_name"] . ' - صورة ' . ($imageIndex + 1)); ?>"
                                     >
-                                        <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="صورة المدرب" class="coach-preview-image">
+                                        <img src="<?php echo academyHtmlspecialchars($imagePath); ?>" alt="صورة المدرب" class="coach-preview-image">
                                     </button>
 
                                     <div class="gallery-image-actions">
-                                        <span class="gallery-image-label"><?php echo htmlspecialchars('صورة ' . ($imageIndex + 1)); ?></span>
+                                        <span class="gallery-image-label"><?php echo academyHtmlspecialchars('صورة ' . ($imageIndex + 1)); ?></span>
 
                                         <form method="POST" class="inline-form js-confirm-submit" data-confirm-message="هل أنت متأكد من حذف هذه الصورة؟">
                                             <input type="hidden" name="action" value="delete_image">
-                                            <input type="hidden" name="coach_id" value="<?php echo htmlspecialchars((string) $filesCoach["id"]); ?>">
-                                            <input type="hidden" name="image_path" value="<?php echo htmlspecialchars($imagePath); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachCsrfToken); ?>">
+                                            <input type="hidden" name="coach_id" value="<?php echo academyHtmlspecialchars((string) $filesCoach["id"]); ?>">
+                                            <input type="hidden" name="image_path" value="<?php echo academyHtmlspecialchars($imagePath); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachCsrfToken); ?>">
                                             <button type="submit" class="delete-image-btn">🗑️ حذف الصورة</button>
                                         </form>
                                     </div>
@@ -1050,10 +1050,10 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                                 <td>
                                     <div class="coach-cell">
                                         <span class="coach-avatar">🏊</span>
-                                        <span><?php echo htmlspecialchars($coach["full_name"]); ?></span>
+                                        <span><?php echo academyHtmlspecialchars($coach["full_name"]); ?></span>
                                     </div>
                                 </td>
-                                <td dir="ltr"><?php echo htmlspecialchars($coach["phone"]); ?></td>
+                                <td dir="ltr"><?php echo academyHtmlspecialchars($coach["phone"]); ?></td>
                                 <td>
                                     <span class="login-status-badge <?php echo !empty($coach['has_password']) ? 'enabled' : 'disabled'; ?>">
                                         <?php echo !empty($coach['has_password']) ? '🔐 مفعلة' : '⚠️ غير مضبوطة'; ?>
@@ -1061,27 +1061,27 @@ $shouldResetForm = $messageType === 'success' && $messageContext === 'save';
                                 </td>
                                 <td><?php echo number_format((float) $coach["hourly_rate"], 2); ?> ج.م</td>
                                 <?php if ($isAdmin): ?>
-                                    <td><?php echo htmlspecialchars($coach["transfer_number"] ?? '—'); ?></td>
-                                    <td><?php echo htmlspecialchars($coach["transfer_type_label"] ?? '—'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars($coach["transfer_number"] ?? '—'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars($coach["transfer_type_label"] ?? '—'); ?></td>
                                 <?php endif; ?>
                                 <td>
                                     <a
-                                        href="<?php echo htmlspecialchars(buildCoachPageUrl(['files' => $coach["id"], 'edit' => $activeEditCoachId])); ?>"
+                                        href="<?php echo academyHtmlspecialchars(buildCoachPageUrl(['files' => $coach["id"], 'edit' => $activeEditCoachId])); ?>"
                                         class="files-btn"
                                     >
                                         <span>📁 ملفات المدرب</span>
                                         <span class="files-count"><?php echo count($coach['image_paths']); ?> صورة</span>
                                     </a>
                                 </td>
-                                <td><?php echo htmlspecialchars($coach["created_at"]); ?></td>
+                                <td><?php echo academyHtmlspecialchars($coach["created_at"]); ?></td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="<?php echo htmlspecialchars(buildCoachPageUrl(['edit' => $coach["id"]])); ?>" class="edit-btn">✏️ تعديل</a>
+                                        <a href="<?php echo academyHtmlspecialchars(buildCoachPageUrl(['edit' => $coach["id"]])); ?>" class="edit-btn">✏️ تعديل</a>
 
                                         <form method="POST" class="inline-form js-confirm-submit" data-confirm-message="هل أنت متأكد من حذف المدرب؟">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="<?php echo htmlspecialchars((string) $coach["id"]); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachCsrfToken); ?>">
+                                            <input type="hidden" name="id" value="<?php echo academyHtmlspecialchars((string) $coach["id"]); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachCsrfToken); ?>">
                                             <button type="submit" class="delete-btn">🗑️ حذف</button>
                                         </form>
                                     </div>

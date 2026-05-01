@@ -853,8 +853,8 @@ foreach ($inventoryItems as $inventoryItem) {
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -895,7 +895,7 @@ foreach ($inventoryItems as $inventoryItem) {
 
             <form method="POST" id="salesForm" class="sales-form" autocomplete="off">
                 <input type="hidden" name="action" value="save_invoice">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($salesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($salesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="invoice-type-grid" id="invoiceTypeGroup">
                     <label class="invoice-type-card active" data-type="sale">
@@ -919,7 +919,7 @@ foreach ($inventoryItems as $inventoryItem) {
                             <select name="item_id[]" class="item-select" <?php echo $hasInventoryItems ? '' : 'disabled'; ?>>
                                 <option value="">اختر الصنف</option>
                                 <?php foreach ($inventoryItems as $inventoryItem): ?>
-                                    <option value="<?php echo (int) $inventoryItem['id']; ?>"><?php echo htmlspecialchars($inventoryItem['item_name'], ENT_QUOTES, 'UTF-8'); ?></option>
+                                    <option value="<?php echo (int) $inventoryItem['id']; ?>"><?php echo academyHtmlspecialchars($inventoryItem['item_name'], ENT_QUOTES, 'UTF-8'); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -1060,13 +1060,13 @@ foreach ($inventoryItems as $inventoryItem) {
                             ?>
                             <tr>
                                 <td data-label="#"><?php echo $index + 1; ?></td>
-                                <td data-label="رقم الفاتورة"><?php echo htmlspecialchars((string) $invoice['invoice_number'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="رقم الفاتورة"><?php echo academyHtmlspecialchars((string) $invoice['invoice_number'], ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="النوع">
                                     <span class="type-badge <?php echo $isReturnInvoice ? 'return-type' : 'sale-type'; ?>">
                                         <?php echo $isReturnInvoice ? 'مرتجع' : 'بيع'; ?>
                                     </span>
                                 </td>
-                                <td data-label="الأصناف" class="items-cell"><?php echo htmlspecialchars((string) ($invoice['items_summary'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="الأصناف" class="items-cell"><?php echo academyHtmlspecialchars((string) ($invoice['items_summary'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الكمية"><?php echo (int) ($invoice['items_count'] ?? 0); ?></td>
                                 <td data-label="الإجمالي" class="amount-cell <?php echo $isReturnInvoice ? 'negative-cell' : 'positive-cell'; ?>">
                                     <?php echo $isReturnInvoice ? '-' : '+'; ?><?php echo formatSalesMoney($invoice['total_amount'] ?? 0); ?> ج.م
@@ -1085,8 +1085,8 @@ foreach ($inventoryItems as $inventoryItem) {
                                         <?php echo $hasRemainingAmount ? 'متبقي' : 'مسددة'; ?>
                                     </span>
                                 </td>
-                                <td data-label="المستخدم"><?php echo htmlspecialchars((string) ($invoice['created_by'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td data-label="الوقت"><?php echo htmlspecialchars((string) ($invoice['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="المستخدم"><?php echo academyHtmlspecialchars((string) ($invoice['created_by'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="الوقت"><?php echo academyHtmlspecialchars((string) ($invoice['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -1158,13 +1158,13 @@ foreach ($inventoryItems as $inventoryItem) {
                             ?>
                             <tr>
                                 <td data-label="#"><?php echo $index + 1; ?></td>
-                                <td data-label="رقم الفاتورة"><?php echo htmlspecialchars((string) $invoice['invoice_number'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="رقم الفاتورة"><?php echo academyHtmlspecialchars((string) $invoice['invoice_number'], ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="النوع">
                                     <span class="type-badge <?php echo $isReturnInvoice ? 'return-type' : 'sale-type'; ?>">
                                         <?php echo $isReturnInvoice ? 'مرتجع' : 'بيع'; ?>
                                     </span>
                                 </td>
-                                <td data-label="الأصناف" class="items-cell"><?php echo htmlspecialchars((string) ($invoice['items_summary'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="الأصناف" class="items-cell"><?php echo academyHtmlspecialchars((string) ($invoice['items_summary'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الكمية"><?php echo (int) ($invoice['items_count'] ?? 0); ?></td>
                                 <td data-label="الإجمالي" class="amount-cell <?php echo $isReturnInvoice ? 'negative-cell' : 'positive-cell'; ?>">
                                     <?php echo $isReturnInvoice ? '-' : '+'; ?><?php echo formatSalesMoney($invoice['total_amount'] ?? 0); ?> ج.م
@@ -1183,34 +1183,34 @@ foreach ($inventoryItems as $inventoryItem) {
                                         <?php echo $hasRemainingAmount ? 'متبقي' : 'مسددة'; ?>
                                     </span>
                                 </td>
-                                <td data-label="ولي الأمر"><?php echo htmlspecialchars((string) ($invoice['guardian_name'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="ولي الأمر"><?php echo academyHtmlspecialchars((string) ($invoice['guardian_name'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الهاتف">
                                     <div class="phone-cell">
-                                        <span><?php echo htmlspecialchars($guardianPhoneText !== '' ? $guardianPhoneText : '-', ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <span><?php echo academyHtmlspecialchars($guardianPhoneText !== '' ? $guardianPhoneText : '-', ENT_QUOTES, 'UTF-8'); ?></span>
                                         <?php if ($hasRemainingAmount): ?>
                                             <div class="phone-actions">
-                                                <a href="<?php echo $guardianPhone !== '' ? 'tel:' . htmlspecialchars($guardianPhone, ENT_QUOTES, 'UTF-8') : '#'; ?>" class="phone-action-btn <?php echo $guardianPhone === '' ? 'is-disabled' : ''; ?>">اتصال</a>
-                                                <a href="<?php echo $guardianWhatsappPhone !== '' ? 'https://wa.me/' . htmlspecialchars($guardianWhatsappPhone, ENT_QUOTES, 'UTF-8') : '#'; ?>" target="_blank" rel="noopener noreferrer" class="phone-action-btn whatsapp-action <?php echo $guardianWhatsappPhone === '' ? 'is-disabled' : ''; ?>">واتساب</a>
+                                                <a href="<?php echo $guardianPhone !== '' ? 'tel:' . academyHtmlspecialchars($guardianPhone, ENT_QUOTES, 'UTF-8') : '#'; ?>" class="phone-action-btn <?php echo $guardianPhone === '' ? 'is-disabled' : ''; ?>">اتصال</a>
+                                                <a href="<?php echo $guardianWhatsappPhone !== '' ? 'https://wa.me/' . academyHtmlspecialchars($guardianWhatsappPhone, ENT_QUOTES, 'UTF-8') : '#'; ?>" target="_blank" rel="noopener noreferrer" class="phone-action-btn whatsapp-action <?php echo $guardianWhatsappPhone === '' ? 'is-disabled' : ''; ?>">واتساب</a>
                                             </div>
                                         <?php endif; ?>
                                     </div>
                                 </td>
-                                <td data-label="المستخدم"><?php echo htmlspecialchars((string) ($invoice['created_by'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td data-label="التاريخ"><?php echo htmlspecialchars((string) ($invoice['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="المستخدم"><?php echo academyHtmlspecialchars((string) ($invoice['created_by'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="التاريخ"><?php echo academyHtmlspecialchars((string) ($invoice['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="سداد الباقي">
                                     <?php if ($hasRemainingAmount): ?>
                                         <form method="POST" class="settlement-form">
                                             <input type="hidden" name="action" value="settle_balance">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($salesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($salesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                             <input type="hidden" name="invoice_id" value="<?php echo (int) ($invoice['id'] ?? 0); ?>">
-                                            <input type="hidden" name="redirect_filter" value="<?php echo htmlspecialchars($paymentFilter, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="redirect_filter" value="<?php echo academyHtmlspecialchars($paymentFilter, ENT_QUOTES, 'UTF-8'); ?>">
                                             <input
                                                 type="number"
                                                 name="payment_amount"
                                                 class="settlement-input"
                                                 min="0.01"
                                                 step="0.01"
-                                                max="<?php echo htmlspecialchars(formatSalesDecimalForStorage($remainingAmount), ENT_QUOTES, 'UTF-8'); ?>"
+                                                max="<?php echo academyHtmlspecialchars(formatSalesDecimalForStorage($remainingAmount), ENT_QUOTES, 'UTF-8'); ?>"
                                                 placeholder="0.00"
                                                 required
                                             >
@@ -1240,7 +1240,7 @@ foreach ($inventoryItems as $inventoryItem) {
             <select name="item_id[]" class="item-select">
                 <option value="">اختر الصنف</option>
                 <?php foreach ($inventoryItems as $inventoryItem): ?>
-                    <option value="<?php echo (int) $inventoryItem['id']; ?>"><?php echo htmlspecialchars($inventoryItem['item_name'], ENT_QUOTES, 'UTF-8'); ?></option>
+                    <option value="<?php echo (int) $inventoryItem['id']; ?>"><?php echo academyHtmlspecialchars($inventoryItem['item_name'], ENT_QUOTES, 'UTF-8'); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>

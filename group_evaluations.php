@@ -162,7 +162,7 @@ unset($subscription);
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <?php endif; ?>
 
     <section class="panel-card full-width-panel">
@@ -170,7 +170,7 @@ unset($subscription);
             <div class="split-grid">
                 <div class="form-group">
                     <label for="month">شهر التقييم</label>
-                    <input type="month" name="month" id="month" value="<?php echo htmlspecialchars($selectedMonth, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="month" name="month" id="month" value="<?php echo academyHtmlspecialchars($selectedMonth, ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="primary-btn">عرض</button>
@@ -186,41 +186,41 @@ unset($subscription);
                 <article class="item-card evaluation-card">
                     <div class="item-card-body">
                         <div class="split-meta">
-                            <strong><?php echo htmlspecialchars((string) ($subscription['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
-                            <span class="status-chip info-chip"><?php echo htmlspecialchars((string) ($subscription['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span>
+                            <strong><?php echo academyHtmlspecialchars((string) ($subscription['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <span class="status-chip info-chip"><?php echo academyHtmlspecialchars((string) ($subscription['subscription_branch'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></span>
                         </div>
                         <div class="details-grid compact-details-grid">
-                            <div><span>المستوى</span><strong><?php echo htmlspecialchars((string) ($subscription['subscription_category'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span>المدرب</span><strong><?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span>الجدول</span><strong><?php echo htmlspecialchars((string) ($subscription['schedule_summary'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>المستوى</span><strong><?php echo academyHtmlspecialchars((string) ($subscription['subscription_category'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>المدرب</span><strong><?php echo academyHtmlspecialchars((string) ($subscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span>الجدول</span><strong><?php echo academyHtmlspecialchars((string) ($subscription['schedule_summary'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         </div>
                         <div class="details-grid compact-details-grid">
-                            <div><span><?php echo htmlspecialchars($selectedMonth, ENT_QUOTES, 'UTF-8'); ?></span><strong><?php echo htmlspecialchars(groupEvaluationStars((int) ($subscription['current_score'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></strong></div>
-                            <div><span><?php echo htmlspecialchars($previousMonth, ENT_QUOTES, 'UTF-8'); ?></span><strong><?php echo htmlspecialchars(groupEvaluationStars((int) ($subscription['previous_score'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span><?php echo academyHtmlspecialchars($selectedMonth, ENT_QUOTES, 'UTF-8'); ?></span><strong><?php echo academyHtmlspecialchars(groupEvaluationStars((int) ($subscription['current_score'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></strong></div>
+                            <div><span><?php echo academyHtmlspecialchars($previousMonth, ENT_QUOTES, 'UTF-8'); ?></span><strong><?php echo academyHtmlspecialchars(groupEvaluationStars((int) ($subscription['previous_score'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></strong></div>
                         </div>
                         <?php if (!empty($subscription['previous_notes'])): ?>
-                            <p class="notification-message">الشهر السابق: <?php echo nl2br(htmlspecialchars((string) $subscription['previous_notes'], ENT_QUOTES, 'UTF-8')); ?></p>
+                            <p class="notification-message">الشهر السابق: <?php echo nl2br(academyHtmlspecialchars((string) $subscription['previous_notes'], ENT_QUOTES, 'UTF-8')); ?></p>
                         <?php endif; ?>
                     </div>
                     <form method="POST" class="stack-form evaluation-form" autocomplete="off">
                         <input type="hidden" name="action" value="save">
                         <input type="hidden" name="subscription_id" value="<?php echo (int) ($subscription['id'] ?? 0); ?>">
-                        <input type="hidden" name="evaluation_month" value="<?php echo htmlspecialchars($selectedMonth, ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(groupEvaluationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="evaluation_month" value="<?php echo academyHtmlspecialchars($selectedMonth, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(groupEvaluationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
                         <div class="form-group">
                             <label for="evaluation_score_<?php echo (int) ($subscription['id'] ?? 0); ?>">تقييم الشهر</label>
                             <select name="evaluation_score" id="evaluation_score_<?php echo (int) ($subscription['id'] ?? 0); ?>" required>
                                 <option value="">اختر التقييم</option>
                                 <?php for ($score = 1; $score <= 5; $score++): ?>
                                     <option value="<?php echo $score; ?>" <?php echo (int) ($subscription['current_score'] ?? 0) === $score ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($score . ' - ' . groupEvaluationStars($score), ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php echo academyHtmlspecialchars($score . ' - ' . groupEvaluationStars($score), ENT_QUOTES, 'UTF-8'); ?>
                                     </option>
                                 <?php endfor; ?>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="evaluation_notes_<?php echo (int) ($subscription['id'] ?? 0); ?>">ملاحظات التقييم</label>
-                            <textarea name="evaluation_notes" id="evaluation_notes_<?php echo (int) ($subscription['id'] ?? 0); ?>" rows="4"><?php echo htmlspecialchars((string) ($subscription['current_notes'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
+                            <textarea name="evaluation_notes" id="evaluation_notes_<?php echo (int) ($subscription['id'] ?? 0); ?>" rows="4"><?php echo academyHtmlspecialchars((string) ($subscription['current_notes'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
                         </div>
                         <button type="submit" class="primary-btn">حفظ التقييم</button>
                     </form>

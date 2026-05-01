@@ -856,8 +856,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
 </head>
 <body
     class="light-mode"
-    data-page-url="<?php echo htmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
-    data-form-close-url="<?php echo htmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
+    data-page-url="<?php echo academyHtmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
+    data-form-close-url="<?php echo academyHtmlspecialchars(SUBSCRIPTIONS_PAGE_FILE, ENT_QUOTES, 'UTF-8'); ?>"
     data-form-modal-open="<?php echo $shouldAutoOpenSubscriptionModal ? '1' : '0'; ?>"
     data-form-modal-reset-page="<?php echo $shouldResetSubscriptionModalOnClose ? '1' : '0'; ?>"
 >
@@ -883,8 +883,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -925,15 +925,15 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
 
                 <form method="POST" id="subscriptionsForm" class="subscriptions-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars((string) ($subscriptionFormData['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($subscriptionsCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="id" id="id" value="<?php echo academyHtmlspecialchars((string) ($subscriptionFormData['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($subscriptionsCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="client-message" id="clientMessage" aria-live="assertive" hidden></div>
 
                 <div class="form-grid form-grid-double">
                     <div class="form-group">
                         <label for="subscription_name">🏷️ اسم المجموعة</label>
-                        <input type="text" name="subscription_name" id="subscription_name" value="<?php echo htmlspecialchars($editSubscriptionGeneratedName, ENT_QUOTES, 'UTF-8'); ?>" readonly aria-describedby="subscription_name_note">
+                        <input type="text" name="subscription_name" id="subscription_name" value="<?php echo academyHtmlspecialchars($editSubscriptionGeneratedName, ENT_QUOTES, 'UTF-8'); ?>" readonly aria-describedby="subscription_name_note">
                         <small id="subscription_name_note">يتم توليد الاسم تلقائيًا من المستوى والمدرب والجدول والفرع.</small>
                     </div>
 
@@ -943,8 +943,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                             <select name="subscription_category" id="subscription_category" required>
                                 <option value="">اختر المستوى</option>
                                 <?php foreach (SUBSCRIPTION_CATEGORIES as $category): ?>
-                                    <option value="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($subscriptionFormData['subscription_category'] ?? '') === $category) ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>
+                                    <option value="<?php echo academyHtmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($subscriptionFormData['subscription_category'] ?? '') === $category) ? 'selected' : ''; ?>>
+                                        <?php echo academyHtmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -959,8 +959,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                             <select name="subscription_branch" id="subscription_branch" required>
                                 <option value="">اختر الفرع</option>
                                 <?php foreach (SUBSCRIPTION_BRANCHES as $branch): ?>
-                                    <option value="<?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($subscriptionFormData['subscription_branch'] ?? '') === $branch) ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>
+                                    <option value="<?php echo academyHtmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($subscriptionFormData['subscription_branch'] ?? '') === $branch) ? 'selected' : ''; ?>>
+                                        <?php echo academyHtmlspecialchars($branch, ENT_QUOTES, 'UTF-8'); ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -982,7 +982,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
 
                     <div class="form-group">
                         <label for="available_exercises_count">🎽 عدد التمارين المتاحة</label>
-                        <input type="number" min="1" step="1" name="available_exercises_count" id="available_exercises_count" value="<?php echo htmlspecialchars((string) ($subscriptionFormData['available_exercises_count'] ?? 1), ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="number" min="1" step="1" name="available_exercises_count" id="available_exercises_count" value="<?php echo academyHtmlspecialchars((string) ($subscriptionFormData['available_exercises_count'] ?? 1), ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
 
                     <div class="form-group">
@@ -993,7 +993,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                 <?php foreach ($coaches as $coach): ?>
                                     <?php $coachId = (int) ($coach['id'] ?? 0); ?>
                                     <option value="<?php echo $coachId; ?>" <?php echo ((int) ($subscriptionFormData['coach_id'] ?? 0) === $coachId) ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars((string) ($coach['full_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php echo academyHtmlspecialchars((string) ($coach['full_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -1002,12 +1002,12 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
 
                     <div class="form-group">
                         <label for="max_trainees">👥 أقصى عدد سباحين</label>
-                        <input type="number" min="1" step="1" name="max_trainees" id="max_trainees" value="<?php echo htmlspecialchars((string) ($subscriptionFormData['max_trainees'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="number" min="1" step="1" name="max_trainees" id="max_trainees" value="<?php echo academyHtmlspecialchars((string) ($subscriptionFormData['max_trainees'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label for="subscription_price">💰 سعر المجموعة</label>
-                        <input type="number" min="0.01" step="0.01" name="subscription_price" id="subscription_price" value="<?php echo htmlspecialchars(formatSubscriptionDecimal($subscriptionFormData['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <input type="number" min="0.01" step="0.01" name="subscription_price" id="subscription_price" value="<?php echo academyHtmlspecialchars(formatSubscriptionDecimal($subscriptionFormData['subscription_price'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>" required>
                     </div>
 
                 </div>
@@ -1022,8 +1022,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                         <?php foreach (SUBSCRIPTION_WEEK_DAYS as $dayKey => $dayLabel): ?>
                             <?php $isChecked = array_key_exists($dayKey, $editScheduleLookup); ?>
                             <label class="day-option <?php echo $isChecked ? 'checked' : ''; ?>">
-                                <input type="checkbox" name="training_days[]" value="<?php echo htmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $isChecked ? 'checked' : ''; ?>>
-                                <span><?php echo htmlspecialchars($dayLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                                <input type="checkbox" name="training_days[]" value="<?php echo academyHtmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>" <?php echo $isChecked ? 'checked' : ''; ?>>
+                                <span><?php echo academyHtmlspecialchars($dayLabel, ENT_QUOTES, 'UTF-8'); ?></span>
                             </label>
                         <?php endforeach; ?>
                     </div>
@@ -1031,9 +1031,9 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                     <div class="schedule-grid">
                         <?php foreach (SUBSCRIPTION_WEEK_DAYS as $dayKey => $dayLabel): ?>
                             <?php $dayTime = $editScheduleLookup[$dayKey] ?? ''; ?>
-                            <div class="schedule-item <?php echo $dayTime !== '' ? 'is-active' : ''; ?>" data-day-key="<?php echo htmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>">
-                                <label for="schedule_time_<?php echo htmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($dayLabel, ENT_QUOTES, 'UTF-8'); ?></label>
-                                <input type="time" name="schedule_time[<?php echo htmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>]" id="schedule_time_<?php echo htmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars((string) $dayTime, ENT_QUOTES, 'UTF-8'); ?>">
+                            <div class="schedule-item <?php echo $dayTime !== '' ? 'is-active' : ''; ?>" data-day-key="<?php echo academyHtmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>">
+                                <label for="schedule_time_<?php echo academyHtmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($dayLabel, ENT_QUOTES, 'UTF-8'); ?></label>
+                                <input type="time" name="schedule_time[<?php echo academyHtmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>]" id="schedule_time_<?php echo academyHtmlspecialchars($dayKey, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo academyHtmlspecialchars((string) $dayTime, ENT_QUOTES, 'UTF-8'); ?>">
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -1066,7 +1066,7 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                 >
                     إضافة مجموعة
                 </button>
-                <a href="<?php echo htmlspecialchars(buildSubscriptionsPageUrl(['export' => 'xlsx']), ENT_QUOTES, 'UTF-8'); ?>" class="back-btn">استخراج إكسل</a>
+                <a href="<?php echo academyHtmlspecialchars(buildSubscriptionsPageUrl(['export' => 'xlsx']), ENT_QUOTES, 'UTF-8'); ?>" class="back-btn">استخراج إكسل</a>
             </div>
         </div>
 
@@ -1096,18 +1096,18 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                     <div class="subscription-cell">
                                         <span class="subscription-avatar">📋</span>
                                         <div>
-                                            <strong><?php echo htmlspecialchars((string) ($subscription['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
-                                            <span><?php echo htmlspecialchars((string) ($subscription['updated_at'] ?? $subscription['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <strong><?php echo academyHtmlspecialchars((string) ($subscription['subscription_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                            <span><?php echo academyHtmlspecialchars((string) ($subscription['updated_at'] ?? $subscription['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span>
                                         </div>
                                     </div>
                                 </td>
-                                <td data-label="الفرع"><span class="soft-badge"><?php echo htmlspecialchars((string) $subscription['subscription_branch_display'], ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="المستوى"><span class="metric-badge"><?php echo htmlspecialchars((string) $subscription['subscription_category_display'], ENT_QUOTES, 'UTF-8'); ?></span></td>
-                                <td data-label="المدرب"><?php echo htmlspecialchars((string) ($subscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="الفرع"><span class="soft-badge"><?php echo academyHtmlspecialchars((string) $subscription['subscription_branch_display'], ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="المستوى"><span class="metric-badge"><?php echo academyHtmlspecialchars((string) $subscription['subscription_category_display'], ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                <td data-label="المدرب"><?php echo academyHtmlspecialchars((string) ($subscription['coach_name'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الأيام"><span class="days-count"><?php echo (int) ($subscription['training_days_count'] ?? 0); ?> يوم</span></td>
                                 <td data-label="التمارين المتاحة"><span class="soft-badge"><?php echo (int) ($subscription['available_exercises_count'] ?? 0); ?> تمرين</span></td>
                                 <td data-label="الجدول">
-                                    <div class="schedule-summary"><?php echo htmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></div>
+                                    <div class="schedule-summary"><?php echo academyHtmlspecialchars((string) ($subscription['schedule_summary'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></div>
                                 </td>
                                 <td data-label="السباحين / الحد الأقصى"><span class="capacity-chip"><?php echo (int) ($subscription['registered_swimmers_count'] ?? 0); ?> / <?php echo (int) ($subscription['max_trainees'] ?? 0); ?> سباح</span></td>
                                 <td data-label="السعر"><span class="soft-badge"><?php echo formatSubscriptionMoney($subscription['subscription_price'] ?? 0); ?> ج.م</span></td>
@@ -1116,8 +1116,8 @@ $subscriptionsCsrfToken = getSubscriptionsCsrfToken();
                                         <a href="<?php echo buildSubscriptionsPageUrl(['edit' => $subscription['id']]); ?>" class="edit-btn">✏️ تعديل</a>
                                         <form method="POST" class="inline-form delete-subscription-form">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="<?php echo htmlspecialchars((string) ($subscription['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($subscriptionsCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="id" value="<?php echo academyHtmlspecialchars((string) ($subscription['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($subscriptionsCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                             <button type="submit" class="delete-btn">🗑️ حذف</button>
                                         </form>
                                     </div>

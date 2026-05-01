@@ -152,7 +152,7 @@ $enabledCount = countEnabledCapabilities(
                     <option value="">اختر اسم المشرف</option>
                     <?php foreach ($supervisors as $supervisor): ?>
                         <option value="<?php echo $supervisor["id"]; ?>" <?php echo $selectedSupervisorId === (int) $supervisor["id"] ? "selected" : ""; ?>>
-                            <?php echo htmlspecialchars($supervisor["username"]); ?>
+                            <?php echo academyHtmlspecialchars($supervisor["username"]); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -165,7 +165,7 @@ $enabledCount = countEnabledCapabilities(
             <div class="supervisor-preview">
                 <div class="preview-avatar">👨‍💼</div>
                 <div>
-                    <strong><?php echo htmlspecialchars($selectedSupervisor["username"]); ?></strong>
+                    <strong><?php echo academyHtmlspecialchars($selectedSupervisor["username"]); ?></strong>
                 </div>
                 <span class="preview-chip"><?php echo permissionCountLabel($enabledCount); ?></span>
             </div>

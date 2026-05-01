@@ -602,7 +602,7 @@ $historyColspan = 9;
 </head>
 <body
     class="light-mode"
-    data-reset-url="<?php echo htmlspecialchars(buildAdminSalariesPageUrl(), ENT_QUOTES, 'UTF-8'); ?>"
+    data-reset-url="<?php echo academyHtmlspecialchars(buildAdminSalariesPageUrl(), ENT_QUOTES, 'UTF-8'); ?>"
     data-default-confirm-message="هل أنت متأكد من تنفيذ القبض الآن؟"
 >
 <div class="coach-salaries-page admin-salaries-page">
@@ -627,8 +627,8 @@ $historyColspan = 9;
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -652,7 +652,7 @@ $historyColspan = 9;
         <article class="stat-card absent-card salary-stat-card">
             <div class="stat-icon">⏱️</div>
             <div>
-                <h2><?php echo htmlspecialchars(number_format($totalOutstandingHours, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
+                <h2><?php echo academyHtmlspecialchars(number_format($totalOutstandingHours, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
                 <p>إجمالي الساعات الحالية</p>
             </div>
         </article>
@@ -660,7 +660,7 @@ $historyColspan = 9;
         <article class="stat-card hours-card salary-stat-card">
             <div class="stat-icon">💵</div>
             <div>
-                <h2><?php echo htmlspecialchars(number_format($totalOutstandingAdvances, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
+                <h2><?php echo academyHtmlspecialchars(number_format($totalOutstandingAdvances, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
                 <p>إجمالي السلف الحالية</p>
             </div>
         </article>
@@ -676,11 +676,11 @@ $historyColspan = 9;
                 <div class="form-row form-row-single">
                     <div class="form-group">
                         <label>اختيار الإداري</label>
-                        <input type="hidden" name="administrator_id" id="administrator_id_filter" value="<?php echo htmlspecialchars($selectedAdministratorId, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="administrator_id" id="administrator_id_filter" value="<?php echo academyHtmlspecialchars($selectedAdministratorId, ENT_QUOTES, 'UTF-8'); ?>">
                         <div class="professional-select" id="administratorSelect" data-placeholder="اختر الإداري من القائمة">
                             <button type="button" class="select-trigger" id="administratorSelectTrigger" aria-expanded="false">
                                 <span class="select-trigger-text" id="administratorSelectText">
-                                    <?php echo $selectedAdministrator ? htmlspecialchars($selectedAdministrator['full_name'], ENT_QUOTES, 'UTF-8') : 'اختر الإداري من القائمة'; ?>
+                                    <?php echo $selectedAdministrator ? academyHtmlspecialchars($selectedAdministrator['full_name'], ENT_QUOTES, 'UTF-8') : 'اختر الإداري من القائمة'; ?>
                                 </span>
                                 <span class="select-trigger-icon">▾</span>
                             </button>
@@ -698,18 +698,18 @@ $historyColspan = 9;
                                         <button
                                             type="button"
                                             class="select-option<?php echo (string) $administrator['id'] === $selectedAdministratorId ? ' is-selected' : ''; ?>"
-                                            data-value="<?php echo htmlspecialchars((string) $administrator['id'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-name="<?php echo htmlspecialchars($administrator['full_name'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-phone="<?php echo htmlspecialchars($administrator['phone'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-hours="<?php echo htmlspecialchars(number_format((float) $administrator['total_hours'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-advances="<?php echo htmlspecialchars(number_format((float) $administrator['total_advances'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-value="<?php echo academyHtmlspecialchars((string) $administrator['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-name="<?php echo academyHtmlspecialchars($administrator['full_name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-phone="<?php echo academyHtmlspecialchars($administrator['phone'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-hours="<?php echo academyHtmlspecialchars(number_format((float) $administrator['total_hours'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-advances="<?php echo academyHtmlspecialchars(number_format((float) $administrator['total_advances'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
                                             data-status="<?php echo $administratorHasData ? 'جاهز للقبض' : 'لا توجد بيانات حالية'; ?>"
                                         >
-                                            <span class="option-name"><?php echo htmlspecialchars($administrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <span class="option-name"><?php echo academyHtmlspecialchars($administrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                                             <span class="option-meta">
-                                                📞 <?php echo htmlspecialchars($administrator['phone'], ENT_QUOTES, 'UTF-8'); ?>
-                                                • ⏱️ <?php echo htmlspecialchars(number_format((float) $administrator['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?>
-                                                • 💵 <?php echo htmlspecialchars(number_format((float) $administrator['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?>
+                                                📞 <?php echo academyHtmlspecialchars($administrator['phone'], ENT_QUOTES, 'UTF-8'); ?>
+                                                • ⏱️ <?php echo academyHtmlspecialchars(number_format((float) $administrator['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?>
+                                                • 💵 <?php echo academyHtmlspecialchars(number_format((float) $administrator['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?>
                                             </span>
                                         </button>
                                     <?php endforeach; ?>
@@ -721,9 +721,9 @@ $historyColspan = 9;
 
                         <div class="selected-coach-meta salary-selected-meta" id="selectedAdministratorMeta">
                             <?php if ($selectedAdministrator): ?>
-                                <span>📞 <?php echo htmlspecialchars($selectedAdministrator['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                <span>⏱️ <?php echo htmlspecialchars(number_format((float) $selectedAdministrator['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
-                                <span>💵 <?php echo htmlspecialchars(number_format((float) $selectedAdministrator['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>📞 <?php echo academyHtmlspecialchars($selectedAdministrator['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>⏱️ <?php echo academyHtmlspecialchars(number_format((float) $selectedAdministrator['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>💵 <?php echo academyHtmlspecialchars(number_format((float) $selectedAdministrator['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -731,7 +731,7 @@ $historyColspan = 9;
 
                 <div class="form-actions salary-filter-actions">
                     <button type="submit" class="filter-btn"<?php echo !$hasAdministrators ? ' disabled' : ''; ?>>عرض البيانات</button>
-                    <a href="<?php echo htmlspecialchars(buildAdminSalariesPageUrl(), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn" id="clearBtn">تحديث</a>
+                    <a href="<?php echo academyHtmlspecialchars(buildAdminSalariesPageUrl(), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn" id="clearBtn">تحديث</a>
                 </div>
             </form>
 
@@ -747,11 +747,11 @@ $historyColspan = 9;
                     </article>
                     <article class="salary-summary-box">
                         <span>إجمالي الساعات</span>
-                        <strong><?php echo htmlspecialchars(number_format((float) $selectedAdministratorTotals['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars(number_format((float) $selectedAdministratorTotals['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </article>
                     <article class="salary-summary-box">
                         <span>إجمالي السلف</span>
-                        <strong><?php echo htmlspecialchars(number_format((float) $selectedAdministratorTotals['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars(number_format((float) $selectedAdministratorTotals['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </article>
                     <article class="salary-summary-box">
                         <span>سجلات السلف</span>
@@ -759,26 +759,26 @@ $historyColspan = 9;
                     </article>
                     <article class="salary-summary-box salary-summary-highlight">
                         <span>المرتب المتاح</span>
-                        <strong id="salaryAmountPreview"><?php echo htmlspecialchars(number_format((float) $selectedAdministratorTotals['salary_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong id="salaryAmountPreview"><?php echo academyHtmlspecialchars(number_format((float) $selectedAdministratorTotals['salary_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </article>
                     <article class="salary-summary-box salary-summary-net <?php echo (float) $selectedAdministratorTotals['net_amount'] >= 0 ? 'is-positive' : 'is-negative'; ?>">
                         <span>صافي القبض</span>
-                        <strong id="salaryNetPreview"><?php echo htmlspecialchars(number_format((float) $selectedAdministratorTotals['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong id="salaryNetPreview"><?php echo academyHtmlspecialchars(number_format((float) $selectedAdministratorTotals['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </article>
                 </div>
 
                 <form method="POST" class="attendance-form salary-payment-form js-confirm-submit" data-confirm-message="هل تريد تسجيل قبض هذا الإداري وتصفير بياناته الحالية؟">
                     <input type="hidden" name="action" value="pay">
-                    <input type="hidden" name="administrator_id" value="<?php echo htmlspecialchars((string) $selectedAdministrator['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($adminSalaryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="administrator_id" value="<?php echo academyHtmlspecialchars((string) $selectedAdministrator['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($adminSalaryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                     <div class="form-group">
                         <label>نوع القبض</label>
                         <div class="payment-cycle-grid">
                             <?php foreach (ADMIN_SALARY_PAYMENT_CYCLES as $cycleKey => $cycleLabel): ?>
                                 <label class="payment-cycle-option<?php echo $formPaymentCycle === $cycleKey ? ' is-active' : ''; ?>">
-                                    <input type="radio" name="payment_cycle" value="<?php echo htmlspecialchars($cycleKey, ENT_QUOTES, 'UTF-8'); ?>"<?php echo $formPaymentCycle === $cycleKey ? ' checked' : ''; ?>>
-                                    <span><?php echo htmlspecialchars($cycleLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <input type="radio" name="payment_cycle" value="<?php echo academyHtmlspecialchars($cycleKey, ENT_QUOTES, 'UTF-8'); ?>"<?php echo $formPaymentCycle === $cycleKey ? ' checked' : ''; ?>>
+                                    <span><?php echo academyHtmlspecialchars($cycleLabel, ENT_QUOTES, 'UTF-8'); ?></span>
                                 </label>
                             <?php endforeach; ?>
                         </div>
@@ -791,12 +791,12 @@ $historyColspan = 9;
                                 type="text"
                                 id="salary_amount"
                                 name="salary_amount"
-                                value="<?php echo htmlspecialchars($formSalaryAmount, ENT_QUOTES, 'UTF-8'); ?>"
+                                value="<?php echo academyHtmlspecialchars($formSalaryAmount, ENT_QUOTES, 'UTF-8'); ?>"
                                 placeholder="مثال: 3000 أو 4500.75"
                                 inputmode="decimal"
                                 maxlength="10"
                                 pattern="[0-9٠-٩۰-۹]+([\\.,][0-9٠-٩۰-۹]{1,2})?"
-                                data-total-advances="<?php echo htmlspecialchars(number_format((float) $selectedAdministratorTotals['total_advances'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                data-total-advances="<?php echo academyHtmlspecialchars(number_format((float) $selectedAdministratorTotals['total_advances'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
                                 required
                             >
                         </div>
@@ -804,14 +804,14 @@ $historyColspan = 9;
                         <div class="form-group form-group-highlight">
                             <label>📌 صافي القبض الحالي</label>
                             <div class="estimated-box advance-total-box <?php echo (float) $selectedAdministratorTotals['net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>" id="salaryNetBox">
-                                <?php echo htmlspecialchars(number_format((float) $selectedAdministratorTotals['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?>
+                                <?php echo academyHtmlspecialchars(number_format((float) $selectedAdministratorTotals['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?>
                             </div>
                         </div>
                     </div>
 
                     <div class="salary-period-row">
-                        <span class="table-summary-chip">من <?php echo htmlspecialchars((string) ($selectedAdministratorTotals['period_start'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></span>
-                        <span class="table-summary-chip">إلى <?php echo htmlspecialchars((string) ($selectedAdministratorTotals['period_end'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span class="table-summary-chip">من <?php echo academyHtmlspecialchars((string) ($selectedAdministratorTotals['period_start'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span class="table-summary-chip">إلى <?php echo academyHtmlspecialchars((string) ($selectedAdministratorTotals['period_end'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></span>
                     </div>
 
                     <div class="form-actions">
@@ -833,12 +833,12 @@ $historyColspan = 9;
                     <?php foreach (array_slice($selectedAdministratorHistory, 0, 5) as $historyItem): ?>
                         <div class="salary-history-preview-item">
                             <div>
-                                <strong><?php echo htmlspecialchars(ADMIN_SALARY_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <span><?php echo htmlspecialchars((string) $historyItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlspecialchars((string) $historyItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <strong><?php echo academyHtmlspecialchars(ADMIN_SALARY_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <span><?php echo academyHtmlspecialchars((string) $historyItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo academyHtmlspecialchars((string) $historyItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </div>
                             <div class="salary-history-preview-meta">
-                                <span><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) $historyItem['paid_at'])), ENT_QUOTES, 'UTF-8'); ?></span>
-                                <strong><?php echo htmlspecialchars(number_format((float) $historyItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <span><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) $historyItem['paid_at'])), ENT_QUOTES, 'UTF-8'); ?></span>
+                                <strong><?php echo academyHtmlspecialchars(number_format((float) $historyItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -857,7 +857,7 @@ $historyColspan = 9;
                 <h2>📅 سجل حضور وانصراف الأيام الحالية</h2>
             </div>
             <?php if ($selectedAdministrator !== null): ?>
-                <div class="table-summary-chip"><?php echo htmlspecialchars($selectedAdministrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="table-summary-chip"><?php echo academyHtmlspecialchars($selectedAdministrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
         </div>
 
@@ -888,16 +888,16 @@ $historyColspan = 9;
                             ?>
                             <tr>
                                 <td><?php echo $index + 1; ?></td>
-                                <td><?php echo htmlspecialchars($dailyRecord['date'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars($dailyRecord['date'], ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td>
                                     <span class="status-badge <?php echo $statusClass; ?>">
                                         <?php echo $statusLabel; ?>
                                     </span>
                                 </td>
-                                <td><?php echo htmlspecialchars(formatAdminSalaryDateTime($dailyRecord['check_in_time']), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatAdminSalaryDateTime($dailyRecord['check_out_time']), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $dailyRecord['work_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $dailyRecord['advance_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatAdminSalaryDateTime($dailyRecord['check_in_time']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatAdminSalaryDateTime($dailyRecord['check_out_time']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $dailyRecord['work_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $dailyRecord['advance_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -916,7 +916,7 @@ $historyColspan = 9;
                 <h2>🗂️ سجل القبض الكامل</h2>
             </div>
             <?php if ($selectedAdministrator !== null): ?>
-                <div class="table-summary-chip"><?php echo htmlspecialchars($selectedAdministrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="table-summary-chip"><?php echo academyHtmlspecialchars($selectedAdministrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
         </div>
 
@@ -940,14 +940,14 @@ $historyColspan = 9;
                         <?php foreach ($selectedAdministratorHistory as $index => $historyItem): ?>
                             <tr>
                                 <td><?php echo $index + 1; ?></td>
-                                <td><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) $historyItem['paid_at'])), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(ADMIN_SALARY_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) $historyItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> / <?php echo htmlspecialchars((string) $historyItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $historyItem['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $historyItem['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $historyItem['salary_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="<?php echo (float) $historyItem['net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>"><?php echo htmlspecialchars(number_format((float) $historyItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) ($historyItem['paid_by_username'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) $historyItem['paid_at'])), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(ADMIN_SALARY_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) $historyItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> / <?php echo academyHtmlspecialchars((string) $historyItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $historyItem['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $historyItem['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $historyItem['salary_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td class="<?php echo (float) $historyItem['net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>"><?php echo academyHtmlspecialchars(number_format((float) $historyItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($historyItem['paid_by_username'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>

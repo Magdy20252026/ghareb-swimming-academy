@@ -488,8 +488,8 @@ $academiesCsrfToken = getAcademiesCsrfToken();
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -528,8 +528,8 @@ $academiesCsrfToken = getAcademiesCsrfToken();
 
             <form method="POST" id="academiesForm" class="academies-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars((string) ($editAcademy['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academiesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="id" id="id" value="<?php echo academyHtmlspecialchars((string) ($editAcademy['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academiesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="form-group form-group-full">
                     <label for="academy_name">🏷️ اسم الأكاديمية</label>
@@ -537,7 +537,7 @@ $academiesCsrfToken = getAcademiesCsrfToken();
                         type="text"
                         name="academy_name"
                         id="academy_name"
-                        value="<?php echo htmlspecialchars((string) ($editAcademy['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                        value="<?php echo academyHtmlspecialchars((string) ($editAcademy['academy_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                         required
                     >
                 </div>
@@ -551,7 +551,7 @@ $academiesCsrfToken = getAcademiesCsrfToken();
                             step="0.01"
                             name="subscription_price"
                             id="subscription_price"
-                            value="<?php echo htmlspecialchars($subscriptionPriceFieldValue, ENT_QUOTES, 'UTF-8'); ?>"
+                            value="<?php echo academyHtmlspecialchars($subscriptionPriceFieldValue, ENT_QUOTES, 'UTF-8'); ?>"
                             aria-label="بالجنيه المصري. أدخل رقمًا صحيحًا أو عشريًا"
                             required
                         >
@@ -615,8 +615,8 @@ $academiesCsrfToken = getAcademiesCsrfToken();
                                     <div class="academy-cell">
                                         <span class="academy-avatar">🌊</span>
                                         <div>
-                                            <strong><?php echo htmlspecialchars((string) $academy['academy_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                            <span><?php echo htmlspecialchars((string) ($academy['updated_at'] ?? $academy['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <strong><?php echo academyHtmlspecialchars((string) $academy['academy_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                            <span><?php echo academyHtmlspecialchars((string) ($academy['updated_at'] ?? $academy['created_at'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></span>
                                         </div>
                                     </div>
                                 </td>
@@ -630,7 +630,7 @@ $academiesCsrfToken = getAcademiesCsrfToken();
                                     <button
                                         type="button"
                                         class="players-toggle"
-                                        data-target="<?php echo htmlspecialchars($detailRowId, ENT_QUOTES, 'UTF-8'); ?>"
+                                        data-target="<?php echo academyHtmlspecialchars($detailRowId, ENT_QUOTES, 'UTF-8'); ?>"
                                         aria-expanded="false"
                                     >عرض اللاعبين</button>
                                 </td>
@@ -639,24 +639,24 @@ $academiesCsrfToken = getAcademiesCsrfToken();
                                         <a href="<?php echo buildAcademiesPageUrl(['edit' => $academy['id']]); ?>" class="edit-btn">✏️ تعديل</a>
                                         <form method="POST" class="inline-form delete-academy-form">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="<?php echo htmlspecialchars((string) $academy['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($academiesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="id" value="<?php echo academyHtmlspecialchars((string) $academy['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($academiesCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                             <button type="submit" class="delete-btn">🗑️ حذف</button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
-                            <tr id="<?php echo htmlspecialchars($detailRowId, ENT_QUOTES, 'UTF-8'); ?>" class="players-detail-row" hidden>
+                            <tr id="<?php echo academyHtmlspecialchars($detailRowId, ENT_QUOTES, 'UTF-8'); ?>" class="players-detail-row" hidden>
                                 <td colspan="6">
                                     <div class="players-panel">
                                         <div class="players-panel-head">
-                                            <strong>لاعبو <?php echo htmlspecialchars((string) $academy['academy_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                            <strong>لاعبو <?php echo academyHtmlspecialchars((string) $academy['academy_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
                                             <span><?php echo (int) ($academy['player_count'] ?? 0); ?> لاعب</span>
                                         </div>
                                         <?php if (!empty($academy['player_names'])): ?>
                                             <div class="players-list">
                                                 <?php foreach ($academy['player_names'] as $playerName): ?>
-                                                    <span class="player-chip"><?php echo htmlspecialchars((string) $playerName, ENT_QUOTES, 'UTF-8'); ?></span>
+                                                    <span class="player-chip"><?php echo academyHtmlspecialchars((string) $playerName, ENT_QUOTES, 'UTF-8'); ?></span>
                                                 <?php endforeach; ?>
                                             </div>
                                         <?php else: ?>

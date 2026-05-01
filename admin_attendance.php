@@ -489,7 +489,7 @@ $adminAttendanceCsrfToken = getAdminAttendanceCsrfToken();
     <link rel="stylesheet" href="assets/css/admin-attendance.css">
 </head>
 <body class="light-mode">
-<div class="admin-attendance-page" data-today-date="<?php echo htmlspecialchars($todayDate, ENT_QUOTES, 'UTF-8'); ?>">
+<div class="admin-attendance-page" data-today-date="<?php echo academyHtmlspecialchars($todayDate, ENT_QUOTES, 'UTF-8'); ?>">
     <header class="page-header">
         <div class="header-text">
             <span class="section-badge">📍 حضور الإداريين</span>
@@ -511,25 +511,25 @@ $adminAttendanceCsrfToken = getAdminAttendanceCsrfToken();
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
     <section class="hero-grid">
         <article class="hero-card live-card">
             <div class="hero-card-head">
-                <span class="hero-chip"><?php echo htmlspecialchars($selectedDayLabel, ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="hero-chip muted"><?php echo htmlspecialchars($selectedDateLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="hero-chip"><?php echo academyHtmlspecialchars($selectedDayLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="hero-chip muted"><?php echo academyHtmlspecialchars($selectedDateLabel, ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
-            <div class="live-clock" id="liveClock"><?php echo htmlspecialchars($nowEgypt->format('H:i:s'), ENT_QUOTES, 'UTF-8'); ?></div>
-            <div class="live-date" id="liveDate"><?php echo htmlspecialchars($nowEgypt->format('Y-m-d'), ENT_QUOTES, 'UTF-8'); ?></div>
+            <div class="live-clock" id="liveClock"><?php echo academyHtmlspecialchars($nowEgypt->format('H:i:s'), ENT_QUOTES, 'UTF-8'); ?></div>
+            <div class="live-date" id="liveDate"><?php echo academyHtmlspecialchars($nowEgypt->format('Y-m-d'), ENT_QUOTES, 'UTF-8'); ?></div>
         </article>
 
         <article class="hero-card register-card">
             <form method="POST" class="attendance-form" id="attendanceForm" autocomplete="off">
                 <input type="hidden" name="action" value="register">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($adminAttendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($adminAttendanceCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="form-group">
                     <label for="barcode">الباركود</label>
@@ -564,12 +564,12 @@ $adminAttendanceCsrfToken = getAdminAttendanceCsrfToken();
 
     <section class="filter-card">
         <div class="filter-meta">
-            <span class="date-chip"><?php echo htmlspecialchars($selectedDayLabel, ENT_QUOTES, 'UTF-8'); ?></span>
-            <strong><?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?></strong>
+            <span class="date-chip"><?php echo academyHtmlspecialchars($selectedDayLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+            <strong><?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?></strong>
         </div>
 
         <form method="GET" class="date-filter-form">
-            <input type="date" name="date" value="<?php echo htmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>" required>
+            <input type="date" name="date" value="<?php echo academyHtmlspecialchars($selectedDate, ENT_QUOTES, 'UTF-8'); ?>" required>
             <button type="submit" class="filter-btn">عرض</button>
         </form>
     </section>
@@ -610,7 +610,7 @@ $adminAttendanceCsrfToken = getAdminAttendanceCsrfToken();
         <article class="stat-card hours-card">
             <div class="stat-icon">⏱️</div>
             <div>
-                <h2><?php echo htmlspecialchars(formatAdministratorAttendanceHours($totalWorkHours), ENT_QUOTES, 'UTF-8'); ?></h2>
+                <h2><?php echo academyHtmlspecialchars(formatAdministratorAttendanceHours($totalWorkHours), ENT_QUOTES, 'UTF-8'); ?></h2>
                 <p>الساعات</p>
             </div>
         </article>
@@ -627,10 +627,10 @@ $adminAttendanceCsrfToken = getAdminAttendanceCsrfToken();
                 <div class="person-list">
                     <?php foreach ($absentAdministrators as $administrator): ?>
                         <div class="person-item">
-                            <div class="person-avatar"><?php echo htmlspecialchars(getAdministratorAttendanceInitial((string) $administrator['full_name']), ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="person-avatar"><?php echo academyHtmlspecialchars(getAdministratorAttendanceInitial((string) $administrator['full_name']), ENT_QUOTES, 'UTF-8'); ?></div>
                             <div class="person-content">
-                                <strong><?php echo htmlspecialchars((string) $administrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <span><?php echo htmlspecialchars((string) $administrator['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <strong><?php echo academyHtmlspecialchars((string) $administrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <span><?php echo academyHtmlspecialchars((string) $administrator['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </div>
                             <span class="status-badge absent-badge">غياب</span>
                         </div>
@@ -651,10 +651,10 @@ $adminAttendanceCsrfToken = getAdminAttendanceCsrfToken();
                 <div class="person-list">
                     <?php foreach ($leaveAdministrators as $administrator): ?>
                         <div class="person-item">
-                            <div class="person-avatar leave-avatar"><?php echo htmlspecialchars(getAdministratorAttendanceInitial((string) $administrator['full_name']), ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="person-avatar leave-avatar"><?php echo academyHtmlspecialchars(getAdministratorAttendanceInitial((string) $administrator['full_name']), ENT_QUOTES, 'UTF-8'); ?></div>
                             <div class="person-content">
-                                <strong><?php echo htmlspecialchars((string) $administrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <span><?php echo htmlspecialchars((string) $administrator['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <strong><?php echo academyHtmlspecialchars((string) $administrator['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <span><?php echo academyHtmlspecialchars((string) $administrator['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </div>
                             <span class="status-badge leave-badge">إجازة</span>
                         </div>
@@ -690,20 +690,20 @@ $adminAttendanceCsrfToken = getAdminAttendanceCsrfToken();
                             <tr>
                                 <td>
                                     <div class="table-person">
-                                        <div class="table-avatar"><?php echo htmlspecialchars(getAdministratorAttendanceInitial((string) $attendanceRecord['full_name']), ENT_QUOTES, 'UTF-8'); ?></div>
+                                        <div class="table-avatar"><?php echo academyHtmlspecialchars(getAdministratorAttendanceInitial((string) $attendanceRecord['full_name']), ENT_QUOTES, 'UTF-8'); ?></div>
                                         <div>
-                                            <strong><?php echo htmlspecialchars((string) $attendanceRecord['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                            <span><?php echo htmlspecialchars((string) $attendanceRecord['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <strong><?php echo academyHtmlspecialchars((string) $attendanceRecord['full_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                            <span><?php echo academyHtmlspecialchars((string) $attendanceRecord['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
                                         </div>
                                     </div>
                                 </td>
-                                <td dir="ltr"><?php echo htmlspecialchars((string) ($attendanceRecord['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) $attendanceRecord['display_check_in'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) $attendanceRecord['display_check_out'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(formatAdministratorAttendanceHours((float) $attendanceRecord['display_hours']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td dir="ltr"><?php echo academyHtmlspecialchars((string) ($attendanceRecord['barcode'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) $attendanceRecord['display_check_in'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) $attendanceRecord['display_check_out'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatAdministratorAttendanceHours((float) $attendanceRecord['display_hours']), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td>
                                     <span class="status-badge <?php echo !empty($attendanceRecord['check_out_time']) ? 'checkout-badge' : 'present-badge'; ?>">
-                                        <?php echo htmlspecialchars((string) $attendanceRecord['status_label'], ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php echo academyHtmlspecialchars((string) $attendanceRecord['status_label'], ENT_QUOTES, 'UTF-8'); ?>
                                     </span>
                                 </td>
                             </tr>

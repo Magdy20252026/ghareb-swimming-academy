@@ -388,7 +388,7 @@ $inventoryCsrfToken = getInventoryCsrfToken();
 
     <?php if (!empty($message)): ?>
         <div class="message-box <?php echo $messageType; ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -429,8 +429,8 @@ $inventoryCsrfToken = getInventoryCsrfToken();
 
             <form method="POST" id="inventoryForm" class="inventory-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($editItem["id"] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($inventoryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="id" id="id" value="<?php echo academyHtmlspecialchars($editItem["id"] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($inventoryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="form-group">
                     <label for="item_name">🏷️ اسم الصنف</label>
@@ -438,7 +438,7 @@ $inventoryCsrfToken = getInventoryCsrfToken();
                         type="text"
                         name="item_name"
                         id="item_name"
-                        value="<?php echo htmlspecialchars($editItem["item_name"] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                        value="<?php echo academyHtmlspecialchars($editItem["item_name"] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                         placeholder="مثال: نظارة سباحة / اشتراك خاص"
                         required
                     >
@@ -471,7 +471,7 @@ $inventoryCsrfToken = getInventoryCsrfToken();
                             step="1"
                             name="quantity"
                             id="quantity"
-                            value="<?php echo htmlspecialchars((string) ($editItem["quantity"] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                            value="<?php echo academyHtmlspecialchars((string) ($editItem["quantity"] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                             placeholder="أدخل الكمية الحالية"
                         >
                     </div>
@@ -485,7 +485,7 @@ $inventoryCsrfToken = getInventoryCsrfToken();
                                 step="0.01"
                                 name="purchase_price"
                                 id="purchase_price"
-                                value="<?php echo htmlspecialchars(isset($editItem["purchase_price"]) ? formatInventoryDecimalForStorage($editItem["purchase_price"]) : '', ENT_QUOTES, 'UTF-8'); ?>"
+                                value="<?php echo academyHtmlspecialchars(isset($editItem["purchase_price"]) ? formatInventoryDecimalForStorage($editItem["purchase_price"]) : '', ENT_QUOTES, 'UTF-8'); ?>"
                                 placeholder="أدخل سعر الشراء"
                                 required
                             >
@@ -500,7 +500,7 @@ $inventoryCsrfToken = getInventoryCsrfToken();
                             step="0.01"
                             name="sale_price"
                             id="sale_price"
-                            value="<?php echo htmlspecialchars(isset($editItem["sale_price"]) ? formatInventoryDecimalForStorage($editItem["sale_price"]) : '', ENT_QUOTES, 'UTF-8'); ?>"
+                            value="<?php echo academyHtmlspecialchars(isset($editItem["sale_price"]) ? formatInventoryDecimalForStorage($editItem["sale_price"]) : '', ENT_QUOTES, 'UTF-8'); ?>"
                             placeholder="أدخل سعر البيع"
                             required
                         >
@@ -577,7 +577,7 @@ $inventoryCsrfToken = getInventoryCsrfToken();
                                     <div class="item-cell">
                                         <span class="item-avatar"><?php echo $tracksQuantity ? '📦' : '🧾'; ?></span>
                                         <div>
-                                            <strong><?php echo htmlspecialchars($item["item_name"], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                            <strong><?php echo academyHtmlspecialchars($item["item_name"], ENT_QUOTES, 'UTF-8'); ?></strong>
                                         </div>
                                     </div>
                                 </td>
@@ -596,15 +596,15 @@ $inventoryCsrfToken = getInventoryCsrfToken();
                                     <td data-label="سعر الشراء"><?php echo formatInventoryMoney($item["purchase_price"] ?? 0); ?> ج.م</td>
                                 <?php endif; ?>
                                 <td data-label="سعر البيع"><?php echo formatInventoryMoney($item["sale_price"] ?? 0); ?> ج.م</td>
-                                <td data-label="آخر تحديث"><?php echo htmlspecialchars((string) ($item["updated_at"] ?? $item["created_at"] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td data-label="آخر تحديث"><?php echo academyHtmlspecialchars((string) ($item["updated_at"] ?? $item["created_at"] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td data-label="الإجراءات">
                                     <div class="action-buttons">
                                         <a href="<?php echo buildInventoryPageUrl(["edit" => $item["id"]]); ?>" class="edit-btn">✏️ تعديل</a>
 
                                         <form method="POST" class="inline-form delete-item-form">
                                             <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="<?php echo htmlspecialchars((string) $item["id"], ENT_QUOTES, 'UTF-8'); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($inventoryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="id" value="<?php echo academyHtmlspecialchars((string) $item["id"], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($inventoryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                             <button type="submit" class="delete-btn">🗑️ حذف</button>
                                         </form>
                                     </div>

@@ -4,7 +4,7 @@ require_once 'app_helpers.php';
 
 $siteSettings = getSiteSettings($pdo);
 $academyName = (string) ($siteSettings['academy_name'] ?? 'الأكاديمية');
-$academyLogoInitial = htmlspecialchars(getAcademyLogoInitial($academyName), ENT_QUOTES, 'UTF-8');
+$academyLogoInitial = academyHtmlspecialchars(getAcademyLogoInitial($academyName), ENT_QUOTES, 'UTF-8');
 
 header('Content-Type: image/svg+xml; charset=UTF-8');
 header('Cache-Control: public, max-age=86400');

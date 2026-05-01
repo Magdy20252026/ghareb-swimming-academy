@@ -274,7 +274,7 @@ $products = swimmerStoreItems($pdo);
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <?php endif; ?>
 
     <section class="admin-content-grid">
@@ -282,15 +282,15 @@ $products = swimmerStoreItems($pdo);
             <h2><?php echo $editItem === null ? 'إضافة منتج' : 'تعديل منتج'; ?></h2>
             <form method="POST" enctype="multipart/form-data" class="stack-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
-                <input type="hidden" name="item_id" value="<?php echo htmlspecialchars($formData['item_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerStoreToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="item_id" value="<?php echo academyHtmlspecialchars($formData['item_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerStoreToken(), ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="form-group">
                     <label for="product_name">اسم المنتج</label>
-                    <input type="text" name="product_name" id="product_name" value="<?php echo htmlspecialchars($formData['product_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="text" name="product_name" id="product_name" value="<?php echo academyHtmlspecialchars($formData['product_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="product_price">السعر بالجنيه المصري</label>
-                    <input type="number" min="0" step="0.01" name="product_price" id="product_price" value="<?php echo htmlspecialchars($formData['product_price'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input type="number" min="0" step="0.01" name="product_price" id="product_price" value="<?php echo academyHtmlspecialchars($formData['product_price'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="product_image">صورة المنتج</label>
@@ -311,13 +311,13 @@ $products = swimmerStoreItems($pdo);
                     <article class="item-card product-card">
                         <div class="item-image-wrap">
                             <?php if ($productImagePath !== null): ?>
-                                <img src="<?php echo htmlspecialchars($productImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars((string) ($product['product_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+                                <img src="<?php echo academyHtmlspecialchars($productImagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo academyHtmlspecialchars((string) ($product['product_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                             <?php else: ?>
                                 <div class="item-image-placeholder">🛍️</div>
                             <?php endif; ?>
                         </div>
                         <div class="item-card-body">
-                            <strong><?php echo htmlspecialchars((string) ($product['product_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong><?php echo academyHtmlspecialchars((string) ($product['product_name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></strong>
                             <span><?php echo swimmerStoreFormatPrice($product['product_price'] ?? 0); ?> ج.م</span>
                         </div>
                         <div class="card-actions">
@@ -325,7 +325,7 @@ $products = swimmerStoreItems($pdo);
                             <form method="POST" class="inline-form">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="item_id" value="<?php echo (int) ($product['id'] ?? 0); ?>">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerStoreToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerStoreToken(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <button type="submit" class="primary-btn danger-btn">حذف</button>
                             </form>
                         </div>

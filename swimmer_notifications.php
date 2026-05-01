@@ -164,7 +164,7 @@ $notifications = $notificationsStmt ? ($notificationsStmt->fetchAll(PDO::FETCH_A
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>"><?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <?php endif; ?>
 
     <section class="admin-content-grid notifications-layout">
@@ -173,17 +173,17 @@ $notifications = $notificationsStmt ? ($notificationsStmt->fetchAll(PDO::FETCH_A
             <form method="POST" class="stack-form" autocomplete="off">
                 <input type="hidden" name="action" value="save">
                 <input type="hidden" name="notification_id" value="<?php echo (int) ($editNotification['id'] ?? 0); ?>">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerNotificationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerNotificationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
                 <div class="form-group">
                     <label for="notification_message">الإشعار</label>
-                    <textarea name="notification_message" id="notification_message" rows="5" required><?php echo htmlspecialchars((string) ($editNotification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    <textarea name="notification_message" id="notification_message" rows="5" required><?php echo academyHtmlspecialchars((string) ($editNotification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="target_branch">الفرع</label>
                     <select name="target_branch" id="target_branch">
                         <option value="">الكل</option>
                         <?php foreach ($branchOptions as $branchOption): ?>
-                            <option value="<?php echo htmlspecialchars((string) $branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (string) ($editNotification['target_branch'] ?? '') === (string) $branchOption ? 'selected' : ''; ?>><?php echo htmlspecialchars((string) $branchOption, ENT_QUOTES, 'UTF-8'); ?></option>
+                            <option value="<?php echo academyHtmlspecialchars((string) $branchOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (string) ($editNotification['target_branch'] ?? '') === (string) $branchOption ? 'selected' : ''; ?>><?php echo academyHtmlspecialchars((string) $branchOption, ENT_QUOTES, 'UTF-8'); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -192,7 +192,7 @@ $notifications = $notificationsStmt ? ($notificationsStmt->fetchAll(PDO::FETCH_A
                     <select name="target_subscription" id="target_subscription">
                         <option value="">الكل</option>
                         <?php foreach ($subscriptionOptions as $subscriptionOption): ?>
-                            <option value="<?php echo htmlspecialchars((string) $subscriptionOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (string) ($editNotification['target_subscription'] ?? '') === (string) $subscriptionOption ? 'selected' : ''; ?>><?php echo htmlspecialchars((string) $subscriptionOption, ENT_QUOTES, 'UTF-8'); ?></option>
+                            <option value="<?php echo academyHtmlspecialchars((string) $subscriptionOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (string) ($editNotification['target_subscription'] ?? '') === (string) $subscriptionOption ? 'selected' : ''; ?>><?php echo academyHtmlspecialchars((string) $subscriptionOption, ENT_QUOTES, 'UTF-8'); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -201,7 +201,7 @@ $notifications = $notificationsStmt ? ($notificationsStmt->fetchAll(PDO::FETCH_A
                     <select name="target_level" id="target_level">
                         <option value="">الكل</option>
                         <?php foreach ($levelOptions as $levelOption): ?>
-                            <option value="<?php echo htmlspecialchars((string) $levelOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (string) ($editNotification['target_level'] ?? '') === (string) $levelOption ? 'selected' : ''; ?>><?php echo htmlspecialchars((string) $levelOption, ENT_QUOTES, 'UTF-8'); ?></option>
+                            <option value="<?php echo academyHtmlspecialchars((string) $levelOption, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (string) ($editNotification['target_level'] ?? '') === (string) $levelOption ? 'selected' : ''; ?>><?php echo academyHtmlspecialchars((string) $levelOption, ENT_QUOTES, 'UTF-8'); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -218,16 +218,16 @@ $notifications = $notificationsStmt ? ($notificationsStmt->fetchAll(PDO::FETCH_A
                 <?php foreach ($notifications as $notification): ?>
                     <article class="item-card notification-card">
                         <div class="item-card-body">
-                            <strong class="notification-audience"><?php echo htmlspecialchars(swimmerNotificationAudience($notification), ENT_QUOTES, 'UTF-8'); ?></strong>
-                            <p class="notification-message"><?php echo nl2br(htmlspecialchars((string) ($notification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
-                            <span class="notification-date"><?php echo htmlspecialchars(date('Y-m-d H:i', strtotime((string) ($notification['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></span>
+                            <strong class="notification-audience"><?php echo academyHtmlspecialchars(swimmerNotificationAudience($notification), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <p class="notification-message"><?php echo nl2br(academyHtmlspecialchars((string) ($notification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
+                            <span class="notification-date"><?php echo academyHtmlspecialchars(date('Y-m-d H:i', strtotime((string) ($notification['created_at'] ?? 'now'))), ENT_QUOTES, 'UTF-8'); ?></span>
                         </div>
                         <div class="card-actions">
                             <a href="swimmer_notifications.php?edit=<?php echo (int) ($notification['id'] ?? 0); ?>" class="primary-btn secondary-btn">تعديل</a>
                             <form method="POST" class="inline-form">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="notification_id" value="<?php echo (int) ($notification['id'] ?? 0); ?>">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(swimmerNotificationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars(swimmerNotificationsToken(), ENT_QUOTES, 'UTF-8'); ?>">
                                 <button type="submit" class="primary-btn danger-btn">حذف</button>
                             </form>
                         </div>

@@ -792,7 +792,7 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
 </head>
 <body
     class="light-mode"
-    data-reset-url="<?php echo htmlspecialchars(buildCoachSalariesPageUrl(), ENT_QUOTES, 'UTF-8'); ?>"
+    data-reset-url="<?php echo academyHtmlspecialchars(buildCoachSalariesPageUrl(), ENT_QUOTES, 'UTF-8'); ?>"
     data-default-confirm-message="هل أنت متأكد من تنفيذ القبض الآن؟"
 >
 <div class="coach-salaries-page">
@@ -817,8 +817,8 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
     </header>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -842,7 +842,7 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
         <article class="stat-card absent-card salary-stat-card">
             <div class="stat-icon">⏱️</div>
             <div>
-                <h2><?php echo htmlspecialchars(number_format($totalOutstandingHours, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
+                <h2><?php echo academyHtmlspecialchars(number_format($totalOutstandingHours, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
                 <p>إجمالي الساعات الحالية</p>
             </div>
         </article>
@@ -850,7 +850,7 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
         <article class="stat-card hours-card salary-stat-card">
             <div class="stat-icon">💵</div>
             <div>
-                <h2><?php echo htmlspecialchars(number_format($totalOutstandingAdvances, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
+                <h2><?php echo academyHtmlspecialchars(number_format($totalOutstandingAdvances, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
                 <p>إجمالي السلف الحالية</p>
             </div>
         </article>
@@ -858,7 +858,7 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
         <article class="stat-card salary-total-card">
             <div class="stat-icon">🧾</div>
             <div>
-                <h2><?php echo htmlspecialchars(number_format($totalPayableSalariesAfterAdvances, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
+                <h2><?php echo academyHtmlspecialchars(number_format($totalPayableSalariesAfterAdvances, 2), ENT_QUOTES, 'UTF-8'); ?></h2>
                 <p>إجمالي المرتبات المطلوبة بعد خصم السلف</p>
             </div>
         </article>
@@ -874,11 +874,11 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                 <div class="form-row form-row-single">
                     <div class="form-group">
                         <label>اختيار المدرب</label>
-                        <input type="hidden" name="coach_id" id="coach_id_filter" value="<?php echo htmlspecialchars($selectedCoachId, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="coach_id" id="coach_id_filter" value="<?php echo academyHtmlspecialchars($selectedCoachId, ENT_QUOTES, 'UTF-8'); ?>">
                         <div class="professional-select" id="coachSelect" data-placeholder="اختر المدرب من القائمة">
                             <button type="button" class="select-trigger" id="coachSelectTrigger" aria-expanded="false">
                                 <span class="select-trigger-text" id="coachSelectText">
-                                    <?php echo $selectedCoach ? htmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8') : 'اختر المدرب من القائمة'; ?>
+                                    <?php echo $selectedCoach ? academyHtmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8') : 'اختر المدرب من القائمة'; ?>
                                 </span>
                                 <span class="select-trigger-icon">▾</span>
                             </button>
@@ -896,18 +896,18 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                                         <button
                                             type="button"
                                             class="select-option<?php echo (string) $coach['id'] === $selectedCoachId ? ' is-selected' : ''; ?>"
-                                            data-value="<?php echo htmlspecialchars((string) $coach['id'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-name="<?php echo htmlspecialchars($coach['full_name'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-phone="<?php echo htmlspecialchars($coach['phone'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-hours="<?php echo htmlspecialchars(number_format((float) $coach['total_hours'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
-                                            data-advances="<?php echo htmlspecialchars(number_format((float) $coach['total_advances'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-value="<?php echo academyHtmlspecialchars((string) $coach['id'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-name="<?php echo academyHtmlspecialchars($coach['full_name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-phone="<?php echo academyHtmlspecialchars($coach['phone'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-hours="<?php echo academyHtmlspecialchars(number_format((float) $coach['total_hours'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-advances="<?php echo academyHtmlspecialchars(number_format((float) $coach['total_advances'], 2, '.', ''), ENT_QUOTES, 'UTF-8'); ?>"
                                             data-status="<?php echo $coachHasData ? 'جاهز للقبض' : 'لا توجد بيانات حالية'; ?>"
                                         >
-                                            <span class="option-name"><?php echo htmlspecialchars($coach['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                            <span class="option-name"><?php echo academyHtmlspecialchars($coach['full_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                                             <span class="option-meta">
-                                                📞 <?php echo htmlspecialchars($coach['phone'], ENT_QUOTES, 'UTF-8'); ?>
-                                                • ⏱️ <?php echo htmlspecialchars(number_format((float) $coach['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?>
-                                                • 💵 <?php echo htmlspecialchars(number_format((float) $coach['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?>
+                                                📞 <?php echo academyHtmlspecialchars($coach['phone'], ENT_QUOTES, 'UTF-8'); ?>
+                                                • ⏱️ <?php echo academyHtmlspecialchars(number_format((float) $coach['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?>
+                                                • 💵 <?php echo academyHtmlspecialchars(number_format((float) $coach['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?>
                                             </span>
                                         </button>
                                     <?php endforeach; ?>
@@ -919,9 +919,9 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
 
                         <div class="selected-coach-meta salary-selected-meta" id="selectedCoachMeta">
                             <?php if ($selectedCoach): ?>
-                                <span>📞 <?php echo htmlspecialchars($selectedCoach['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                <span>⏱️ <?php echo htmlspecialchars(number_format((float) $selectedCoach['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
-                                <span>💵 <?php echo htmlspecialchars(number_format((float) $selectedCoach['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>📞 <?php echo academyHtmlspecialchars($selectedCoach['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>⏱️ <?php echo academyHtmlspecialchars(number_format((float) $selectedCoach['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>💵 <?php echo academyHtmlspecialchars(number_format((float) $selectedCoach['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -930,18 +930,18 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                 <div class="form-row salary-date-range-row">
                     <div class="form-group">
                         <label for="period_start">من تاريخ</label>
-                        <input type="date" id="period_start" name="period_start" aria-label="تاريخ بداية فترة الحجز أو الصرف" value="<?php echo htmlspecialchars((string) $selectedPeriodStart, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="date" id="period_start" name="period_start" aria-label="تاريخ بداية فترة الحجز أو الصرف" value="<?php echo academyHtmlspecialchars((string) $selectedPeriodStart, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
 
                     <div class="form-group">
                         <label for="period_end">إلى تاريخ</label>
-                        <input type="date" id="period_end" name="period_end" aria-label="تاريخ نهاية فترة الحجز أو الصرف" value="<?php echo htmlspecialchars((string) $selectedPeriodEnd, ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="date" id="period_end" name="period_end" aria-label="تاريخ نهاية فترة الحجز أو الصرف" value="<?php echo academyHtmlspecialchars((string) $selectedPeriodEnd, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                 </div>
 
                 <div class="form-actions salary-filter-actions">
                     <button type="submit" class="filter-btn"<?php echo !$hasCoaches ? ' disabled' : ''; ?>>عرض البيانات</button>
-                    <a href="<?php echo htmlspecialchars(buildCoachSalariesPageUrl(), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn" id="clearBtn">تحديث</a>
+                    <a href="<?php echo academyHtmlspecialchars(buildCoachSalariesPageUrl(), ENT_QUOTES, 'UTF-8'); ?>" class="clear-btn" id="clearBtn">تحديث</a>
                 </div>
             </form>
 
@@ -953,11 +953,11 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                     </article>
                     <article class="salary-summary-box">
                         <span>الساعات</span>
-                        <strong><?php echo htmlspecialchars(number_format((float) $selectedCoachTotals['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars(number_format((float) $selectedCoachTotals['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </article>
                     <article class="salary-summary-box">
                         <span>السلف</span>
-                        <strong><?php echo htmlspecialchars(number_format((float) $selectedCoachTotals['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                        <strong><?php echo academyHtmlspecialchars(number_format((float) $selectedCoachTotals['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                     </article>
                     <article class="salary-summary-box">
                         <span>سجلات السلف</span>
@@ -966,46 +966,46 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                     <?php if ($canViewHourlyRate): ?>
                         <article class="salary-summary-box salary-summary-highlight">
                             <span>سعر الساعة</span>
-                            <strong><?php echo htmlspecialchars(number_format((float) $selectedCoach['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong><?php echo academyHtmlspecialchars(number_format((float) $selectedCoach['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </article>
                     <?php endif; ?>
                     <?php if ($canViewSalaryTotals): ?>
                         <article class="salary-summary-box salary-summary-highlight">
                             <span>إجمالي الأجر</span>
-                            <strong><?php echo htmlspecialchars(number_format((float) $selectedCoachTotals['gross_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong><?php echo academyHtmlspecialchars(number_format((float) $selectedCoachTotals['gross_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </article>
                         <article class="salary-summary-box salary-summary-net <?php echo (float) $selectedCoachTotals['net_amount'] >= 0 ? 'is-positive' : 'is-negative'; ?>">
                             <span>صافي القبض</span>
-                            <strong><?php echo htmlspecialchars(number_format((float) $selectedCoachTotals['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong><?php echo academyHtmlspecialchars(number_format((float) $selectedCoachTotals['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </article>
                         <article class="salary-summary-box salary-summary-highlight">
                             <span>إجمالي المستحقات المحجوزة</span>
-                            <strong><?php echo htmlspecialchars(number_format($selectedCoachPendingNetAmount, 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong><?php echo academyHtmlspecialchars(number_format($selectedCoachPendingNetAmount, 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                         </article>
                     <?php endif; ?>
                 </div>
 
                 <form method="POST" class="attendance-form salary-payment-form">
-                    <input type="hidden" name="coach_id" value="<?php echo htmlspecialchars((string) $selectedCoach['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachSalaryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="period_start" value="<?php echo htmlspecialchars((string) $selectedPeriodStart, ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="period_end" value="<?php echo htmlspecialchars((string) $selectedPeriodEnd, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="coach_id" value="<?php echo academyHtmlspecialchars((string) $selectedCoach['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachSalaryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="period_start" value="<?php echo academyHtmlspecialchars((string) $selectedPeriodStart, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="period_end" value="<?php echo academyHtmlspecialchars((string) $selectedPeriodEnd, ENT_QUOTES, 'UTF-8'); ?>">
 
                     <div class="form-group">
                         <label>نوع القبض</label>
                         <div class="payment-cycle-grid">
                             <?php foreach (COACH_SALARY_PAYMENT_CYCLES as $cycleKey => $cycleLabel): ?>
                                 <label class="payment-cycle-option<?php echo $formPaymentCycle === $cycleKey ? ' is-active' : ''; ?>">
-                                    <input type="radio" name="payment_cycle" value="<?php echo htmlspecialchars($cycleKey, ENT_QUOTES, 'UTF-8'); ?>"<?php echo $formPaymentCycle === $cycleKey ? ' checked' : ''; ?>>
-                                    <span><?php echo htmlspecialchars($cycleLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <input type="radio" name="payment_cycle" value="<?php echo academyHtmlspecialchars($cycleKey, ENT_QUOTES, 'UTF-8'); ?>"<?php echo $formPaymentCycle === $cycleKey ? ' checked' : ''; ?>>
+                                    <span><?php echo academyHtmlspecialchars($cycleLabel, ENT_QUOTES, 'UTF-8'); ?></span>
                                 </label>
                             <?php endforeach; ?>
                         </div>
                     </div>
 
                     <div class="salary-period-row">
-                        <span class="table-summary-chip">من <?php echo htmlspecialchars((string) ($selectedCoachTotals['period_start'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></span>
-                        <span class="table-summary-chip">إلى <?php echo htmlspecialchars((string) ($selectedCoachTotals['period_end'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span class="table-summary-chip">من <?php echo academyHtmlspecialchars((string) ($selectedCoachTotals['period_start'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span class="table-summary-chip">إلى <?php echo academyHtmlspecialchars((string) ($selectedCoachTotals['period_end'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></span>
                     </div>
 
                     <div class="salary-period-note">
@@ -1054,13 +1054,13 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                     <?php foreach (array_slice($selectedCoachPendingPayments, 0, 5) as $pendingItem): ?>
                         <div class="salary-history-preview-item salary-pending-preview-item">
                             <div>
-                                <strong>مستحق محفوظ • <?php echo htmlspecialchars(COACH_SALARY_PAYMENT_CYCLES[$pendingItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <span><?php echo htmlspecialchars((string) $pendingItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlspecialchars((string) $pendingItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <strong>مستحق محفوظ • <?php echo academyHtmlspecialchars(COACH_SALARY_PAYMENT_CYCLES[$pendingItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <span><?php echo academyHtmlspecialchars((string) $pendingItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo academyHtmlspecialchars((string) $pendingItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </div>
                             <div class="salary-history-preview-meta">
-                                <span>حُجز في <?php echo htmlspecialchars(formatCoachSalaryTimestamp((string) ($pendingItem['reserved_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span>حُجز في <?php echo academyHtmlspecialchars(formatCoachSalaryTimestamp((string) ($pendingItem['reserved_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span>
                                 <?php if ($canViewSalaryTotals): ?>
-                                    <strong><?php echo htmlspecialchars(number_format((float) $pendingItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                    <strong><?php echo academyHtmlspecialchars(number_format((float) $pendingItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -1071,13 +1071,13 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                     <?php foreach (array_slice($selectedCoachHistory, 0, 5) as $historyItem): ?>
                         <div class="salary-history-preview-item">
                             <div>
-                                <strong><?php echo htmlspecialchars(COACH_SALARY_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></strong>
-                                <span><?php echo htmlspecialchars((string) $historyItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlspecialchars((string) $historyItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <strong><?php echo academyHtmlspecialchars(COACH_SALARY_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></strong>
+                                <span><?php echo academyHtmlspecialchars((string) $historyItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> - <?php echo academyHtmlspecialchars((string) $historyItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </div>
                             <div class="salary-history-preview-meta">
-                                <span><?php echo htmlspecialchars(formatCoachSalaryTimestamp((string) ($historyItem['paid_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span><?php echo academyHtmlspecialchars(formatCoachSalaryTimestamp((string) ($historyItem['paid_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span>
                                 <?php if ($canViewSalaryTotals): ?>
-                                    <strong><?php echo htmlspecialchars(number_format((float) $historyItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
+                                    <strong><?php echo academyHtmlspecialchars(number_format((float) $historyItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></strong>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -1097,7 +1097,7 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                 <h2>📅 تفاصيل الأيام الحالية</h2>
             </div>
             <?php if ($selectedCoach !== null): ?>
-                <div class="table-summary-chip"><?php echo htmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="table-summary-chip"><?php echo academyHtmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
         </div>
 
@@ -1121,17 +1121,17 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                         <?php foreach ($selectedCoachDailyRecords as $index => $dailyRecord): ?>
                             <tr>
                                 <td><?php echo $index + 1; ?></td>
-                                <td><?php echo htmlspecialchars($dailyRecord['date'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars($dailyRecord['date'], ENT_QUOTES, 'UTF-8'); ?></td>
                                 <td>
                                     <span class="status-badge <?php echo !empty($dailyRecord['attendance_status']) ? 'present-badge' : 'absent-badge'; ?>">
                                         <?php echo !empty($dailyRecord['attendance_status']) ? 'حاضر' : 'بدون حضور'; ?>
                                     </span>
                                 </td>
-                                <td><?php echo htmlspecialchars(number_format((float) $dailyRecord['work_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $dailyRecord['advance_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $dailyRecord['work_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $dailyRecord['advance_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php if ($canViewSalaryTotals): ?>
-                                    <td><?php echo htmlspecialchars(number_format((float) $dailyRecord['daily_total'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td class="<?php echo (float) $dailyRecord['daily_net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>"><?php echo htmlspecialchars(number_format((float) $dailyRecord['daily_net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars(number_format((float) $dailyRecord['daily_total'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td class="<?php echo (float) $dailyRecord['daily_net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>"><?php echo academyHtmlspecialchars(number_format((float) $dailyRecord['daily_net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
@@ -1151,7 +1151,7 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                 <h2>📌 المستحقات المحجوزة</h2>
             </div>
             <?php if ($selectedCoach !== null): ?>
-                <div class="table-summary-chip"><?php echo htmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="table-summary-chip"><?php echo academyHtmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
         </div>
 
@@ -1181,25 +1181,25 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                         <?php foreach ($selectedCoachPendingPayments as $index => $pendingItem): ?>
                             <tr>
                                 <td><?php echo $index + 1; ?></td>
-                                <td><?php echo htmlspecialchars(formatCoachSalaryTimestamp((string) ($pendingItem['reserved_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(COACH_SALARY_PAYMENT_STATUSES['pending'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(COACH_SALARY_PAYMENT_CYCLES[$pendingItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) $pendingItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> / <?php echo htmlspecialchars((string) $pendingItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $pendingItem['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $pendingItem['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatCoachSalaryTimestamp((string) ($pendingItem['reserved_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(COACH_SALARY_PAYMENT_STATUSES['pending'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(COACH_SALARY_PAYMENT_CYCLES[$pendingItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) $pendingItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> / <?php echo academyHtmlspecialchars((string) $pendingItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $pendingItem['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $pendingItem['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php if ($canViewHourlyRate): ?>
-                                    <td><?php echo htmlspecialchars(number_format((float) $pendingItem['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars(number_format((float) $pendingItem['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php endif; ?>
                                 <?php if ($canViewSalaryTotals): ?>
-                                    <td><?php echo htmlspecialchars(number_format((float) $pendingItem['gross_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td class="<?php echo (float) $pendingItem['net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>"><?php echo htmlspecialchars(number_format((float) $pendingItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars(number_format((float) $pendingItem['gross_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td class="<?php echo (float) $pendingItem['net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>"><?php echo academyHtmlspecialchars(number_format((float) $pendingItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php endif; ?>
                                 <td>
                                     <form method="POST" class="salary-inline-form js-confirm-submit" data-confirm-message="هل تريد صرف هذا المستحق المحجوز الآن؟">
                                         <input type="hidden" name="action" value="pay_pending">
-                                        <input type="hidden" name="coach_id" value="<?php echo htmlspecialchars((string) $selectedCoach['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="payment_id" value="<?php echo htmlspecialchars((string) $pendingItem['id'], ENT_QUOTES, 'UTF-8'); ?>">
-                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachSalaryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="coach_id" value="<?php echo academyHtmlspecialchars((string) $selectedCoach['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="payment_id" value="<?php echo academyHtmlspecialchars((string) $pendingItem['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachSalaryCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                                         <button type="submit" class="table-action-btn">💵 صرف المستحق</button>
                                     </form>
                                 </td>
@@ -1221,7 +1221,7 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                 <h2>🗂️ سجل القبض الكامل</h2>
             </div>
             <?php if ($selectedCoach !== null): ?>
-                <div class="table-summary-chip"><?php echo htmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="table-summary-chip"><?php echo academyHtmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
         </div>
 
@@ -1251,20 +1251,20 @@ $dailyColspan = $canViewSalaryTotals ? 7 : 5;
                         <?php foreach ($selectedCoachHistory as $index => $historyItem): ?>
                             <tr>
                                 <td><?php echo $index + 1; ?></td>
-                                <td><?php echo htmlspecialchars(formatCoachSalaryTimestamp((string) ($historyItem['paid_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(COACH_SALARY_PAYMENT_STATUSES['paid'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(COACH_SALARY_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars((string) $historyItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> / <?php echo htmlspecialchars((string) $historyItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $historyItem['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td><?php echo htmlspecialchars(number_format((float) $historyItem['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(formatCoachSalaryTimestamp((string) ($historyItem['paid_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(COACH_SALARY_PAYMENT_STATUSES['paid'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(COACH_SALARY_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) $historyItem['period_start'], ENT_QUOTES, 'UTF-8'); ?> / <?php echo academyHtmlspecialchars((string) $historyItem['period_end'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $historyItem['total_hours'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars(number_format((float) $historyItem['total_advances'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php if ($canViewHourlyRate): ?>
-                                    <td><?php echo htmlspecialchars(number_format((float) $historyItem['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars(number_format((float) $historyItem['hourly_rate'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php endif; ?>
                                 <?php if ($canViewSalaryTotals): ?>
-                                    <td><?php echo htmlspecialchars(number_format((float) $historyItem['gross_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td class="<?php echo (float) $historyItem['net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>"><?php echo htmlspecialchars(number_format((float) $historyItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo academyHtmlspecialchars(number_format((float) $historyItem['gross_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td class="<?php echo (float) $historyItem['net_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>"><?php echo academyHtmlspecialchars(number_format((float) $historyItem['net_amount'], 2), ENT_QUOTES, 'UTF-8'); ?></td>
                                 <?php endif; ?>
-                                <td><?php echo htmlspecialchars((string) ($historyItem['paid_by_username'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
+                                <td><?php echo academyHtmlspecialchars((string) ($historyItem['paid_by_username'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>

@@ -568,25 +568,25 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة المدربين - <?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></title>
+    <title>بوابة المدربين - <?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></title>
     <meta name="theme-color" content="#2563eb">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="بوابة المدربين">
-    <link rel="manifest" href="<?php echo htmlspecialchars(coachPortalBuildUrl('coach_portal_manifest.php'), ENT_QUOTES, 'UTF-8'); ?>">
-    <link rel="icon" href="<?php echo htmlspecialchars(coachPortalBuildUrl('coach_portal_icon.php'), ENT_QUOTES, 'UTF-8'); ?>" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="<?php echo htmlspecialchars(coachPortalBuildUrl('coach_portal_icon.php'), ENT_QUOTES, 'UTF-8'); ?>">
+    <link rel="manifest" href="<?php echo academyHtmlspecialchars(coachPortalBuildUrl('coach_portal_manifest.php'), ENT_QUOTES, 'UTF-8'); ?>">
+    <link rel="icon" href="<?php echo academyHtmlspecialchars(coachPortalBuildUrl('coach_portal_icon.php'), ENT_QUOTES, 'UTF-8'); ?>" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="<?php echo academyHtmlspecialchars(coachPortalBuildUrl('coach_portal_icon.php'), ENT_QUOTES, 'UTF-8'); ?>">
     <link rel="stylesheet" href="assets/css/coach-portal.css">
 </head>
 <body
     class="light-mode"
-    data-reset-url="<?php echo htmlspecialchars($selectedCoach !== null ? coachPortalBuildUrl('coach_portal.php', ['logout' => '1']) : coachPortalBuildUrl('coach_portal.php'), ENT_QUOTES, 'UTF-8'); ?>"
-    data-portal-url="<?php echo htmlspecialchars(coachPortalBuildUrl('coach_portal.php'), ENT_QUOTES, 'UTF-8'); ?>"
-    data-notifications-feed-url="<?php echo htmlspecialchars($selectedCoach !== null ? coachPortalBuildUrl('coach_portal_notifications_feed.php') : '', ENT_QUOTES, 'UTF-8'); ?>"
-    data-notifications-scope="<?php echo htmlspecialchars($selectedCoach !== null ? 'coach-' . (int) ($selectedCoach['id'] ?? 0) : '', ENT_QUOTES, 'UTF-8'); ?>"
-    data-notifications-app-name="<?php echo htmlspecialchars('بوابة المدربين - ' . $academyName, ENT_QUOTES, 'UTF-8'); ?>"
-    data-notifications-icon-url="<?php echo htmlspecialchars(coachPortalBuildUrl('coach_portal_icon.php'), ENT_QUOTES, 'UTF-8'); ?>"
-    data-notifications-service-worker-url="<?php echo htmlspecialchars(coachPortalBuildUrl('coach_portal_sw.js'), ENT_QUOTES, 'UTF-8'); ?>"
+    data-reset-url="<?php echo academyHtmlspecialchars($selectedCoach !== null ? coachPortalBuildUrl('coach_portal.php', ['logout' => '1']) : coachPortalBuildUrl('coach_portal.php'), ENT_QUOTES, 'UTF-8'); ?>"
+    data-portal-url="<?php echo academyHtmlspecialchars(coachPortalBuildUrl('coach_portal.php'), ENT_QUOTES, 'UTF-8'); ?>"
+    data-notifications-feed-url="<?php echo academyHtmlspecialchars($selectedCoach !== null ? coachPortalBuildUrl('coach_portal_notifications_feed.php') : '', ENT_QUOTES, 'UTF-8'); ?>"
+    data-notifications-scope="<?php echo academyHtmlspecialchars($selectedCoach !== null ? 'coach-' . (int) ($selectedCoach['id'] ?? 0) : '', ENT_QUOTES, 'UTF-8'); ?>"
+    data-notifications-app-name="<?php echo academyHtmlspecialchars('بوابة المدربين - ' . $academyName, ENT_QUOTES, 'UTF-8'); ?>"
+    data-notifications-icon-url="<?php echo academyHtmlspecialchars(coachPortalBuildUrl('coach_portal_icon.php'), ENT_QUOTES, 'UTF-8'); ?>"
+    data-notifications-service-worker-url="<?php echo academyHtmlspecialchars(coachPortalBuildUrl('coach_portal_sw.js'), ENT_QUOTES, 'UTF-8'); ?>"
 >
 <div class="portal-shell">
     <header class="hero-card">
@@ -594,16 +594,16 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
             <div class="brand-logo-wrap">
                 <div class="brand-logo">
                     <?php if ($academyLogoPath !== null): ?>
-                        <img src="<?php echo htmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="شعار <?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
+                        <img src="<?php echo academyHtmlspecialchars($academyLogoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="شعار <?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?>">
                     <?php else: ?>
-                        <span><?php echo htmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span><?php echo academyHtmlspecialchars($academyLogoInitial, ENT_QUOTES, 'UTF-8'); ?></span>
                     <?php endif; ?>
                 </div>
                 <span class="brand-wave">🌊</span>
             </div>
             <div class="brand-text">
                 <span class="page-badge">🏅 بوابة المدربين</span>
-                <h1><?php echo htmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></h1>
+                <h1><?php echo academyHtmlspecialchars($academyName, ENT_QUOTES, 'UTF-8'); ?></h1>
             </div>
         </div>
 
@@ -635,7 +635,7 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
                     inputmode="tel"
                     autocomplete="tel"
                     placeholder="مثال: 01000000000"
-                    value="<?php echo htmlspecialchars($submittedPhone, ENT_QUOTES, 'UTF-8'); ?>"
+                    value="<?php echo academyHtmlspecialchars($submittedPhone, ENT_QUOTES, 'UTF-8'); ?>"
                 >
             </div>
 
@@ -654,7 +654,7 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
 
             <div class="search-actions">
                 <button type="submit" class="primary-btn">🔓 دخول وعرض البيانات</button>
-                <a href="<?php echo htmlspecialchars($selectedCoach !== null ? coachPortalBuildUrl('coach_portal.php', ['logout' => '1']) : coachPortalBuildUrl('coach_portal.php'), ENT_QUOTES, 'UTF-8'); ?>" class="secondary-btn" id="clearBtn">
+                <a href="<?php echo academyHtmlspecialchars($selectedCoach !== null ? coachPortalBuildUrl('coach_portal.php', ['logout' => '1']) : coachPortalBuildUrl('coach_portal.php'), ENT_QUOTES, 'UTF-8'); ?>" class="secondary-btn" id="clearBtn">
                     <?php echo $selectedCoach !== null ? '🚪 تسجيل الخروج' : '🧹 مسح'; ?>
                 </a>
             </div>
@@ -662,8 +662,8 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
     </section>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType, ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo academyHtmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
@@ -673,15 +673,15 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
                 <div class="coach-avatar">🏊‍♂️</div>
                 <div>
                     <span class="mini-badge">👤 بيانات المدرب</span>
-                    <h2><?php echo htmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></h2>
+                    <h2><?php echo academyHtmlspecialchars($selectedCoach['full_name'], ENT_QUOTES, 'UTF-8'); ?></h2>
                     <div class="coach-meta">
-                        <span>📞 <?php echo htmlspecialchars($selectedCoach['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
-                        <span>💵 سعر الساعة: <?php echo htmlspecialchars(formatCoachPortalAmount((float) ($selectedCoach['hourly_rate'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span>📞 <?php echo academyHtmlspecialchars($selectedCoach['phone'], ENT_QUOTES, 'UTF-8'); ?></span>
+                        <span>💵 سعر الساعة: <?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($selectedCoach['hourly_rate'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></span>
                         <span>
                             🗓️ الفترة الحالية:
-                            <?php echo htmlspecialchars((string) ($coachTotals['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                            <?php echo academyHtmlspecialchars((string) ($coachTotals['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                             →
-                            <?php echo htmlspecialchars((string) ($coachTotals['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                            <?php echo academyHtmlspecialchars((string) ($coachTotals['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                         </span>
                     </div>
                 </div>
@@ -694,11 +694,11 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
                 </div>
                 <div class="availability-pill <?php echo (float) $coachPendingTotalAmount >= 0 ? 'positive' : 'negative'; ?>">
                     <span>📌 إجمالي القبض المستحق</span>
-                    <strong><?php echo htmlspecialchars(formatCoachPortalAmount($coachPendingTotalAmount), ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong><?php echo academyHtmlspecialchars(formatCoachPortalAmount($coachPendingTotalAmount), ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
                 <div class="availability-pill <?php echo (float) $coachTotals['available_amount'] >= 0 ? 'positive' : 'negative'; ?>">
                     <span>💸 إجمالي القبض الحالي</span>
-                    <strong><?php echo htmlspecialchars(formatCoachPortalAmount((float) $coachTotals['available_amount']), ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) $coachTotals['available_amount']), ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
             </div>
         </section>
@@ -710,7 +710,7 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
 
             <form method="POST" class="search-form auth-form password-form" autocomplete="off">
                 <input type="hidden" name="action" value="change_password">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($coachPortalCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo academyHtmlspecialchars($coachPortalCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="field-group">
                     <label for="current_password">كلمة المرور الحالية</label>
@@ -741,8 +741,8 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
                 <div class="coach-notifications-grid">
                     <?php foreach ($coachNotifications as $coachNotification): ?>
                         <article class="coach-notification-card">
-                            <strong><?php echo htmlspecialchars(formatCoachPortalTimestamp((string) ($coachNotification['created_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
-                            <p><?php echo nl2br(htmlspecialchars((string) ($coachNotification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
+                            <strong><?php echo academyHtmlspecialchars(formatCoachPortalTimestamp((string) ($coachNotification['created_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <p><?php echo nl2br(academyHtmlspecialchars((string) ($coachNotification['notification_message'] ?? ''), ENT_QUOTES, 'UTF-8')); ?></p>
                         </article>
                     <?php endforeach; ?>
                 </div>
@@ -755,7 +755,7 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
             <article class="stat-card accent-orange">
                 <span class="stat-icon">⏱️</span>
                 <div>
-                    <strong><?php echo htmlspecialchars(formatCoachPortalAmount((float) $coachTotals['total_hours']), ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) $coachTotals['total_hours']), ENT_QUOTES, 'UTF-8'); ?></strong>
                     <p>عدد الساعات المستحقة</p>
                 </div>
             </article>
@@ -779,7 +779,7 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
             <article class="stat-card accent-blue">
                 <span class="stat-icon">💵</span>
                 <div>
-                    <strong><?php echo htmlspecialchars(formatCoachPortalAmount((float) $coachTotals['gross_amount']), ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) $coachTotals['gross_amount']), ENT_QUOTES, 'UTF-8'); ?></strong>
                     <p>إجمالي المستحق قبل السلف</p>
                 </div>
             </article>
@@ -787,7 +787,7 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
             <article class="stat-card accent-gold">
                 <span class="stat-icon">🧾</span>
                 <div>
-                    <strong><?php echo htmlspecialchars(formatCoachPortalAmount((float) $coachTotals['total_advances']), ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <strong><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) $coachTotals['total_advances']), ENT_QUOTES, 'UTF-8'); ?></strong>
                     <p>إجمالي السلف الحالية</p>
                 </div>
             </article>
@@ -832,17 +832,17 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
                                 <?php foreach ($coachDailyRecords as $dailyRecord): ?>
                                     <?php $isPresent = !empty($dailyRecord['attendance_status']); ?>
                                     <tr>
-                                        <td data-label="اليوم"><?php echo htmlspecialchars(formatCoachPortalDateLabel((string) $dailyRecord['date']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="اليوم"><?php echo academyHtmlspecialchars(formatCoachPortalDateLabel((string) $dailyRecord['date']), ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="الحالة">
                                             <span class="status-pill <?php echo $isPresent ? 'present' : 'absent'; ?>">
                                                 <?php echo $isPresent ? '✅ حاضر' : '❌ غائب'; ?>
                                             </span>
                                         </td>
-                                        <td data-label="الساعات المسجلة"><?php echo htmlspecialchars(formatCoachPortalAmount((float) $dailyRecord['work_hours']), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="المستحق اليومي"><?php echo htmlspecialchars(formatCoachPortalAmount((float) $dailyRecord['daily_due_amount']), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="السلفة اليومية"><?php echo htmlspecialchars(formatCoachPortalAmount((float) $dailyRecord['advance_amount']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الساعات المسجلة"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) $dailyRecord['work_hours']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="المستحق اليومي"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) $dailyRecord['daily_due_amount']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="السلفة اليومية"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) $dailyRecord['advance_amount']), ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="المتاح اليوم" class="<?php echo (float) $dailyRecord['daily_available_amount'] >= 0 ? 'positive-text' : 'negative-text'; ?>">
-                                            <?php echo htmlspecialchars(formatCoachPortalAmount((float) $dailyRecord['daily_available_amount']), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) $dailyRecord['daily_available_amount']), ENT_QUOTES, 'UTF-8'); ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -877,20 +877,20 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
                             <tbody>
                                 <?php foreach ($coachPendingPayments as $pendingItem): ?>
                                     <tr>
-                                        <td data-label="الحالة"><?php echo htmlspecialchars(COACH_PORTAL_PAYMENT_STATUSES['pending'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="نوع القبض"><?php echo htmlspecialchars(COACH_PORTAL_PAYMENT_CYCLES[$pendingItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الحالة"><?php echo academyHtmlspecialchars(COACH_PORTAL_PAYMENT_STATUSES['pending'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="نوع القبض"><?php echo academyHtmlspecialchars(COACH_PORTAL_PAYMENT_CYCLES[$pendingItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="فترة الاستحقاق">
-                                            <?php echo htmlspecialchars((string) ($pendingItem['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars((string) ($pendingItem['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                                             →
-                                            <?php echo htmlspecialchars((string) ($pendingItem['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars((string) ($pendingItem['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                                         </td>
-                                        <td data-label="الساعات"><?php echo htmlspecialchars(formatCoachPortalAmount((float) ($pendingItem['total_hours'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="الإجمالي"><?php echo htmlspecialchars(formatCoachPortalAmount((float) ($pendingItem['gross_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="السلف"><?php echo htmlspecialchars(formatCoachPortalAmount((float) ($pendingItem['total_advances'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الساعات"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($pendingItem['total_hours'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الإجمالي"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($pendingItem['gross_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="السلف"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($pendingItem['total_advances'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="الصافي" class="<?php echo (float) ($pendingItem['net_amount'] ?? 0) >= 0 ? 'positive-text' : 'negative-text'; ?>">
-                                            <?php echo htmlspecialchars(formatCoachPortalAmount((float) ($pendingItem['net_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($pendingItem['net_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?>
                                         </td>
-                                        <td data-label="تاريخ الحجز"><?php echo htmlspecialchars(formatCoachPortalTimestamp((string) ($pendingItem['reserved_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="تاريخ الحجز"><?php echo academyHtmlspecialchars(formatCoachPortalTimestamp((string) ($pendingItem['reserved_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -924,20 +924,20 @@ $coachPortalCsrfToken = getCoachPortalCsrfToken();
                             <tbody>
                                 <?php foreach ($coachPaymentHistory as $historyItem): ?>
                                     <tr>
-                                        <td data-label="الحالة"><?php echo htmlspecialchars(COACH_PORTAL_PAYMENT_STATUSES['paid'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="نوع القبض"><?php echo htmlspecialchars(COACH_PORTAL_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الحالة"><?php echo academyHtmlspecialchars(COACH_PORTAL_PAYMENT_STATUSES['paid'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="نوع القبض"><?php echo academyHtmlspecialchars(COACH_PORTAL_PAYMENT_CYCLES[$historyItem['payment_cycle']] ?? '—', ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="الفترة">
-                                            <?php echo htmlspecialchars((string) ($historyItem['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars((string) ($historyItem['period_start'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                                             →
-                                            <?php echo htmlspecialchars((string) ($historyItem['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars((string) ($historyItem['period_end'] ?? '—'), ENT_QUOTES, 'UTF-8'); ?>
                                         </td>
-                                        <td data-label="الساعات"><?php echo htmlspecialchars(formatCoachPortalAmount((float) ($historyItem['total_hours'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="الإجمالي"><?php echo htmlspecialchars(formatCoachPortalAmount((float) ($historyItem['gross_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
-                                        <td data-label="السلف"><?php echo htmlspecialchars(formatCoachPortalAmount((float) ($historyItem['total_advances'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الساعات"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($historyItem['total_hours'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="الإجمالي"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($historyItem['gross_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="السلف"><?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($historyItem['total_advances'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td data-label="الصافي" class="<?php echo (float) ($historyItem['net_amount'] ?? 0) >= 0 ? 'positive-text' : 'negative-text'; ?>">
-                                            <?php echo htmlspecialchars(formatCoachPortalAmount((float) ($historyItem['net_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?>
+                                            <?php echo academyHtmlspecialchars(formatCoachPortalAmount((float) ($historyItem['net_amount'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?>
                                         </td>
-                                        <td data-label="تاريخ القبض"><?php echo htmlspecialchars(formatCoachPortalTimestamp((string) ($historyItem['paid_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        <td data-label="تاريخ القبض"><?php echo academyHtmlspecialchars(formatCoachPortalTimestamp((string) ($historyItem['paid_at'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

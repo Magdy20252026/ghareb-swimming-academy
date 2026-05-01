@@ -320,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إعدادات الموقع - <?php echo htmlspecialchars($academyName); ?></title>
+    <title>إعدادات الموقع - <?php echo academyHtmlspecialchars($academyName); ?></title>
     <link rel="stylesheet" href="assets/css/site-settings.css">
 </head>
 <body class="light-mode">
@@ -346,7 +346,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <?php if ($message !== ''): ?>
-        <div class="message-box <?php echo htmlspecialchars($messageType); ?>"><?php echo htmlspecialchars($message); ?></div>
+        <div class="message-box <?php echo academyHtmlspecialchars($messageType); ?>"><?php echo academyHtmlspecialchars($message); ?></div>
     <?php endif; ?>
 
     <div class="settings-grid">
@@ -362,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         type="text"
                         id="academy_name"
                         name="academy_name"
-                        value="<?php echo htmlspecialchars($academyName); ?>"
+                        value="<?php echo academyHtmlspecialchars($academyName); ?>"
                         placeholder="أدخل اسم الأكاديمية"
                         required
                     >
@@ -380,28 +380,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="facebook_url">رابط فيسبوك</label>
-                    <input type="text" id="facebook_url" name="facebook_url" value="<?php echo htmlspecialchars($socialLinksInput['facebook_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://facebook.com/...">
+                    <input type="text" id="facebook_url" name="facebook_url" value="<?php echo academyHtmlspecialchars($socialLinksInput['facebook_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://facebook.com/...">
                 </div>
 
                 <div class="form-group">
                     <label for="whatsapp_url">رابط أو رقم واتساب</label>
-                    <input type="text" id="whatsapp_url" name="whatsapp_url" value="<?php echo htmlspecialchars($socialLinksInput['whatsapp_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://wa.me/... أو 01000000000">
+                    <input type="text" id="whatsapp_url" name="whatsapp_url" value="<?php echo academyHtmlspecialchars($socialLinksInput['whatsapp_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://wa.me/... أو 01000000000">
                     <small>يمكن إدخال رابط واتساب الكامل أو رقم الهاتف وسيتم تحويله تلقائيًا.</small>
                 </div>
 
                 <div class="form-group">
                     <label for="youtube_url">رابط يوتيوب</label>
-                    <input type="text" id="youtube_url" name="youtube_url" value="<?php echo htmlspecialchars($socialLinksInput['youtube_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://youtube.com/...">
+                    <input type="text" id="youtube_url" name="youtube_url" value="<?php echo academyHtmlspecialchars($socialLinksInput['youtube_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://youtube.com/...">
                 </div>
 
                 <div class="form-group">
                     <label for="tiktok_url">رابط تيك توك</label>
-                    <input type="text" id="tiktok_url" name="tiktok_url" value="<?php echo htmlspecialchars($socialLinksInput['tiktok_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://tiktok.com/...">
+                    <input type="text" id="tiktok_url" name="tiktok_url" value="<?php echo academyHtmlspecialchars($socialLinksInput['tiktok_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://tiktok.com/...">
                 </div>
 
                 <div class="form-group">
                     <label for="instagram_url">رابط إنستاجرام</label>
-                    <input type="text" id="instagram_url" name="instagram_url" value="<?php echo htmlspecialchars($socialLinksInput['instagram_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://instagram.com/...">
+                    <input type="text" id="instagram_url" name="instagram_url" value="<?php echo academyHtmlspecialchars($socialLinksInput['instagram_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="https://instagram.com/...">
                 </div>
 
                 <div class="form-actions">
@@ -418,20 +418,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="academy-preview">
                 <div class="academy-logo-preview">
                     <?php if ($academyLogoPath !== null): ?>
-                        <img src="<?php echo htmlspecialchars($academyLogoPath); ?>" alt="شعار الأكاديمية">
+                        <img src="<?php echo academyHtmlspecialchars($academyLogoPath); ?>" alt="شعار الأكاديمية">
                     <?php else: ?>
-                        <span><?php echo htmlspecialchars($academyLogoInitial); ?></span>
+                        <span><?php echo academyHtmlspecialchars($academyLogoInitial); ?></span>
                     <?php endif; ?>
                 </div>
-                <h3><?php echo htmlspecialchars($academyName); ?></h3>
+                <h3><?php echo academyHtmlspecialchars($academyName); ?></h3>
                 <p>ستظهر هذه البيانات في شاشة تسجيل الدخول ولوحة التحكم وفوتر بوابة السباحين.</p>
 
                 <div class="social-preview-list">
                     <?php foreach ($socialPlatforms as $platform): ?>
                         <?php $fieldName = $platform['field']; ?>
                         <?php if (!empty($siteSettings[$fieldName])): ?>
-                            <a href="<?php echo htmlspecialchars((string) $siteSettings[$fieldName], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="social-preview-link">
-                                <?php echo htmlspecialchars($platform['label'], ENT_QUOTES, 'UTF-8'); ?>
+                            <a href="<?php echo academyHtmlspecialchars((string) $siteSettings[$fieldName], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" class="social-preview-link">
+                                <?php echo academyHtmlspecialchars($platform['label'], ENT_QUOTES, 'UTF-8'); ?>
                             </a>
                         <?php endif; ?>
                     <?php endforeach; ?>
