@@ -212,7 +212,7 @@ body.dark-mode .amount-badge.remaining.has-value {
         text-align: right;
         border: none;
         border-radius: 0;
-        overflow-wrap: anywhere;
+        overflow-wrap: break-word;
         word-break: break-word;
     }
 
