@@ -169,13 +169,13 @@ body.dark-mode .amount-badge.remaining.has-value {
     color: #fde68a;
 }
 
-@media (max-width: 1200px), (max-width: 1366px) and (pointer: coarse) {
+@media (max-width: 1200px), ((min-width: 1201px) and (max-width: 1366px) and (pointer: coarse)) {
     .content-grid {
         grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 860px), (max-width: 1024px) and (pointer: coarse) {
+@media (max-width: 860px), ((min-width: 861px) and (max-width: 1024px) and (pointer: coarse)) {
     body {
         padding: 16px;
     }
