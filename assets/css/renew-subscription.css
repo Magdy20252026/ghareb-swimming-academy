@@ -369,9 +369,30 @@ body.dark-mode .amount-badge.remaining.has-value {
     }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 640px) {
     :root {
         --table-min-width: 0;
+    }
+
+    .page-header {
+        grid-template-columns: 1fr;
+    }
+
+    .header-actions {
+        order: 0;
+        width: 100%;
+        justify-self: stretch;
+        justify-content: flex-start;
+    }
+
+    .theme-switch-box {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-actions > *:not(.theme-switch-box) {
+        flex: 1 1 100%;
+        width: 100%;
     }
 
     .renew-table-wrapper tr {
