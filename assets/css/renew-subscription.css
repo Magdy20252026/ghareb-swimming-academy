@@ -8,12 +8,11 @@
     max-width: 1440px;
 }
 
-.academy-players-page,
-.academy-players-page > *,
+.page-header > *,
 .hero-grid > *,
 .content-grid > *,
 .subscription-overview-grid > *,
-.payment-grid > * {
+.payment-grid .form-group {
     min-width: 0;
 }
 
@@ -213,7 +212,6 @@ body.dark-mode .amount-badge.remaining.has-value {
         border: none;
         border-radius: 0;
         overflow-wrap: break-word;
-        word-break: break-word;
     }
 
     .table-wrapper.renew-table-wrapper th,
