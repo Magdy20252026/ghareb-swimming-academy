@@ -4,8 +4,14 @@
     --table-min-width: 980px;
 }
 
+html,
+body {
+    max-width: 100%;
+}
+
 .academy-players-page {
     max-width: 1440px;
+    width: 100%;
 }
 
 .page-header > *,
@@ -163,13 +169,18 @@ body.dark-mode .amount-badge.remaining.has-value {
     color: #fde68a;
 }
 
-@media (max-width: 1200px) {
+/* Keep medium-width touch devices in a single-column layout because the page becomes cramped in mobile browsers/webviews. */
+@media (max-width: 1200px), (min-width: 1201px) and (max-width: 1366px) and (pointer: coarse) {
     .content-grid {
         grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 860px), (min-width: 861px) and (max-width: 1024px) and (pointer: coarse) {
+    body {
+        padding: 16px;
+    }
+
     .page-header,
     .hero-card,
     .form-card,
@@ -213,6 +224,12 @@ body.dark-mode .amount-badge.remaining.has-value {
     .content-grid {
         grid-template-columns: 1fr;
         gap: 16px;
+    }
+
+    .form-card,
+    .side-panel,
+    .side-card {
+        width: 100%;
     }
 
     .renew-table-wrapper {
