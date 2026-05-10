@@ -8,6 +8,15 @@
     max-width: 1440px;
 }
 
+.academy-players-page,
+.academy-players-page > *,
+.hero-grid > *,
+.content-grid > *,
+.subscription-overview-grid > *,
+.payment-grid > * {
+    min-width: 0;
+}
+
 .renew-table-wrapper {
     --table-min-width: 980px;
 }
@@ -170,7 +179,14 @@ body.dark-mode .amount-badge.remaining.has-value {
     }
 
     .renew-table-wrapper {
-        overflow-x: visible;
+        overflow-x: hidden;
+    }
+
+    .renew-table-wrapper table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+        border-spacing: 0;
     }
 
     .renew-table-wrapper thead {
@@ -191,11 +207,27 @@ body.dark-mode .amount-badge.remaining.has-value {
         overflow: hidden;
     }
 
+    .renew-table-wrapper th:nth-child(n),
+    .renew-table-wrapper td:nth-child(n) {
+        min-width: 0;
+        width: 100%;
+    }
+
     .renew-table-wrapper td {
         padding: 12px 0;
         text-align: right;
         border: none;
         border-radius: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .renew-table-wrapper td + td {
+        border-top: 1px dashed rgba(212, 229, 242, 0.9);
+    }
+
+    body.dark-mode .renew-table-wrapper td + td {
+        border-top-color: rgba(74, 91, 120, 0.54);
     }
 
     .renew-table-wrapper td::before {
@@ -211,6 +243,9 @@ body.dark-mode .amount-badge.remaining.has-value {
     .renew-table-wrapper td:last-child {
         width: 100%;
         min-width: 0;
+        border-radius: 0;
+        border-right: none;
+        border-left: none;
     }
 
     .renew-table-wrapper .renew-actions-cell {
@@ -252,5 +287,11 @@ body.dark-mode .amount-badge.remaining.has-value {
 
     .renew-table-wrapper tr {
         padding: 12px;
+    }
+
+    .hero-card,
+    .hero-card-main,
+    .overview-item {
+        padding: 16px;
     }
 }
