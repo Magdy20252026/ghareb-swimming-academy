@@ -170,13 +170,13 @@ body.dark-mode .amount-badge.remaining.has-value {
 }
 
 /* Keep medium-width touch devices in a single-column layout because the page becomes cramped in mobile browsers/webviews. */
-@media (max-width: 1200px), ((min-width: 1201px) and (max-width: 1366px) and (pointer: coarse)) {
+@media (max-width: 1200px), (min-width: 1201px) and (max-width: 1366px) and (pointer: coarse) {
     .content-grid {
         grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 860px), ((min-width: 861px) and (max-width: 1024px) and (pointer: coarse)) {
+@media (max-width: 860px), (min-width: 861px) and (max-width: 1024px) and (pointer: coarse) {
     body {
         padding: 16px;
     }
