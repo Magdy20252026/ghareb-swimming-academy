@@ -7,11 +7,11 @@
 html,
 body {
     max-width: 100%;
-    overflow-x: hidden;
 }
 
 .academy-players-page {
     max-width: 1440px;
+    width: 100%;
 }
 
 .page-header > *,
@@ -169,13 +169,13 @@ body.dark-mode .amount-badge.remaining.has-value {
     color: #fde68a;
 }
 
-@media (max-width: 1200px), (pointer: coarse) {
+@media (max-width: 1200px), (max-width: 1366px) and (pointer: coarse) {
     .content-grid {
         grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 860px), (pointer: coarse) {
+@media (max-width: 860px), (max-width: 1024px) and (pointer: coarse) {
     body {
         padding: 16px;
     }
