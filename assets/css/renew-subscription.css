@@ -170,10 +170,6 @@ body.dark-mode .amount-badge.remaining.has-value {
 }
 
 @media (max-width: 860px) {
-    body {
-        padding: 16px;
-    }
-
     .page-header,
     .hero-card,
     .form-card,
