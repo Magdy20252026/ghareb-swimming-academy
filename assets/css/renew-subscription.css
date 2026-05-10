@@ -213,7 +213,7 @@ body.dark-mode .amount-badge.remaining.has-value {
         min-width: 0;
     }
 
-    .renew-table-wrapper td[data-label="الإجراءات"] {
+    .renew-table-wrapper .renew-actions-cell {
         display: block;
     }
 
