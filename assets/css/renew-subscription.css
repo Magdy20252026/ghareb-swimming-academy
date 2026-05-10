@@ -4,14 +4,7 @@
     --table-min-width: 980px;
 }
 
-html,
-body {
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
 .academy-players-page {
-    width: 100%;
     max-width: 1440px;
 }
 
@@ -21,6 +14,17 @@ body {
 .subscription-overview-grid > *,
 .payment-grid .form-group {
     min-width: 0;
+}
+
+.page-header,
+.hero-grid,
+.content-grid,
+.table-card,
+.form-card,
+.side-card,
+.hero-card,
+.hero-card-main {
+    max-width: 100%;
 }
 
 .renew-table-wrapper {
