@@ -216,9 +216,9 @@ body.dark-mode .amount-badge.remaining.has-value {
         word-break: break-word;
     }
 
-    .renew-table-wrapper th,
-    .renew-table-wrapper td {
-        min-width: 0 !important;
+    .table-wrapper.renew-table-wrapper th,
+    .table-wrapper.renew-table-wrapper td {
+        min-width: 0;
         width: 100%;
     }
 
