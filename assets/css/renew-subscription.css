@@ -4,7 +4,14 @@
     --table-min-width: 980px;
 }
 
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .academy-players-page {
+    width: 100%;
     max-width: 1440px;
 }
 
@@ -159,13 +166,43 @@ body.dark-mode .amount-badge.remaining.has-value {
 }
 
 @media (max-width: 860px) {
+    body {
+        padding: 14px;
+    }
+
+    .page-header,
+    .hero-card,
+    .form-card,
+    .side-card,
+    .table-card {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .page-header,
+    .table-head {
+        grid-template-columns: 1fr;
+    }
+
     .header-actions {
         width: 100%;
-        justify-content: stretch;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
     }
 
     .header-actions > *:not(.theme-switch-box) {
-        flex: 1 1 160px;
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .theme-switch-box {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
     }
 
     .payment-grid,
@@ -174,6 +211,7 @@ body.dark-mode .amount-badge.remaining.has-value {
     }
 
     .content-grid {
+        grid-template-columns: 1fr;
         gap: 16px;
     }
 
@@ -272,15 +310,6 @@ body.dark-mode .amount-badge.remaining.has-value {
 @media (max-width: 520px) {
     :root {
         --table-min-width: 0;
-    }
-
-    .theme-switch-box {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .header-actions > *:not(.theme-switch-box) {
-        flex-basis: 100%;
     }
 
     .renew-table-wrapper tr {
