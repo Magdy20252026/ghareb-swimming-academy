@@ -324,7 +324,7 @@ body.dark-mode .amount-badge.remaining.has-value {
     }
 }
 
-@media (max-width: 1100px) {
+@media (min-width: 861px) and (max-width: 1100px) {
     .page-header {
         grid-template-columns: 1fr;
         align-items: stretch;
