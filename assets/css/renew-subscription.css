@@ -171,7 +171,7 @@ body.dark-mode .amount-badge.remaining.has-value {
 
 @media (max-width: 860px) {
     body {
-        padding: 14px;
+        padding: 16px;
     }
 
     .page-header,
