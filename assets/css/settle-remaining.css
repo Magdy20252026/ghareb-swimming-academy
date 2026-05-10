@@ -183,23 +183,21 @@ body.dark-mode .remaining-settlement-page .table-wrapper td::before {
     }
 
     .remaining-settlement-page .table-wrapper td {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 14px;
+        display: block;
         padding: 12px 0;
-        text-align: left;
+        text-align: right;
         border: none;
         border-radius: 0;
     }
 
     .remaining-settlement-page .table-wrapper td::before {
         content: attr(data-label);
+        display: block;
+        margin-bottom: 8px;
         font-size: 12px;
         font-weight: 900;
         color: var(--text-soft);
         text-align: right;
-        flex: 0 0 110px;
     }
 
     .remaining-settlement-page .table-wrapper td:first-child,
@@ -222,7 +220,26 @@ body.dark-mode .remaining-settlement-page .table-wrapper td::before {
 }
 
 @media (max-width: 520px) {
+    .remaining-settlement-page .toolbar-card,
+    .remaining-settlement-page .table-card,
+    .remaining-settlement-page .page-header {
+        padding: 18px;
+        border-radius: 20px;
+    }
+
     .remaining-settlement-page .table-wrapper tr {
         padding: 12px;
+    }
+
+    .remaining-settlement-page .toolbar-form-actions > *,
+    .remaining-settlement-page .settlement-submit-group,
+    .remaining-settlement-page .settlement-submit-group .save-btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .remaining-settlement-page .stacked-cell,
+    .remaining-settlement-page .settlement-form {
+        gap: 8px;
     }
 }

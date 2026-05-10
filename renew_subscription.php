@@ -983,7 +983,7 @@ $renewCsrfToken = getRenewCsrfToken();
                                 <td data-label="نهاية الاشتراك"><span class="table-cell-text table-cell-date"><?php echo academyHtmlspecialchars(formatRenewDate((string) ($player['subscription_end_date'] ?? '')), ENT_QUOTES, 'UTF-8'); ?></span></td>
                                 <td data-label="المتبقي القديم"><span class="amount-badge remaining <?php echo (float) ($player['remaining_amount'] ?? 0) > 0 ? 'has-value' : ''; ?>"><?php echo formatRenewMoney($player['remaining_amount'] ?? 0); ?> ج.م</span></td>
                                 <td data-label="مرات التجديد"><span class="table-cell-text"><?php echo (int) ($player['renewal_count'] ?? 0); ?></span></td>
-                                <td data-label="الإجراءات">
+                                <td data-label="الإجراءات" class="renew-actions-cell">
                                     <div class="action-buttons">
                                         <a href="<?php echo academyHtmlspecialchars(buildRenewPageUrl(['search' => $search, 'branch' => $branch, 'renew' => $player['id']]), ENT_QUOTES, 'UTF-8'); ?>#renewSubscriptionForm" class="pay-btn">تجديد</a>
                                         <a href="<?php echo academyHtmlspecialchars('academy_players.php?search=' . urlencode((string) ($player['barcode'] ?? '')), ENT_QUOTES, 'UTF-8'); ?>" class="link-btn files-btn">صفحة السباحين</a>
